@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">人众云媒</string>
+    <string name="passwordLimit">0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ</string>
+    <string name="idCardLimit">0123456789Xx</string>
+    <string name="numDecimalLimit">0123456789.</string>
+    <string name="numberLimit">0123456789</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+</resources>
