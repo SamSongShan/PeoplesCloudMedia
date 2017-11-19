@@ -32,7 +32,7 @@
             android:maxLines="1"
             android:ellipsize="end"
             android:textSize="20sp"
-            android:textColor="@color/colorWhite"/>
+            android:textColor="@color/colorLightBlack"/>
         <TextView
             android:id="@+id/toolbar_next"
             android:layout_width="wrap_content"
