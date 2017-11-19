@@ -1,4 +1,4 @@
-package com.example.a11355.peoplescloudmedia.util;
+package com.example.a11355.peoplescloudmedia.model;
 
 /**
  * Created by Administrator on 2017/8/18.
