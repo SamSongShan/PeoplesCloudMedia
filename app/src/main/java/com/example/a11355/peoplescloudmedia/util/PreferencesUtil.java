@@ -5,8 +5,12 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.view.View;
 
+import com.example.a11355.peoplescloudmedia.R;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+
+import cn.sharesdk.onekeyshare.OnekeyShare;
 
 
 /**
@@ -124,7 +128,7 @@ public class PreferencesUtil {
 
     public static void showShare(Context context, String title, String url, String text, String imgPath,
                                  View.OnClickListener listener) {
-       /* OnekeyShare oks = new OnekeyShare();
+        OnekeyShare oks = new OnekeyShare();
         //追加复制按钮
 //        Bitmap copy = BitmapFactory.decodeResource(context.getResources(), R.drawable.copy_link);
 //        oks.setCustomerLogo(copy, "复制链接", listener);
@@ -150,6 +154,6 @@ public class PreferencesUtil {
         oks.setSiteUrl(url);
 
         // 启动分享GUI
-        oks.show(context);*/
+        oks.show(context);
     }
 }
