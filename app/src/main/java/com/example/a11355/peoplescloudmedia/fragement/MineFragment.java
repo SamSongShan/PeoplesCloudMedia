@@ -2,6 +2,9 @@ package com.example.a11355.peoplescloudmedia.fragement;
 
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.Environment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -12,13 +15,17 @@ import android.widget.TextView;
 
 import com.example.a11355.peoplescloudmedia.R;
 import com.example.a11355.peoplescloudmedia.activity.MyQRCodeActivity;
+import com.example.a11355.peoplescloudmedia.activity.SettingActivity;
 import com.example.a11355.peoplescloudmedia.adapter.MineRVAdapter;
 import com.example.a11355.peoplescloudmedia.base.AbsRecyclerViewAdapter;
 import com.example.a11355.peoplescloudmedia.base.BaseFragment;
 import com.example.a11355.peoplescloudmedia.custom.GridDividerItemDecoration;
+import com.example.a11355.peoplescloudmedia.util.BitMapUtil;
 import com.example.a11355.peoplescloudmedia.util.Constant;
+import com.example.a11355.peoplescloudmedia.util.PreferencesUtil;
 import com.facebook.drawee.view.SimpleDraweeView;
 
+import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 
@@ -103,14 +110,26 @@ public class MineFragment extends BaseFragment implements View.OnClickListener, 
             }
             break;
             case R.id.img_shear: {//分享
-
+                share();
             }
             break;
             case R.id.img_setting: {//设置
-
+                startActivity(new Intent(getContext(), SettingActivity.class));
             }
             break;
         }
+    }
+
+    //分享
+    public void share() {
+        String filePath = Environment.getExternalStorageDirectory() + "/Android/data/" +
+                getContext().getPackageName() + "/cache/logo.jpg";
+        if (!new File(filePath).exists()) {
+            Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher);
+            BitMapUtil.saveBitmap2File(bitmap, filePath);
+        }
+        PreferencesUtil.showShare(getContext(), "我发现了一个很好用的人众云媒哦~", "点击链接",
+                "美好生活从这里开始，快来人众云媒\n", filePath, this);
     }
 
     @Override
