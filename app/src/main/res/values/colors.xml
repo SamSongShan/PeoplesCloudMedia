@@ -9,9 +9,9 @@
     <color name="colorOrangeDark">#FC992C</color>
     <color name="colorLightAccent">#e48967</color>
     <color name="colorBlack">#000</color>
-    <color name="colorLightBlack">#020202</color>
+    <color name="colorLightBlack">#333333</color>
 
-    <color name="colorWhite">#fff</color>
+    <color name="colorWhite">#ffffff</color>
     <color name="colorWelfareBG">#fafafa</color>
     <color name="colorRed">#f00</color>
     <color name="colorGray">#888</color>
