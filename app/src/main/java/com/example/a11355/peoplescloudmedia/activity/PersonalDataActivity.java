@@ -20,6 +20,7 @@ import com.example.a11355.peoplescloudmedia.util.BitMapUtil;
 import com.example.a11355.peoplescloudmedia.util.Constant;
 import com.example.a11355.peoplescloudmedia.util.OkHttpUtil;
 import com.example.a11355.peoplescloudmedia.util.ToastUtil;
+import com.example.a11355.peoplescloudmedia.util.ToolBarUtil;
 import com.facebook.drawee.view.SimpleDraweeView;
 
 import butterknife.BindView;
@@ -53,6 +54,16 @@ public class PersonalDataActivity extends BaseActivity implements BaseDialog.OnI
         return R.layout.activity_personal_data;
     }
 
+    @Override
+    protected void init() {
+
+        ToolBarUtil.initToolBar(toolbarText, "个人资料", new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
+    }
 
     @OnClick({R.id.sdv_userHead, R.id.ll_nickName, R.id.ll_gender, R.id.ll_signature})
     public void onViewClicked(View view) {
