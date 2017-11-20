@@ -75,6 +75,9 @@ public class PersonalDataActivity extends BaseActivity implements BaseDialog.OnI
             }
             break;
             case R.id.ll_nickName: {    // 修改昵称
+
+                Intent intent = new Intent(this, NikcAndSignatureActivity.class);
+                startActivityForResult(intent, Constant.Code.Nick);
             }
             break;
             case R.id.ll_gender: { //  修改性别
@@ -84,6 +87,8 @@ public class PersonalDataActivity extends BaseActivity implements BaseDialog.OnI
             }
             break;
             case R.id.ll_signature: {// 修个个性签名
+                Intent intent = new Intent(this, NikcAndSignatureActivity.class);
+                startActivityForResult(intent, Constant.Code.Signature);
             }
             break;
         }
@@ -142,6 +147,14 @@ public class PersonalDataActivity extends BaseActivity implements BaseDialog.OnI
                         tipsDialog.show(getFragmentManager(), "tips");
                     }
                     break;
+                case Constant.Code.Nick: {//昵称
+
+                    break;
+                }
+                case Constant.Code.Signature: {//个性签名
+
+                    break;
+                }
             }
         }
     }
