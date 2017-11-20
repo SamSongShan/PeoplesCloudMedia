@@ -155,7 +155,8 @@
             android:value="您的AppSecret" />
 
         <activity android:name=".activity.SettingActivity" />
-        <activity android:name=".activity.PersonalDataActivity"></activity>
+        <activity android:name=".activity.PersonalDataActivity" />
+        <activity android:name=".activity.NikcAndSignatureActivity"></activity>
     </application>
 
 </manifest>
