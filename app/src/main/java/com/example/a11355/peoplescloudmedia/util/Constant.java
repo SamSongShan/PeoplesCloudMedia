@@ -92,7 +92,10 @@ public interface Constant {
         int CameraCode = 0x0002;
         int PermissionCode = 0x1001;
 
-
+         //更改昵称
+        int Nick=0x2001;
+        //更改个性签名
+        int Signature=0x2002;
     }
 
     interface IdString {
