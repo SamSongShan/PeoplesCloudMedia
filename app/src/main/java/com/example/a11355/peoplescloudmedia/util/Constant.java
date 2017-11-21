@@ -11,7 +11,7 @@ public interface Constant {
     interface URL {
 
         //本地服务器地址
-        String BaseUrl = "http://192.168.1.134:8011/Index.asmx/";
+        String BaseUrl = "http://service.lml9.com/Index.asmx/";
         String BaseImg = "http://192.168.1.134:8011";
         String BaseH5 = "http://192.168.1.134:8012";
 

@@ -10,11 +10,10 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="260dp"
+        android:layout_height="200dp"
         android:background="@color/colorLightRed">
 
         <com.facebook.drawee.view.SimpleDraweeView
-
             android:id="@+id/sdv"
             android:layout_width="120dp"
             android:layout_height="120dp"
@@ -29,14 +28,14 @@
 
 
         <RadioGroup
-            android:id="@+id/rg_login"
+            android:id="@+id/rg"
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:layout_alignParentBottom="true"
             android:orientation="horizontal">
 
             <RadioButton
-                android:id="@+id/rb_login"
+                android:id="@+id/rb_personal"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -44,19 +43,19 @@
                 android:button="@null"
                 android:checked="true"
                 android:gravity="center"
-                android:text="登录"
+                android:text="个人"
                 android:textColor="@color/colorWhite"
                 android:textSize="18sp" />
 
             <RadioButton
-                android:id="@+id/rb_register"
+                android:id="@+id/rb_business"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="@drawable/selector_rb"
                 android:button="@null"
                 android:gravity="center"
-                android:text="注册"
+                android:text="企业"
                 android:textColor="@color/colorWhite"
                 android:textSize="18sp" />
         </RadioGroup>
@@ -65,421 +64,301 @@
     <ScrollView
         android:id="@+id/sv_login"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_weight="1"
         android:background="@color/colorWhite"
         android:visibility="visible">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="30dp">
-            <!--手机号-->
+            android:padding="20dp">
+
             <LinearLayout
+                android:id="@+id/ll_login"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/colorWhite"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_margin="10dp"
-                    android:scaleType="fitCenter"
-                    android:src="@drawable/ic_phone" />
-
-                <EditText
-                    android:id="@+id/et_loginName"
+                android:orientation="vertical">
+                <!--手机号-->
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@null"
-                    android:hint="输入手机号"
-                    android:imeOptions="actionNext"
-                    android:inputType="phone"
-                    android:maxLength="11"
-                    android:paddingLeft="10dp"
-                    android:textSize="16sp" />
+                    android:layout_height="wrap_content"
+                    android:background="@color/colorWhite"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_margin="10dp"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/ic_phone" />
+
+                    <EditText
+                        android:id="@+id/et_loginName"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@null"
+                        android:hint="请输入账号/手机号"
+                        android:imeOptions="actionNext"
+                        android:inputType="phone"
+                        android:maxLength="11"
+                        android:paddingLeft="10dp"
+                        android:textSize="16sp" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:background="@color/colorLightGray" />
+                <!-- 密码 -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/colorWhite"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_margin="10dp"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/ic_password" />
+
+                    <EditText
+                        android:id="@+id/et_password"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:background="@null"
+                        android:digits="@string/passwordLimit"
+                        android:hint="请输入六位数密码"
+                        android:imeOptions="actionGo"
+                        android:inputType="textPassword"
+                        android:maxLength="6"
+                        android:paddingLeft="11dp"
+                        android:singleLine="true"
+                        android:textSize="16sp" />
+
+                    <ImageView
+                        android:id="@+id/iv_psw"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_gravity="center"
+                        android:layout_margin="10dp"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/psw_check" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:background="@color/colorLightGray" />
+
+
             </LinearLayout>
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:background="@color/colorLightGray" />
-            <!-- 密码 -->
-            <LinearLayout
+            <ScrollView
+                android:id="@+id/sv_personal_register"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_weight="1"
                 android:background="@color/colorWhite"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
+                android:visibility="gone">
 
-                <ImageView
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/colorWhite"
+                    android:orientation="vertical">
+                    <!--手机号-->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/colorWhite"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_margin="10dp"
+                            android:scaleType="fitCenter"
+                            android:src="@drawable/ic_phone" />
+
+                        <EditText
+                            android:id="@+id/et_regMobile"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@null"
+                            android:hint="请输入账号/手机号码"
+                            android:imeOptions="actionNext"
+                            android:inputType="phone"
+                            android:maxLength="11"
+                            android:paddingLeft="10dp"
+                            android:textSize="16sp" />
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1px"
+                        android:background="@color/colorLightGray" />
+                    <!-- 验证码 -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/colorWhite"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingBottom="1dp"
+                        android:paddingRight="5dp"
+                        android:paddingTop="1dp">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_margin="10dp"
+                            android:scaleType="fitCenter"
+                            android:src="@drawable/ic_identify" />
+
+                        <EditText
+                            android:id="@+id/et_regIdentify"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:background="@null"
+                            android:hint="请输入验证码"
+                            android:imeOptions="actionNext"
+                            android:inputType="number"
+                            android:maxLength="10"
+                            android:paddingLeft="10dp"
+                            android:textSize="16sp" />
+
+                        <Button
+                            android:id="@+id/btn_identify"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="3dp"
+                            android:background="@drawable/selector_shape_black_gray"
+                            android:clickable="true"
+                            android:gravity="center"
+                            android:padding="2dp"
+                            android:text="获取验证码"
+                            android:textColor="@color/colorWhite" />
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1px"
+                        android:background="@color/colorLightGray" />
+                    <!-- 密码 -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/colorWhite"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_margin="10dp"
+                            android:scaleType="fitCenter"
+                            android:src="@drawable/ic_password" />
+
+                        <EditText
+                            android:id="@+id/et_regPassword"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@null"
+                            android:digits="@string/passwordLimit"
+                            android:hint="请输入六位数密码"
+                            android:imeOptions="actionNext"
+                            android:inputType="textPassword"
+                            android:maxLength="6"
+                            android:paddingLeft="11dp"
+                            android:singleLine="true"
+                            android:textSize="16sp" />
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1px"
+                        android:background="@color/colorLightGray" />
+                </LinearLayout>
+            </ScrollView>
+
+            <RelativeLayout
+                android:id="@+id/rv_forget"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/tv_forgetPassword"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
                     android:layout_margin="10dp"
-                    android:scaleType="fitCenter"
-                    android:src="@drawable/ic_password" />
-
-                <EditText
-                    android:id="@+id/et_password"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:background="@null"
-                    android:digits="@string/passwordLimit"
-                    android:hint="密码"
-                    android:imeOptions="actionGo"
-                    android:inputType="textPassword"
-                    android:maxLength="6"
-                    android:paddingLeft="11dp"
-                    android:singleLine="true"
+                    android:clickable="true"
+                    android:gravity="center"
+                    android:paddingRight="10dp"
+                    android:text="忘记密码"
                     android:textSize="16sp" />
 
-                <ImageView
-                    android:id="@+id/iv_x"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:layout_gravity="center"
+                <TextView
+                    android:id="@+id/tv_personal_register"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_gravity="right"
                     android:layout_margin="10dp"
-                    android:scaleType="fitCenter"
-                    android:src="@drawable/ic_x" />
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:background="@color/colorLightGray" />
-
-            <TextView
-                android:id="@+id/tv_forgetPassword"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="right"
-                android:layout_margin="10dp"
-                android:clickable="true"
-                android:gravity="center"
-                android:paddingRight="10dp"
-                android:text="忘记密码?"
-                android:textColor="@color/colorPowder"
-                android:textSize="16sp" />
+                    android:clickable="true"
+                    android:gravity="center"
+                    android:paddingRight="10dp"
+                    android:text="新用户注册>"
+                    android:textSize="16sp" />
+            </RelativeLayout>
 
             <Button
                 android:id="@+id/btn_login"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
-                android:background="@drawable/shape_solid_btn"
-                android:text="登  录"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/shape_solid_red_20"
+                android:text="登录"
                 android:textColor="@color/colorWhite"
                 android:textSize="18sp" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:padding="10dp" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:background="@color/colorWhite"
-                android:gravity="center"
-                android:orientation="vertical"
-                android:padding="5dp">
-
-                <TextView
-                    android:id="@+id/tv_1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="版本号：豌豆汽车V1.0.0" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="©2017深圳市豌豆汽车科技有限公司" />
-            </LinearLayout>
-
-        </LinearLayout>
-    </ScrollView>
-
-    <ScrollView
-        android:id="@+id/ll_register"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:background="@color/colorWhite"
-        android:visibility="gone">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/colorWhite"
-            android:orientation="vertical"
-            android:padding="30dp">
-            <!--手机号-->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/colorWhite"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_margin="10dp"
-                    android:scaleType="fitCenter"
-                    android:src="@drawable/ic_phone" />
-
-                <EditText
-                    android:id="@+id/et_regMobile"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@null"
-                    android:hint="手机号码"
-                    android:imeOptions="actionNext"
-                    android:inputType="phone"
-                    android:maxLength="11"
-                    android:paddingLeft="10dp"
-                    android:textSize="16sp" />
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:background="@color/colorLightGray" />
-            <!-- 验证码 -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/colorWhite"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:paddingBottom="1dp"
-                android:paddingRight="5dp"
-                android:paddingTop="1dp">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_margin="10dp"
-                    android:scaleType="fitCenter"
-                    android:src="@drawable/ic_identify" />
-
-                <EditText
-                    android:id="@+id/et_regIdentify"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:background="@null"
-                    android:hint="验证码"
-                    android:imeOptions="actionNext"
-                    android:inputType="number"
-                    android:maxLength="10"
-                    android:paddingLeft="10dp"
-                    android:textSize="16sp" />
-
-                <Button
-                    android:id="@+id/btn_identify"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/selector_shape_black_gray"
-                    android:clickable="true"
-                    android:gravity="center"
-                    android:padding="5dp"
-                    android:text="获取验证码"
-                    android:textColor="@color/colorWhite" />
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:background="@color/colorLightGray" />
-            <!-- 密码 -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/colorWhite"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_margin="10dp"
-                    android:scaleType="fitCenter"
-                    android:src="@drawable/ic_password" />
-
-                <EditText
-                    android:id="@+id/et_regPassword"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@null"
-                    android:digits="@string/passwordLimit"
-                    android:hint="密码"
-                    android:imeOptions="actionNext"
-                    android:inputType="textPassword"
-                    android:maxLength="@integer/pwdLength"
-                    android:paddingLeft="11dp"
-                    android:singleLine="true"
-                    android:textSize="16sp" />
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:background="@color/colorLightGray" />
-            <!-- 确认密码 -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/colorWhite"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_margin="10dp"
-                    android:scaleType="fitCenter"
-                    android:src="@drawable/ic_password" />
-
-                <EditText
-                    android:id="@+id/et_regPassword2"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@null"
-                    android:digits="@string/passwordLimit"
-                    android:hint="确认密码"
-                    android:imeOptions="actionNext"
-                    android:inputType="textPassword"
-                    android:maxLength="@integer/pwdLength"
-                    android:paddingLeft="11dp"
-                    android:singleLine="true"
-                    android:textSize="16sp" />
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:background="@color/colorLightGray" />
-            <!-- 邀请码 -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/colorWhite"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-
-                android:paddingRight="5dp">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_margin="10dp"
-                    android:paddingBottom="4dp"
-                    android:paddingTop="4dp"
-                    android:scaleType="fitCenter"
-                    android:src="@drawable/ic_identitj" />
-
-                <EditText
-                    android:id="@+id/et_regInvite"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@null"
-                    android:hint="好友推荐码(选填)"
-                    android:imeOptions="actionGo"
-                    android:inputType="phone"
-                    android:maxLength="11"
-                    android:paddingLeft="10dp"
-                    android:textSize="16sp" />
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="2px"
-                android:background="@color/colorLightGray" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="12dp"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-
-                <CheckBox
-                    android:id="@+id/cb_protocol"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="10dp"
-                    android:background="@drawable/selector_protocol"
-                    android:button="@null"
-                    android:checked="true" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="2dp"
-                    android:layout_marginRight="10dp"
-                    android:text="已阅读并同意"
-                    android:textColor="@color/colorDeepBlack" />
-
-                <TextView
-                    android:id="@+id/tv_protocol"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="2dp"
-                    android:clickable="true"
-                    android:text="《豌豆汽车用户协议》"
-                    android:textColor="@color/colorPowder" />
-            </LinearLayout>
 
             <Button
                 android:id="@+id/btn_register"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
-                android:background="@drawable/shape_solid_btn"
-                android:text="注  册"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/shape_solid_red_20"
+                android:text="注册"
                 android:textColor="@color/colorWhite"
-                android:textSize="18sp" />
+                android:textSize="18sp"
+                android:visibility="gone" />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:padding="10dp" />
-
-            <LinearLayout
+            <Button
+                android:id="@+id/btn_login_byWX"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:background="@color/colorWhite"
-                android:gravity="center"
-                android:orientation="vertical"
-                android:padding="5dp">
-
-                <TextView
-                    android:id="@+id/tv_2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="版本号：豌豆汽车V1.0.0" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="©2017深圳市豌豆汽车科技有限公司" />
-            </LinearLayout>
+                android:layout_marginTop="20dp"
+                android:background="@drawable/shape_stoke_red_solid_withe_20"
+                android:text="微信登录"
+                android:textColor="@color/colorLightRed"
+                android:textSize="18sp" />
         </LinearLayout>
     </ScrollView>
+
 </LinearLayout>
