@@ -28,6 +28,13 @@ public interface Constant {
                 + "&mode=driving&region=%s&output=html&src=%s";
         String MapTrans = "http://api.map.baidu.com/ag/coord/convert?from=%d&to=%d&x=%s&y=%s";
 
+        //注册分享链接   RecommendMobile  传推荐人手机号
+        String ShearLink = "http://net.lml9.com/Webuser/Registered?RecommendMobile=";
+        //用户注册
+        String Registered = BaseUrl + "Registered";
+        //获取短信
+        String GetMobileCode = BaseUrl + "GetMobileCode";
+
 
     }
 
@@ -61,6 +68,10 @@ public interface Constant {
         //我的页面列表数据
         String[] mines = {"我的文章", "我的推广", "我的名片", "关于我们"};
 
+        String[] GetMobileCodeType = {"用户注册", "密码找回", "微信快捷登录绑定手机"};
+
+
+
 
     }
 
@@ -75,7 +86,8 @@ public interface Constant {
         //数据异常
         int ABNORMAL = 500;
 
-
+         //验证码失效时间
+        int CodeRetryTime=120;
     }
 
     interface ID {
@@ -92,10 +104,10 @@ public interface Constant {
         int CameraCode = 0x0002;
         int PermissionCode = 0x1001;
 
-         //更改昵称
-        int Nick=0x2001;
+        //更改昵称
+        int Nick = 0x2001;
         //更改个性签名
-        int Signature=0x2002;
+        int Signature = 0x2002;
     }
 
     interface IdString {

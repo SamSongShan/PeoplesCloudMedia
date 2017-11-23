@@ -63,9 +63,7 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
-
-        </activity>
+        <activity android:name=".MainActivity"></activity>
 
         <provider
             android:name="android.support.v4.content.FileProvider"
@@ -159,6 +157,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".activity.RegisterForBusinessActivity"></activity>
     </application>
 
 </manifest>

@@ -319,7 +319,7 @@ public class PhoneUtil {
     /**
      * 判断EditText输入是否错误 -- 判断2个字符 带删除按钮
      */
-    public static void isEditError2WithDel(String text, EditText editText, View delBtn) {
+    public static void isEditError2WithDel(String text, EditText editText, Object delBtn) {
         if (!TextUtils.isEmpty(text)) {
             if (text.contains("\"")) {
                 editText.setError(Constant.Strings.ErrorTips1);
@@ -327,10 +327,17 @@ public class PhoneUtil {
             if (text.contains("\\")) {
                 editText.setError(Constant.Strings.ErrorTips2);
             }
-            delBtn.setVisibility(View.VISIBLE);
+
+            if (!(delBtn instanceof String))  {
+                ((View)delBtn).setVisibility(View.VISIBLE);
+
+            }
         } else {
             editText.setError(null);
-            delBtn.setVisibility(View.GONE);
+            if (!(delBtn instanceof String))  {
+                ((View)delBtn).setVisibility(View.GONE);
+
+            }
         }
     }
 
