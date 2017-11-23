@@ -1,5 +1,6 @@
 package com.example.a11355.peoplescloudmedia.activity;
 
+import android.text.InputType;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -58,8 +59,17 @@ public class LoginActivity extends BaseActivity implements RadioGroup.OnCheckedC
     @OnClick({R.id.iv_psw, R.id.btn_identify, R.id.tv_forgetPassword, R.id.tv_personal_register, R.id.btn_login, R.id.btn_register, R.id.btn_login_byWX})
     public void onViewClicked(View view) {
         switch (view.getId()) {
-            case R.id.iv_psw: //查看密码
-                break;
+            case R.id.iv_psw: {//查看密码
+                ivPsw.setSelected(!ivPsw.isSelected());
+                if (ivPsw.isSelected()) {
+                    etPassword.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);//设置密码可见
+
+                } else {
+                    etPassword.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD | InputType.TYPE_CLASS_TEXT );//设置密码不可见
+
+                }
+            }
+            break;
             case R.id.btn_identify:    //发送验证码
                 break;
             case R.id.tv_forgetPassword:   //忘记密码
