@@ -203,7 +203,6 @@ public class LoginActivity extends BaseActivity implements RadioGroup.OnCheckedC
                         }
                     });
 
-
             }
         }
     }
