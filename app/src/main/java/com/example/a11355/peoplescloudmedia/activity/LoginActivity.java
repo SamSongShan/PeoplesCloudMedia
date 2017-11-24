@@ -183,8 +183,8 @@ public class LoginActivity extends BaseActivity implements RadioGroup.OnCheckedC
                 OkHttpUtil.postJson(Constant.URL.GetMobileCode, DesUtil.encrypt(jsonString), this);
                 //设置XX秒后重试
 
-                try {
-                    handler.post(new Runnable() {
+
+                handler.post(new Runnable() {
                         @Override
                         public void run() {
                             if (btnIdentify != null) {
@@ -202,9 +202,7 @@ public class LoginActivity extends BaseActivity implements RadioGroup.OnCheckedC
                             }
                         }
                     });
-                } catch (Exception e) {
 
-                }
 
             }
         }
@@ -233,5 +231,12 @@ public class LoginActivity extends BaseActivity implements RadioGroup.OnCheckedC
     @Override
     public void onFailure(String url, String error) {
 
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        handler.removeCallbacksAndMessages(null);
     }
 }
