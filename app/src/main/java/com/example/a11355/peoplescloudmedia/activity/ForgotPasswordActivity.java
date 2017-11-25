@@ -15,7 +15,6 @@ import com.example.a11355.peoplescloudmedia.base.BaseActivity;
 import com.example.a11355.peoplescloudmedia.custom.LoadingDialog;
 import com.example.a11355.peoplescloudmedia.model.GetMobileCode;
 import com.example.a11355.peoplescloudmedia.model.MobileCodeEntity;
-import com.example.a11355.peoplescloudmedia.model.Registered;
 import com.example.a11355.peoplescloudmedia.model.RegisteredEntity;
 import com.example.a11355.peoplescloudmedia.util.Constant;
 import com.example.a11355.peoplescloudmedia.util.DesUtil;
@@ -31,16 +30,15 @@ import butterknife.OnClick;
 import butterknife.OnTextChanged;
 
 /*
-* 企业注册
+* 忘记密码
 * */
-public class RegisterForBusinessActivity extends BaseActivity implements OkHttpUtil.OnDataListener {
+
+// TODO: 2017/11/25 接口没有 
+public class ForgotPasswordActivity extends BaseActivity implements OkHttpUtil.OnDataListener {
+
 
     @BindView(R.id.toolbar_text)
     Toolbar toolbarText;
-    @BindView(R.id.et_businessName)
-    EditText etBusinessName;
-    @BindView(R.id.et_bossName)
-    EditText etBossName;
     @BindView(R.id.et_regMobile)
     EditText etRegMobile;
     @BindView(R.id.et_regIdentify)
@@ -49,7 +47,6 @@ public class RegisterForBusinessActivity extends BaseActivity implements OkHttpU
     Button btnIdentify;
     @BindView(R.id.et_regPassword)
     EditText etRegPassword;
-
 
     private final int retryLimit = Constant.Integers.CodeRetryTime;//重试秒数上限
     private int timeNum = retryLimit;//获取验证码倒计时
@@ -62,15 +59,15 @@ public class RegisterForBusinessActivity extends BaseActivity implements OkHttpU
 
     private LoadingDialog loadingDialog;
 
-
     @Override
     protected int getViewResId() {
-        return R.layout.activity_register_for_business;
+        return R.layout.activity_forgot_password;
     }
+
 
     @Override
     protected void init() {
-        ToolBarUtil.initToolBar(toolbarText, "注册", new View.OnClickListener() {
+        ToolBarUtil.initToolBar(toolbarText, "忘记密码", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 handler.removeCallbacksAndMessages(null);
@@ -84,21 +81,16 @@ public class RegisterForBusinessActivity extends BaseActivity implements OkHttpU
     @OnClick({R.id.btn_identify, R.id.btn_register})
     public void onViewClicked(View view) {
         switch (view.getId()) {
-            case R.id.btn_identify:  //发送验证码
+            case R.id.btn_identify: //发送验证码
                 getCode();
                 break;
-            case R.id.btn_register:    //注册
+            case R.id.btn_register:   //修改
+
                 if (isRegister) {
                     ToastUtil.initToast(this, "请不要重复操作");
                     break;
-                } else if (TextUtils.isEmpty(etBusinessName.getText().toString())) {
-                    ToastUtil.initToast(this, "企业名称不能为空");
-
-                } else if (TextUtils.isEmpty(etBossName.getText().toString())) {
-                    ToastUtil.initToast(this, "联系人姓名不能为空");
-
                 } else if (TextUtils.isEmpty(etRegMobile.getText().toString()) && etRegMobile.getText().toString().length() == 0) {
-                    ToastUtil.initToast(this, "联系人手机号码不能为空");
+                    ToastUtil.initToast(this, "企业/个人手机号码不能为空");
                 } else if (TextUtils.isEmpty(correctCode)) {
                     ToastUtil.initToast(this, "请获取验证码");
                 } else if (!etRegMobile.getText().toString().equals(mobile)) {
@@ -116,15 +108,15 @@ public class RegisterForBusinessActivity extends BaseActivity implements OkHttpU
                     ToastUtil.initToast(this, "请输入六位数密码");
                     etRegPassword.setText(null);
                 } else {//输入正确，注册
-                    PhoneUtil.hideKeyboard(view);
+                    /*PhoneUtil.hideKeyboard(view);
                     isRegister = true;
-                    loadingDialog = LoadingDialog.newInstance("注册中...");
+                    loadingDialog = LoadingDialog.newInstance("密码找回中...");
                     loadingDialog.show(getFragmentManager());
 
                     String jsonString = gson.toJson(new Registered("Mobile", "Android", mobile, etRegPassword.getText().toString(), "default", etBusinessName.getText().toString(), etBossName.getText().toString(), "default", "1"));
 
                     Log.e("loge", "注册json: " + jsonString);
-                    OkHttpUtil.postJson(Constant.URL.Registered, DesUtil.encrypt(jsonString), this);
+                    OkHttpUtil.postJson(Constant.URL.Registered, DesUtil.encrypt(jsonString), this);*/
 
                 }
 
@@ -229,7 +221,6 @@ public class RegisterForBusinessActivity extends BaseActivity implements OkHttpU
                     break;
             }
         }
-
     }
 
     @Override
@@ -238,7 +229,7 @@ public class RegisterForBusinessActivity extends BaseActivity implements OkHttpU
     }
 
     /**
-     * 注册之后
+     * 修改之后
      */
     private void afterRegister(String userId, String token) {
         //用户信息加密后保存到本地

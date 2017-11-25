@@ -1,8 +1,11 @@
 package com.example.a11355.peoplescloudmedia.base;
 
 import android.content.pm.ActivityInfo;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+
+import com.example.a11355.peoplescloudmedia.util.StatusBarUtils;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -19,6 +22,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(getViewResId());
+        StatusBarUtils.setStatusBarLightMode(this, Color.WHITE);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);//手机竖屏
         unbinder = ButterKnife.bind(this);
         init();

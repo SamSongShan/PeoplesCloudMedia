@@ -34,6 +34,10 @@ public interface Constant {
         String Registered = BaseUrl + "Registered";
         //获取短信
         String GetMobileCode = BaseUrl + "GetMobileCode";
+        // 用户登录
+        String LoginRole = BaseUrl + "LoginRole";
+
+
 
 
     }
@@ -67,7 +71,7 @@ public interface Constant {
         String ErrorTips4 = "不可包含 _ 号";
         //我的页面列表数据
         String[] mines = {"我的文章", "我的推广", "我的名片", "关于我们"};
-
+         //发送短信参数
         String[] GetMobileCodeType = {"用户注册", "密码找回", "微信快捷登录绑定手机"};
 
 
@@ -108,6 +112,7 @@ public interface Constant {
         int Nick = 0x2001;
         //更改个性签名
         int Signature = 0x2002;
+        int RegisterForBusinessCode=0x2003;
     }
 
     interface IdString {
