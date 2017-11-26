@@ -59,9 +59,10 @@ public class NikcAndSignatureActivity extends BaseActivity implements OkHttpUtil
             public void onClick(View v) {
 
                 if (!TextUtils.isEmpty(et.getText())) {
+                    loadingDialog = LoadingDialog.newInstance("设置中...");
+                    loadingDialog.show(getFragmentManager());
                     if (type == 0) {
-                        loadingDialog = LoadingDialog.newInstance("设置中...");
-                        loadingDialog.show(getFragmentManager());
+
                         PreferencesUtil.submitUserInfo(NikcAndSignatureActivity.this, "NickName", et.getText().toString(), NikcAndSignatureActivity.this);
                     } else {
                         PreferencesUtil.submitUserInfo(NikcAndSignatureActivity.this, "Signature", et.getText().toString(), NikcAndSignatureActivity.this);
