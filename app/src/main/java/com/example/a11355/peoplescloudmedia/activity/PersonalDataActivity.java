@@ -126,6 +126,7 @@ public class PersonalDataActivity extends BaseActivity implements BaseDialog.OnI
                 isChangeHead = false;
                 isChangeGender = false;
                 Intent intent = new Intent(this, NikcAndSignatureActivity.class);
+                intent.putExtra("type", 0);
                 startActivityForResult(intent, Constant.Code.Nick);
             }
             break;
@@ -149,6 +150,7 @@ public class PersonalDataActivity extends BaseActivity implements BaseDialog.OnI
                 isChangeHead = false;
                 isChangeGender = false;
                 Intent intent = new Intent(this, NikcAndSignatureActivity.class);
+                intent.putExtra("type", 1);
                 startActivityForResult(intent, Constant.Code.Signature);
             }
             break;
@@ -215,12 +217,19 @@ public class PersonalDataActivity extends BaseActivity implements BaseDialog.OnI
                     break;
                 case Constant.Code.Nick: {//昵称
 
-                    break;
-                }
-                case Constant.Code.Signature: {//个性签名
+                    tvNickName.setText(data.getStringExtra("changeText"));
+                    needMineReflash = true;
 
-                    break;
                 }
+                break;
+                case Constant.Code.Signature: {//个性签名
+                    tvSignature.setText(data.getStringExtra("changeText"));
+                    needMineReflash = true;
+
+                }
+                break;
+
+
             }
         }
     }
@@ -291,14 +300,14 @@ public class PersonalDataActivity extends BaseActivity implements BaseDialog.OnI
                             progressBar.setVisibility(View.GONE);
                             GetEntityUserEntity userInfo = PhoneUtil.getUserInfo(this);
                             userInfo.getData().setHeadIcon(headUrl);
-                            SharedPreferencesUtil.saveUserInfo(this, DesUtil.encrypt(gson.toJson(userInfo),DesUtil.LOCAL_KEY));
+                            SharedPreferencesUtil.saveUserInfo(this, DesUtil.encrypt(gson.toJson(userInfo), DesUtil.LOCAL_KEY));
                             sdvUserHead.setImageURI(PhoneUtil.getHead(headUrl));
 
 
                         } else if (isChangeGender) {
                             GetEntityUserEntity userInfo = PhoneUtil.getUserInfo(this);
                             userInfo.getData().setGender(genderForVisible);
-                            SharedPreferencesUtil.saveUserInfo(this, DesUtil.encrypt(gson.toJson(userInfo),DesUtil.LOCAL_KEY));
+                            SharedPreferencesUtil.saveUserInfo(this, DesUtil.encrypt(gson.toJson(userInfo), DesUtil.LOCAL_KEY));
                             gender.setText(genderForVisible);
                         }
 
@@ -323,4 +332,6 @@ public class PersonalDataActivity extends BaseActivity implements BaseDialog.OnI
             tipsDialog.dismiss();
         }
     }
+
+
 }
