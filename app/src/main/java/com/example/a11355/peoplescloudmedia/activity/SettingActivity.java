@@ -74,7 +74,9 @@ public class SettingActivity extends BaseActivity {
                         if (v.getId() == R.id.btn_confirmDialog) {
                             CacheUtil.clearCache();
                             ConfigConstants.clearCache();
+                            tvClearCache.setText("0K");
                             ToastUtil.initToast(SettingActivity.this, "已经清理缓存");
+
                         }
                     }
                 });
@@ -91,7 +93,7 @@ public class SettingActivity extends BaseActivity {
                             CacheUtil.clearCache();
                             ConfigConstants.clearCache();
                             ToastUtil.initToast(SettingActivity.this, "已经清理缓存");
-                            tvClearCache.setText("0K");
+
 
                         }
                     }
