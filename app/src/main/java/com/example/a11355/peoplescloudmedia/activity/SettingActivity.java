@@ -12,6 +12,7 @@ import com.example.a11355.peoplescloudmedia.base.BaseDialog;
 import com.example.a11355.peoplescloudmedia.custom.ConfirmDialog;
 import com.example.a11355.peoplescloudmedia.util.CacheUtil;
 import com.example.a11355.peoplescloudmedia.util.ConfigConstants;
+import com.example.a11355.peoplescloudmedia.util.Constant;
 import com.example.a11355.peoplescloudmedia.util.PreferencesUtil;
 import com.example.a11355.peoplescloudmedia.util.ToastUtil;
 import com.example.a11355.peoplescloudmedia.util.ToolBarUtil;
@@ -35,6 +36,7 @@ public class SettingActivity extends BaseActivity {
     TextView tvVersion;
 
     private DecimalFormat decimal = new DecimalFormat("0.0");
+    private boolean needMineReflash = false; //是否需要mineFragement更新
 
 
     @Override
@@ -48,6 +50,9 @@ public class SettingActivity extends BaseActivity {
         ToolBarUtil.initToolBar(toolbarText, "设置", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (needMineReflash) {
+                    setResult(RESULT_OK);
+                }
                 onBackPressed();
             }
         });
@@ -58,7 +63,7 @@ public class SettingActivity extends BaseActivity {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tv_personalData: {   //个人资料
-                        startActivity(new Intent(this,PersonalDataActivity.class));
+                startActivityForResult(new Intent(this, PersonalDataActivity.class), Constant.Code.LoginCode);
             }
             break;
             case R.id.ll_clearCache: {  //清除缓存
@@ -86,6 +91,8 @@ public class SettingActivity extends BaseActivity {
                             CacheUtil.clearCache();
                             ConfigConstants.clearCache();
                             ToastUtil.initToast(SettingActivity.this, "已经清理缓存");
+                            tvClearCache.setText("0K");
+
                         }
                     }
                 });
@@ -131,5 +138,13 @@ public class SettingActivity extends BaseActivity {
         Intent intent = new Intent(this, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_OK) {
+            needMineReflash = true;
+        }
+
     }
 }

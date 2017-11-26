@@ -8,22 +8,34 @@ import android.os.Environment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.a11355.peoplescloudmedia.R;
+import com.example.a11355.peoplescloudmedia.activity.LoginActivity;
 import com.example.a11355.peoplescloudmedia.activity.MyQRCodeActivity;
 import com.example.a11355.peoplescloudmedia.activity.SettingActivity;
 import com.example.a11355.peoplescloudmedia.adapter.MineRVAdapter;
 import com.example.a11355.peoplescloudmedia.base.AbsRecyclerViewAdapter;
 import com.example.a11355.peoplescloudmedia.base.BaseFragment;
 import com.example.a11355.peoplescloudmedia.custom.GridDividerItemDecoration;
+import com.example.a11355.peoplescloudmedia.custom.LoadingDialog;
+import com.example.a11355.peoplescloudmedia.model.GetEntityUser;
+import com.example.a11355.peoplescloudmedia.model.GetEntityUserEntity;
 import com.example.a11355.peoplescloudmedia.util.BitMapUtil;
 import com.example.a11355.peoplescloudmedia.util.Constant;
+import com.example.a11355.peoplescloudmedia.util.DesUtil;
+import com.example.a11355.peoplescloudmedia.util.OkHttpUtil;
+import com.example.a11355.peoplescloudmedia.util.PhoneUtil;
 import com.example.a11355.peoplescloudmedia.util.PreferencesUtil;
+import com.example.a11355.peoplescloudmedia.util.ToastUtil;
 import com.facebook.drawee.view.SimpleDraweeView;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import java.io.File;
 import java.util.Arrays;
@@ -31,11 +43,13 @@ import java.util.List;
 
 import butterknife.BindView;
 
+import static android.app.Activity.RESULT_OK;
+
 
 /**
  * 我的
  */
-public class MineFragment extends BaseFragment implements View.OnClickListener, AbsRecyclerViewAdapter.OnItemClickListener {
+public class MineFragment extends BaseFragment implements View.OnClickListener, AbsRecyclerViewAdapter.OnItemClickListener, OkHttpUtil.OnDataListener, SwipeRefreshLayout.OnRefreshListener {
 
 
     @BindView(R.id.rv_store)
@@ -53,6 +67,11 @@ public class MineFragment extends BaseFragment implements View.OnClickListener, 
     private TextView tvFansNum;
     private TextView tvCollectNum;
     private List<String> strings;
+
+    private Gson gson = new GsonBuilder().create();
+    private String userId;
+    private String token;
+    private LoadingDialog loadingDialog;
 
     public MineFragment() {
         // Required empty public constructor
@@ -77,8 +96,19 @@ public class MineFragment extends BaseFragment implements View.OnClickListener, 
         mineRVAdapter.setData(strings);
         mineRVAdapter.setOnItemClickListener(this);
         initHeadView(view);
+        srlStore.setOnRefreshListener(this);
+
     }
 
+    @Override
+    protected void loadData() {
+        loadingDialog = LoadingDialog.newInstance("加载中...");
+        loadingDialog.show(getActivity().getFragmentManager());
+        userId = PreferencesUtil.getUserId(getActivity());
+        token = PreferencesUtil.getToken(getActivity());
+        String jsonUser = gson.toJson(new GetEntityUser(token, userId));
+        OkHttpUtil.postJson(Constant.URL.GetEntityUser, DesUtil.encrypt(jsonUser), this);
+    }
 
     public void initHeadView(View view) {
         sdvUserHead = (SimpleDraweeView) view.findViewById(R.id.sdv_userHead);
@@ -114,7 +144,7 @@ public class MineFragment extends BaseFragment implements View.OnClickListener, 
             }
             break;
             case R.id.img_setting: {//设置
-                startActivity(new Intent(getContext(), SettingActivity.class));
+                startActivityForResult(new Intent(getContext(), SettingActivity.class),Constant.Code.LoginCode);
             }
             break;
         }
@@ -148,6 +178,78 @@ public class MineFragment extends BaseFragment implements View.OnClickListener, 
             }
             break;
 
+        }
+    }
+
+    @Override
+    public void onResponse(String url, String json) {
+        if (!TextUtils.isEmpty(json)) {
+            String decrypt = DesUtil.decrypt(json);
+            switch (url) {
+
+                case Constant.URL.GetEntityUser: { //个人信息
+                    Log.e("loge", "GetEntityUser: " + decrypt);
+                    GetEntityUserEntity getEntityUserEntity = gson.fromJson(decrypt, GetEntityUserEntity.class);
+
+                    if (getEntityUserEntity.getCode() == Constant.Integers.SUC) { //成功
+                        PreferencesUtil.saveUserInfo(getActivity(), DesUtil.encrypt(decrypt, DesUtil.LOCAL_KEY));
+                        setHeadViewData(getEntityUserEntity.getData());
+                        dismissLoading();
+
+                    } else if (getEntityUserEntity.getCode() == Constant.Integers.TOKEN_OUT_OF) { //token过期
+                        dismissLoading();
+                        ToastUtil.initToast(getContext(), getEntityUserEntity.getMessage());
+                        startActivityForResult(new Intent(getContext(), LoginActivity.class), Constant.Code.LoginCode);
+
+                    } else {//其他
+                        dismissLoading();
+                        ToastUtil.initToast(getContext(), getEntityUserEntity.getMessage());
+                    }
+
+                }
+                break;
+            }
+        }
+    }
+
+    private void setHeadViewData(GetEntityUserEntity.DataBean data) {
+        sdvUserHead.setImageURI(PhoneUtil.getHead(data.getHeadIcon()));
+
+        tvName.setText(data.getNickName());
+        tvSignature.setText(TextUtils.isEmpty(data.getSignature()) ? "暂未设置个性签名" : data.getSignature());
+        tvFocusNum.setText(data.getFocusNum() + "");
+        tvFansNum.setText(data.getFansNum() + "");
+        tvCollectNum.setText(data.getCollectNum() + "");
+
+    }
+
+    @Override
+    public void onFailure(String url, String error) {
+
+    }
+
+    @Override
+    public void onRefresh() {
+        loadData();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == Constant.Code.LoginCode) {
+            if (resultCode == RESULT_OK) {
+                onRefresh();
+            }
+
+
+        }
+    }
+
+    private void dismissLoading() {
+        if (loadingDialog != null) {
+            loadingDialog.dismiss();
+        }
+        if (srlStore != null && srlStore.isRefreshing()) {
+            srlStore.setRefreshing(false);
         }
     }
 }

@@ -13,6 +13,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
@@ -20,15 +21,25 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.a11355.peoplescloudmedia.activity.LoginActivity;
 import com.example.a11355.peoplescloudmedia.base.BaseActivity;
+import com.example.a11355.peoplescloudmedia.base.BaseDialog;
+import com.example.a11355.peoplescloudmedia.custom.ConfirmDialog;
 import com.example.a11355.peoplescloudmedia.custom.DownloadDialog;
 import com.example.a11355.peoplescloudmedia.fragement.FindFragment;
 import com.example.a11355.peoplescloudmedia.fragement.MessageFragment;
 import com.example.a11355.peoplescloudmedia.fragement.MineFragment;
 import com.example.a11355.peoplescloudmedia.fragement.VideoFragment;
+import com.example.a11355.peoplescloudmedia.model.AppVersionEntity;
+import com.example.a11355.peoplescloudmedia.model.GetAppVersion;
+import com.example.a11355.peoplescloudmedia.util.Constant;
+import com.example.a11355.peoplescloudmedia.util.DesUtil;
 import com.example.a11355.peoplescloudmedia.util.OkHttpUtil;
 import com.example.a11355.peoplescloudmedia.util.PhoneUtil;
+import com.example.a11355.peoplescloudmedia.util.PreferencesUtil;
 import com.example.a11355.peoplescloudmedia.util.ToastUtil;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -39,10 +50,8 @@ import java.util.Map;
 import butterknife.BindView;
 import butterknife.OnClick;
 
-import static android.R.attr.versionName;
 
-
-public class MainActivity extends BaseActivity implements View.OnClickListener, OkHttpUtil.OnProgressListener, RadioGroup.OnCheckedChangeListener {
+public class MainActivity extends BaseActivity implements View.OnClickListener, OkHttpUtil.OnProgressListener, RadioGroup.OnCheckedChangeListener, OkHttpUtil.OnDataListener {
     @BindView(R.id.rg_mainTab)
     public RadioGroup radioGroup;
 
@@ -55,6 +64,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     private int page;//要启动的Fragment的页数
 
     private boolean isExit = false;//退出标识
+    private String versionName;
+    private String newAppLink;
 
 
     final private int REQUEST_CODE_ASK_MULTIPLE_PERMISSIONS = 124;
@@ -62,6 +73,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     private VideoFragment videoFragment;
     private MessageFragment messageFragment;
     private MineFragment mineFragment;
+    private String userId;
+    private Gson gson = new GsonBuilder().create();
 
 
     @Override
@@ -76,20 +89,29 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             checkPermissions();
 
+        } else {
+            checkVersion();
         }
 
         radioGroup.setOnCheckedChangeListener(this);
         radioGroup.getChildAt(0).performClick();
 
+
+    }
+    //版本检查
+
+    private void checkVersion() {
+        String jsonString = gson.toJson(new GetAppVersion("安卓"));
+        OkHttpUtil.postJson(Constant.URL.GetAppVersion, DesUtil.encrypt(jsonString), this);
     }
 
     private void downLoadApp() {
-        downloadDialog = DownloadDialog.newInstance(PhoneUtil.getAppName(this) + "versionName", isForce);
+        downloadDialog = DownloadDialog.newInstance(PhoneUtil.getAppName(this) + versionName, isForce);
         downloadDialog.show(getFragmentManager(), "download");
         filePath = Environment.getExternalStorageDirectory() + "/Download/" + PhoneUtil.getAppName(this) +
                 "_" + versionName + ".apk";
         Log.e("loge", "Download: " + filePath);
-        OkHttpUtil.fileDownload("url", filePath, this, new OkHttpUtil.OnDataListener() {
+        OkHttpUtil.fileDownload(newAppLink, filePath, this, new OkHttpUtil.OnDataListener() {
             @Override
             public void onResponse(String url, String json) {//下载完成
                 TextView btnInstall = downloadDialog.getBtnInstall();
@@ -220,6 +242,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             requestPermissions(permissionsList.toArray(new String[permissionsList.size()]),
                     REQUEST_CODE_ASK_MULTIPLE_PERMISSIONS);
             return;
+        } else {
+            checkVersion();
         }
 
         //可以操作
@@ -267,12 +291,14 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                         && perms.get(Manifest.permission.BODY_SENSORS) == PackageManager.PERMISSION_GRANTED*/
                         ) {
                     // 授权成功
+                    checkVersion();
 
                 } else {
                     // 授权失败
 
                     Toast.makeText(MainActivity.this, "部分权限被拒绝，使用过程中可能会出现未知错误", Toast.LENGTH_SHORT)
                             .show();
+                    checkVersion();
                 }
             }
             break;
@@ -328,29 +354,50 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 break;
 
             case R.id.rb_mainTab3://消息
-                page = 2;
-                if (messageFragment == null) {
-                    messageFragment = new MessageFragment();
-                    transaction.add(R.id.fl_main, messageFragment, "2");
+                page = 3;
+
+
+                if (!isLogin()) {//当前未登录
+                    startActivityForResult(new Intent(this, LoginActivity.class), Constant.Code.IntoCertifyCode);
                 } else {
-                    transaction.show(messageFragment);
-                    //messageFragment.onRefresh();//强制进入刷新
+                    if (messageFragment == null) {
+                        messageFragment = new MessageFragment();
+                        transaction.add(R.id.fl_main, messageFragment, "2");
+                    } else {
+                        transaction.show(messageFragment);
+                        //messageFragment.onRefresh();//强制进入刷新
+                    }
                 }
+
 
                 break;
             case R.id.rb_mainTab4://我的
-                page = 3;
-                if (mineFragment == null) {
-
-                    mineFragment = new MineFragment();
-                    transaction.add(R.id.fl_main, mineFragment, "3");
+                page = 4;
+                if (!isLogin()) {//当前未登录
+                    startActivityForResult(new Intent(this, LoginActivity.class), Constant.Code.IntoCertifyCode);
                 } else {
-                    transaction.show(mineFragment);
-                    //mineFragment.onRefresh();//强制进入刷新
+                    if (mineFragment == null) {
+
+                        mineFragment = new MineFragment();
+                        transaction.add(R.id.fl_main, mineFragment, "3");
+                    } else {
+                        transaction.show(mineFragment);
+                        mineFragment.onRefresh();//强制进入刷新
+                    }
                 }
+
                 break;
         }
         transaction.commitAllowingStateLoss();
+    }
+
+    public boolean isLogin() {
+        userId = PreferencesUtil.getUserId(this);
+        if ("default".equals(userId)) {
+            return false;
+        } else {
+            return true;
+        }
     }
 
     /**
@@ -372,9 +419,77 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     }
 
 
-
     @OnClick(R.id.img_add)//发布
     public void onViewClicked() {
+        if (!isLogin()) {//当前未登录
+            startActivityForResult(new Intent(this, LoginActivity.class), Constant.Code.IntoCertifyCode);
+        } else {
+        }
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == Constant.Code.IntoCertifyCode) {
+            if (resultCode == RESULT_OK) {
+                onCheckedChanged(radioGroup, radioGroup.getCheckedRadioButtonId());
+            } else {
+                radioGroup.getChildAt(0).performClick();
+            }
+        }
+    }
+
+    @Override
+    public void onResponse(String url, String json) {
+        if (!TextUtils.isEmpty(json)) {
+            String decrypt = DesUtil.decrypt(json);
+            switch (url) {
+                case Constant.URL.GetAppVersion: { //版本更新
+
+                    Log.e("GetAppVersion", "onResponse" + decrypt);
+                    AppVersionEntity version = new Gson().fromJson(decrypt, AppVersionEntity.class);
+                    if (version.getCode() == Constant.Integers.SUC) {
+                        isForce = false;
+                        versionName = version.getData().getItemName();
+                        String charStr = versionName.charAt(0) + "";
+                        String ver = versionName;
+                        if ("v".equals(charStr)) {
+                            ver = versionName.substring(1, versionName.length());
+                        }
+                        if ("V".equals(charStr)) {
+                            isForce = true;
+                        }
+
+                        int isNeedUpdate = PhoneUtil.isNeedUpdate(PhoneUtil.getAppVersion(this), ver);
+                        switch (isNeedUpdate) {
+                            case 2://需要强制更新
+                                isForce = true;
+                            case 1://需要更新
+
+                                newAppLink = version.getData().getItemValue();
+                                String newContent = version.getData().getDescription() + "</br>(建议在wifi下更新)";
+                                ConfirmDialog confirmDialog = ConfirmDialog.newInstance("系统即将升级到" + newContent, "取消", "确认");
+                                confirmDialog.setOnItemClickListener(new BaseDialog.OnItemClickListener() {
+                                    @Override
+                                    public void onItemClick(View v) {
+                                        if (v.getId() == R.id.btn_confirmDialog) {
+                                            downLoadApp();
+                                        }
+                                    }
+                                });
+                                confirmDialog.show(getFragmentManager());
+                                break;
+                        }
+                    }
+                }
+                break;
+            }
+        }
+    }
+
+    @Override
+    public void onFailure(String url, String error) {
 
     }
 }

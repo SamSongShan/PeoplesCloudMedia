@@ -19,6 +19,7 @@ import android.widget.Toast;
 import com.example.a11355.peoplescloudmedia.R;
 import com.example.a11355.peoplescloudmedia.base.BaseActivity;
 import com.example.a11355.peoplescloudmedia.custom.LoadingDialog;
+import com.example.a11355.peoplescloudmedia.model.GetAppVersion;
 import com.example.a11355.peoplescloudmedia.model.GetMobileCode;
 import com.example.a11355.peoplescloudmedia.model.LoginRole;
 import com.example.a11355.peoplescloudmedia.model.LoginRoleEntity;
@@ -101,6 +102,9 @@ public class LoginActivity extends BaseActivity implements RadioGroup.OnCheckedC
         rg.setOnCheckedChangeListener(this);
         rg.setFocusable(true);
         rg.setFocusableInTouchMode(true);
+        //版本检查
+        String jsonString = gson.toJson(new GetAppVersion("安卓"));
+        OkHttpUtil.postJson(Constant.URL.GetAppVersion, DesUtil.encrypt(jsonString), this);
     }
 
     @OnClick({R.id.iv_psw, R.id.btn_identify, R.id.tv_forgetPassword, R.id.tv_personal_register, R.id.btn_login, R.id.btn_register, R.id.btn_login_byWX})

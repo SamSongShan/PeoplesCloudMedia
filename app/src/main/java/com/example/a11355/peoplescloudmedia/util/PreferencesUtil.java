@@ -6,6 +6,9 @@ import android.content.SharedPreferences;
 import android.view.View;
 
 import com.example.a11355.peoplescloudmedia.R;
+import com.example.a11355.peoplescloudmedia.model.UpdateUserEntity;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -59,12 +62,12 @@ public class PreferencesUtil {
 
    /* *//**
      * 修改用户数据
-     *//*
+     */
     public static void submitUserInfo(Context context, String name, String data, OkHttpUtil.OnDataListener dataListener) {
         Gson gson = new GsonBuilder().create();
-        String jsonString = gson.toJson(new UpdateUserInfo(getUserId(context), name, data));
+        String jsonString = gson.toJson(new UpdateUserEntity(getUserId(context),getToken(context), name, data));
         OkHttpUtil.postJson(Constant.URL.UpdateUserEntity, DesUtil.encrypt(jsonString), dataListener);
-    }*/
+    }
 
     /**
      * 清除本地保存数据
@@ -100,6 +103,29 @@ public class PreferencesUtil {
                     userId = DesUtil.decrypt(userId, DesUtil.LOCAL_KEY);
                 }
                 return userId;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "default";
+    }
+
+    /**
+     * 从本地获取Token
+     */
+    public static String getToken(Context context) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        SharedPreferences user = context.getSharedPreferences("user", context.MODE_PRIVATE);
+        try {
+            long loginTime = user.getLong("LoginTime", sdf.parse("2016-01-01").getTime());
+            if ((System.currentTimeMillis() - loginTime) > (30 * 24 * 60 * 60 * 1000L)) {//距离上次登录已超30天
+                return "default";
+            } else {//距离上次登录未超30天
+                String token = user.getString("Token", "default");
+                if (!"default".equals(token)) {
+                      token = DesUtil.decrypt(token, DesUtil.LOCAL_KEY);
+                }
+                return token;
             }
         } catch (Exception e) {
             e.printStackTrace();

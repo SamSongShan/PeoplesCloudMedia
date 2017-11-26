@@ -16,7 +16,9 @@ import android.widget.TextView;
 import com.example.a11355.peoplescloudmedia.R;
 import com.example.a11355.peoplescloudmedia.base.BaseActivity;
 import com.example.a11355.peoplescloudmedia.custom.CustomPopupWindow;
+import com.example.a11355.peoplescloudmedia.model.GetEntityUserEntity;
 import com.example.a11355.peoplescloudmedia.util.BitMapUtil;
+import com.example.a11355.peoplescloudmedia.util.Constant;
 import com.example.a11355.peoplescloudmedia.util.PhoneUtil;
 import com.example.a11355.peoplescloudmedia.util.PreferencesUtil;
 import com.example.a11355.peoplescloudmedia.util.ScreenshotUtils;
@@ -47,6 +49,9 @@ public class MyQRCodeActivity extends BaseActivity implements View.OnClickListen
 
     private CustomPopupWindow customPopupWindow;
 
+    private String ShearLink;
+    private GetEntityUserEntity.DataBean userInfo;
+
 
     @Override
     protected int getViewResId() {
@@ -76,12 +81,19 @@ public class MyQRCodeActivity extends BaseActivity implements View.OnClickListen
             }
         });
 
-        //
+        ShearLink=Constant.URL.ShearLink;
+        GetEntityUserEntity GetEntityUserEntity = PhoneUtil.getUserInfo(this);
 
+        if (GetEntityUserEntity!=null){
+            userInfo = GetEntityUserEntity.getData();
+            sdvUserHead.setImageURI(PhoneUtil.getHead(userInfo.getHeadIcon()));
+            tvName.setText(userInfo.getNickName());
+            ShearLink= ShearLink+ userInfo.getMobile();
 
-        Bitmap qrCode = BitMapUtil.createQRImage("这是个二维码字符串", PhoneUtil.getPhoneWidth(this) / 2);
+        }
+
+        Bitmap qrCode = BitMapUtil.createQRImage(ShearLink, PhoneUtil.getPhoneWidth(this) / 2);
         ivQRCode.setImageBitmap(qrCode);
-
 
     }
 

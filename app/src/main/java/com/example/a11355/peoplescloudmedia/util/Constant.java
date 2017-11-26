@@ -12,8 +12,8 @@ public interface Constant {
 
         //本地服务器地址
         String BaseUrl = "http://service.lml9.com/Index.asmx/";
-        String BaseImg = "http://192.168.1.134:8011";
-        String BaseH5 = "http://192.168.1.134:8012";
+        String BaseImg = "http://service.lml9.com";
+        String BaseH5 = "http://service.lml9.com";
 
         String DefaultHeadImg = "res:///" + R.drawable.ic_launcher;
 
@@ -37,9 +37,22 @@ public interface Constant {
         // 用户登录
         String LoginRole = BaseUrl + "LoginRole";
 
+        //版本检查
+        String GetAppVersion = BaseUrl + "GetAppVersion";
+        //获取个人信息
+        String GetEntityUser = BaseUrl + "GetEntityUser";
+        //图片上传
+        String UploadImg = BaseUrl + "UploadImg";
 
+        //用户基本信息修改(输入参数string Json)
+        /*
+        * UserId:用户编号
+ Token:登录的判断标识
+ Action:修改信息( 昵称-NickName、头像-HeadIcon、性别-Gender，个性签名-Signature,手机号-Mobile)
+ ActionValue:值
+        * */
 
-
+        String UpdateUserEntity = BaseUrl + "UpdateUserEntity";
     }
 
     interface Strings {
@@ -71,10 +84,8 @@ public interface Constant {
         String ErrorTips4 = "不可包含 _ 号";
         //我的页面列表数据
         String[] mines = {"我的文章", "我的推广", "我的名片", "关于我们"};
-         //发送短信参数
+        //发送短信参数
         String[] GetMobileCodeType = {"用户注册", "密码找回", "微信快捷登录绑定手机"};
-
-
 
 
     }
@@ -83,15 +94,15 @@ public interface Constant {
     interface Integers {
         //操作成功
         int SUC = 200;
-        //操作失败
-        int FAIL = 300;
+        //token过期
+        int TOKEN_OUT_OF = 300;
         //数据为空
         int NULL = 400;
         //数据异常
         int ABNORMAL = 500;
 
-         //验证码失效时间
-        int CodeRetryTime=120;
+        //验证码失效时间
+        int CodeRetryTime = 120;
     }
 
     interface ID {
@@ -112,7 +123,12 @@ public interface Constant {
         int Nick = 0x2001;
         //更改个性签名
         int Signature = 0x2002;
-        int RegisterForBusinessCode=0x2003;
+        //商家注册
+        int RegisterForBusinessCode = 0x2003;
+        //未登录
+        int IntoCertifyCode = 0x2004;
+        //登录
+        int LoginCode = 0x2005;
     }
 
     interface IdString {

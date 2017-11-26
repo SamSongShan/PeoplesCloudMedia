@@ -6,22 +6,34 @@ import android.net.Uri;
 import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
 import com.example.a11355.peoplescloudmedia.R;
 import com.example.a11355.peoplescloudmedia.base.BaseActivity;
 import com.example.a11355.peoplescloudmedia.base.BaseDialog;
+import com.example.a11355.peoplescloudmedia.custom.LoadingDialog;
 import com.example.a11355.peoplescloudmedia.custom.SectorProgressBar;
 import com.example.a11355.peoplescloudmedia.custom.TipsAuthDialog;
 import com.example.a11355.peoplescloudmedia.custom.UploadGenderDialog;
 import com.example.a11355.peoplescloudmedia.custom.UploadImgDialog;
+import com.example.a11355.peoplescloudmedia.model.GetEntityUserEntity;
+import com.example.a11355.peoplescloudmedia.model.SingleWordEntity;
+import com.example.a11355.peoplescloudmedia.model.UploadImgEntity;
 import com.example.a11355.peoplescloudmedia.util.BitMapUtil;
 import com.example.a11355.peoplescloudmedia.util.Constant;
+import com.example.a11355.peoplescloudmedia.util.DesUtil;
 import com.example.a11355.peoplescloudmedia.util.OkHttpUtil;
+import com.example.a11355.peoplescloudmedia.util.PhoneUtil;
+import com.example.a11355.peoplescloudmedia.util.PreferencesUtil;
+import com.example.a11355.peoplescloudmedia.util.SharedPreferencesUtil;
 import com.example.a11355.peoplescloudmedia.util.ToastUtil;
 import com.example.a11355.peoplescloudmedia.util.ToolBarUtil;
 import com.facebook.drawee.view.SimpleDraweeView;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -47,6 +59,17 @@ public class PersonalDataActivity extends BaseActivity implements BaseDialog.OnI
     SectorProgressBar progressBar;
     private TipsAuthDialog tipsDialog;
     private Handler handler = new Handler();
+    private String encode = "";
+    private LoadingDialog loadingDialog;
+    private boolean isUpdating = false;
+    private boolean isChangeHead = false;
+    private String headUrl;
+
+    private Gson gson = new GsonBuilder().create();
+
+    private boolean needMineReflash = false; //是否需要mineFragement更新
+    private boolean isChangeGender;
+    private String genderForVisible;
 
 
     @Override
@@ -60,15 +83,35 @@ public class PersonalDataActivity extends BaseActivity implements BaseDialog.OnI
         ToolBarUtil.initToolBar(toolbarText, "个人资料", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                if (needMineReflash) {
+                    setResult(RESULT_OK);
+                }
                 onBackPressed();
             }
         });
+
+        GetEntityUserEntity getEntityUserEntity = PhoneUtil.getUserInfo(this);
+
+        if (getEntityUserEntity != null) {
+            GetEntityUserEntity.DataBean userInfo = getEntityUserEntity.getData();
+
+            encode = userInfo.getEnCode();
+            sdvUserHead.setImageURI(PhoneUtil.getHead(userInfo.getHeadIcon()));
+            tvNickName.setText(userInfo.getNickName());
+            gender.setText(TextUtils.isEmpty(userInfo.getGender()) ? "暂未设置" : userInfo.getGender());
+            tvSignature.setText(TextUtils.isEmpty(userInfo.getSignature()) ? "暂未设置" : userInfo.getSignature());
+        }
+
+
     }
 
     @OnClick({R.id.sdv_userHead, R.id.ll_nickName, R.id.ll_gender, R.id.ll_signature})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.sdv_userHead: {   //   更换头像
+                isChangeHead = true;
+                isChangeGender = false;
                 UploadImgDialog upImgDialog = UploadImgDialog.newInstance();
                 upImgDialog.setOnItemClickListener(this);
                 upImgDialog.show(getFragmentManager());
@@ -76,17 +119,35 @@ public class PersonalDataActivity extends BaseActivity implements BaseDialog.OnI
             break;
             case R.id.ll_nickName: {    // 修改昵称
 
+                if (isUpdating) {
+                    ToastUtil.initToast(this, "正在上传头像，请稍后");
+                    return;
+                }
+                isChangeHead = false;
+                isChangeGender = false;
                 Intent intent = new Intent(this, NikcAndSignatureActivity.class);
                 startActivityForResult(intent, Constant.Code.Nick);
             }
             break;
             case R.id.ll_gender: { //  修改性别
+                if (isUpdating) {
+                    ToastUtil.initToast(this, "正在上传头像，请稍后");
+                    return;
+                }
+                isChangeHead = false;
+                isChangeGender = true;
                 UploadGenderDialog uploadGenderDialog = UploadGenderDialog.newInstance();
                 uploadGenderDialog.setOnItemClickListener(this);
                 uploadGenderDialog.show(getFragmentManager());
             }
             break;
             case R.id.ll_signature: {// 修个个性签名
+                if (isUpdating) {
+                    ToastUtil.initToast(this, "正在上传头像，请稍后");
+                    return;
+                }
+                isChangeHead = false;
+                isChangeGender = false;
                 Intent intent = new Intent(this, NikcAndSignatureActivity.class);
                 startActivityForResult(intent, Constant.Code.Signature);
             }
@@ -118,12 +179,17 @@ public class PersonalDataActivity extends BaseActivity implements BaseDialog.OnI
                 }
                 break;
             case R.id.tv_man: //男
-
+                loadingDialog = LoadingDialog.newInstance("设置中...");
+                loadingDialog.show(getFragmentManager());
+                genderForVisible = "男";
+                PreferencesUtil.submitUserInfo(this, "Gender", "男", this);
 
                 break;
             case R.id.tv_woman://女
-
-
+                loadingDialog = LoadingDialog.newInstance("设置中...");
+                loadingDialog.show(getFragmentManager());
+                genderForVisible = "女";
+                PreferencesUtil.submitUserInfo(this, "Gender", "女", this);
                 break;
         }
     }
@@ -168,8 +234,8 @@ public class PersonalDataActivity extends BaseActivity implements BaseDialog.OnI
                 progressBar.initProgress();
 
             }
-
-            OkHttpUtil.postStream("上传图像接口", "encode", 0, bitmap, this, this);
+            isUpdating = true;
+            OkHttpUtil.postStream(Constant.URL.UploadImg, encode, 0, bitmap, this, this);
         }
     }
 
@@ -192,11 +258,69 @@ public class PersonalDataActivity extends BaseActivity implements BaseDialog.OnI
 
     @Override
     public void onResponse(String url, String json) {
+        if (!TextUtils.isEmpty(json)) {
+            String decrypt = DesUtil.decrypt(json);
+            switch (url) {
+                case Constant.URL.UploadImg: {//上传头像
 
+                    Log.e("loge", "UploadImg: " + decrypt);
+                    UploadImgEntity img = new Gson().fromJson(decrypt, UploadImgEntity.class);
+                    if (img.getCode() == Constant.Integers.SUC) {
+                        loadingDialog = LoadingDialog.newInstance("设置中...");
+                        loadingDialog.show(getFragmentManager());
+                        headUrl = img.getData();
+                        PreferencesUtil.submitUserInfo(this, "HeadIcon", img.getData(), this);
+                    } else {
+                        ToastUtil.initToast(this, img.getMessage());
+                        isUpdating = false;
+                    }
+
+                }
+                break;
+
+                case Constant.URL.UpdateUserEntity: {
+                    Log.e("UpdateUserEntity", "UpdateUserEntity: " + decrypt);
+
+                    dismissLoading();
+                    SingleWordEntity img = new Gson().fromJson(decrypt, SingleWordEntity.class);
+                    ToastUtil.initToast(this, img.getMessage());
+                    if (img.getCode() == Constant.Integers.SUC) {
+
+                        if (isChangeHead) { //
+                            isUpdating = false;
+                            progressBar.setVisibility(View.GONE);
+                            GetEntityUserEntity userInfo = PhoneUtil.getUserInfo(this);
+                            userInfo.getData().setHeadIcon(headUrl);
+                            SharedPreferencesUtil.saveUserInfo(this, DesUtil.encrypt(gson.toJson(userInfo),DesUtil.LOCAL_KEY));
+                            sdvUserHead.setImageURI(PhoneUtil.getHead(headUrl));
+
+
+                        } else if (isChangeGender) {
+                            GetEntityUserEntity userInfo = PhoneUtil.getUserInfo(this);
+                            userInfo.getData().setGender(genderForVisible);
+                            SharedPreferencesUtil.saveUserInfo(this, DesUtil.encrypt(gson.toJson(userInfo),DesUtil.LOCAL_KEY));
+                            gender.setText(genderForVisible);
+                        }
+
+                        needMineReflash = true;
+                    }
+                }
+                break;
+            }
+        }
     }
 
     @Override
     public void onFailure(String url, String error) {
 
+    }
+
+    private void dismissLoading() {
+        if (loadingDialog != null) {
+            loadingDialog.dismiss();
+        }
+        if (tipsDialog != null) {
+            tipsDialog.dismiss();
+        }
     }
 }

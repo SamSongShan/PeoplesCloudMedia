@@ -15,6 +15,9 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.example.a11355.peoplescloudmedia.model.GetEntityUserEntity;
+import com.google.gson.Gson;
+
 import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
@@ -469,22 +472,22 @@ public class PhoneUtil {
 
   /*  *//**
      * 获取本地的用户信息
-     *//*
-    public static UserInfoEntity.DataEntity getUserInfo(Context context) {
+     */
+    public static GetEntityUserEntity getUserInfo(Context context) {
         SharedPreferences userInfo = context.getSharedPreferences("userInfo", context.MODE_PRIVATE);
         String info = userInfo.getString("UserInfo", null);
         if (info != null) {
             try {
                 info = DesUtil.decrypt(info, DesUtil.LOCAL_KEY);
-                UserInfoEntity infoEntity = new Gson().fromJson(info, UserInfoEntity.class);
-                return infoEntity.getData();
+                GetEntityUserEntity infoEntity = new Gson().fromJson(info, GetEntityUserEntity.class);
+                return infoEntity;
             } catch (Exception e) {
                 e.printStackTrace();
                 return null;
             }
         }
         return null;
-    }*/
+    }
 
 
     /**
