@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        app:cardCornerRadius="5dp"
+        app:cardElevation="10dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <com.facebook.drawee.view.SimpleDraweeView
+                android:id="@+id/sdv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                fresco:actualImageScaleType="fitXY"
+                fresco:failureImage="@drawable/img_fail"
+                fresco:failureImageScaleType="centerInside"
+                fresco:placeholderImage="@drawable/img_loading"
+                fresco:placeholderImageScaleType="fitCenter"
+                fresco:roundingBorderWidth="5dp"
+                fresco:viewAspectRatio="0.8" />
+
+
+              <LinearLayout
+                  android:layout_alignParentBottom="true"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:orientation="vertical">
+                  <TextView
+                      android:id="@+id/tv_title"
+                      android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      android:layout_marginLeft="10dp"
+                      android:layout_marginRight="10dp"
+                      android:ellipsize="end"
+                      android:gravity="center"
+                      android:maxLines="2"
+                      android:textColor="@color/colorWhite"
+                      android:textSize="16sp"
+                      android:textStyle="bold"
+                      tools:text="标题" />
+                  <LinearLayout
+                      android:id="@+id/ll_below"
+                      android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      android:orientation="horizontal">
+                      <com.facebook.drawee.view.SimpleDraweeView
+                          android:id="@+id/sdv_from"
+                          android:layout_width="25dp"
+                          android:layout_height="wrap_content"
+                          android:layout_gravity="center_vertical"
+                          android:layout_margin="10dp"
+                          fresco:actualImageScaleType="focusCrop"
+                          fresco:failureImage="@drawable/img_fail"
+                          fresco:failureImageScaleType="centerInside"
+                          fresco:placeholderImage="@drawable/img_loading"
+                          fresco:placeholderImageScaleType="fitCenter"
+                          fresco:roundAsCircle="true"
+                          fresco:viewAspectRatio="1" />
+
+                      <RelativeLayout
+                          android:layout_width="wrap_content"
+                          android:layout_height="match_parent"
+                          android:layout_weight="1"
+                          android:orientation="horizontal">
+
+                          <TextView
+                              android:id="@+id/tv_from"
+                              android:layout_width="wrap_content"
+                              android:layout_height="wrap_content"
+                              android:layout_alignParentRight="true"
+                              android:layout_centerVertical="true"
+                              android:layout_gravity="center_vertical"
+                              android:layout_marginRight="20dp"
+                              android:drawableLeft="@drawable/watch"
+                              android:drawablePadding="5dp"
+                              android:ellipsize="end"
+                              android:gravity="right"
+                              android:textColor="@color/colorGray"
+                              tools:text="描述" />
+                      </RelativeLayout>
+
+                  </LinearLayout>
+              </LinearLayout>
+
+
+        </RelativeLayout>
+
+
+    </android.support.v7.widget.CardView>
+
+
+</LinearLayout>

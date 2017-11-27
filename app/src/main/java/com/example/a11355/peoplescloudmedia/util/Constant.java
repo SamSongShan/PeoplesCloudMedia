@@ -53,7 +53,12 @@ public interface Constant {
         * */
 
         String UpdateUserEntity = BaseUrl + "UpdateUserEntity";
-        String GetAreaLastDate=BaseUrl + "GetAreaLastDate";
+        //清除缓存接口
+        String GetAreaLastDate = BaseUrl + "GetAreaLastDate";
+        //视频接口
+        String GetVideoList = BaseUrl + "GetVideoList";
+
+
     }
 
     interface Strings {

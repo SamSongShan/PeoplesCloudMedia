@@ -19,6 +19,7 @@ import com.example.a11355.peoplescloudmedia.base.BaseActivity;
 import com.example.a11355.peoplescloudmedia.base.BaseDialog;
 import com.example.a11355.peoplescloudmedia.custom.ConfirmDialog;
 import com.example.a11355.peoplescloudmedia.custom.DownloadDialog;
+import com.example.a11355.peoplescloudmedia.custom.LoadingDialog;
 import com.example.a11355.peoplescloudmedia.model.AppVersionEntity;
 import com.example.a11355.peoplescloudmedia.model.GetAppVersion;
 import com.example.a11355.peoplescloudmedia.util.CacheUtil;
@@ -62,6 +63,7 @@ public class SettingActivity extends BaseActivity implements OkHttpUtil.OnDataLi
     private DownloadDialog downloadDialog;
     private String filePath;
     private Handler handler = new Handler();
+    private LoadingDialog loadingDialog;
 
 
     @Override
@@ -124,6 +126,9 @@ public class SettingActivity extends BaseActivity implements OkHttpUtil.OnDataLi
                     }
                 });
                 confirmDialog.show(getFragmentManager());*/
+
+                loadingDialog = LoadingDialog.newInstance("检查更新中...");
+                loadingDialog.show(getFragmentManager());
                 String jsonString = gson.toJson(new GetAppVersion("安卓"));
                 OkHttpUtil.postJson(Constant.URL.GetAppVersion, DesUtil.encrypt(jsonString), this);
             }
@@ -180,6 +185,7 @@ public class SettingActivity extends BaseActivity implements OkHttpUtil.OnDataLi
     @Override
     public void onResponse(String url, String json) {
         if (!TextUtils.isEmpty(json)) {
+            dismissLoading();
             String decrypt = DesUtil.decrypt(json);
 
             Log.e("GetAppVersion", "onResponse" + decrypt);
@@ -301,5 +307,10 @@ public class SettingActivity extends BaseActivity implements OkHttpUtil.OnDataLi
                 }
             }
         });
+    }
+    private void dismissLoading() {
+        if (loadingDialog != null) {
+            loadingDialog.dismiss();
+        }
     }
 }
