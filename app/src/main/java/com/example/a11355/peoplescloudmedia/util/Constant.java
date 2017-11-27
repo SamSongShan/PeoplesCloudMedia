@@ -53,6 +53,7 @@ public interface Constant {
         * */
 
         String UpdateUserEntity = BaseUrl + "UpdateUserEntity";
+        String GetAreaLastDate=BaseUrl + "GetAreaLastDate";
     }
 
     interface Strings {

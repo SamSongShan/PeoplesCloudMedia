@@ -253,7 +253,7 @@ public class PhoneUtil {
      * 本地缓存是否可用
      */
     public static boolean isUrlCacheValid(Context context, String url) {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
         if (TextUtils.isEmpty(CacheUtil.getUrlCache(url))) {
             return false;
         } else {
@@ -497,5 +497,7 @@ public class PhoneUtil {
         DecimalFormat format2 = new DecimalFormat("00");
         return year + "-" + format2.format(month) + "-" + format2.format(day);
     }
+
+
 
 }

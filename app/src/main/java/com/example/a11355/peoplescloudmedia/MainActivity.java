@@ -3,6 +3,7 @@ package com.example.a11355.peoplescloudmedia;
 import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
@@ -32,6 +33,7 @@ import com.example.a11355.peoplescloudmedia.fragement.MineFragment;
 import com.example.a11355.peoplescloudmedia.fragement.VideoFragment;
 import com.example.a11355.peoplescloudmedia.model.AppVersionEntity;
 import com.example.a11355.peoplescloudmedia.model.GetAppVersion;
+import com.example.a11355.peoplescloudmedia.model.GetAreaLastDateEntity;
 import com.example.a11355.peoplescloudmedia.util.Constant;
 import com.example.a11355.peoplescloudmedia.util.DesUtil;
 import com.example.a11355.peoplescloudmedia.util.OkHttpUtil;
@@ -92,6 +94,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         } else {
             checkVersion();
         }
+        //行政区域修改时间
+        OkHttpUtil.postJson(Constant.URL.GetAreaLastDate, "0", this);
 
         radioGroup.setOnCheckedChangeListener(this);
         radioGroup.getChildAt(0).performClick();
@@ -484,6 +488,17 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                     }
                 }
                 break;
+                case Constant.URL.GetAreaLastDate:
+                    Log.e("GetAreaLastDate", "onResponse" + decrypt);
+
+                    GetAreaLastDateEntity getAreaLastDateEntity = gson.fromJson(decrypt, GetAreaLastDateEntity.class);
+
+                    if (getAreaLastDateEntity.getCode() == 200) {
+                        SharedPreferences.Editor isFirst = getSharedPreferences("isFirst", MODE_PRIVATE).edit();
+                        isFirst.putString("LastAddressModifyTime",getAreaLastDateEntity.getData().getLastDate());
+                        isFirst.commit();
+                    }
+                    break;
             }
         }
     }
