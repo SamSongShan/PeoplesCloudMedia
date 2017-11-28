@@ -156,11 +156,10 @@
         <activity android:name=".activity.SettingActivity" />
         <activity android:name=".activity.PersonalDataActivity" />
         <activity android:name=".activity.NikcAndSignatureActivity" />
-        <activity android:name=".activity.LoginActivity">
-
-        </activity>
+        <activity android:name=".activity.LoginActivity"></activity>
         <activity android:name=".activity.RegisterForBusinessActivity" />
-        <activity android:name=".activity.ForgotPasswordActivity"></activity>
+        <activity android:name=".activity.ForgotPasswordActivity" />
+        <activity android:name=".activity.MyPromotionActivity"></activity>
     </application>
 
 </manifest>

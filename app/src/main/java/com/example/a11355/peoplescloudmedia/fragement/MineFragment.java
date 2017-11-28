@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import com.example.a11355.peoplescloudmedia.R;
 import com.example.a11355.peoplescloudmedia.activity.LoginActivity;
+import com.example.a11355.peoplescloudmedia.activity.MyPromotionActivity;
 import com.example.a11355.peoplescloudmedia.activity.MyQRCodeActivity;
 import com.example.a11355.peoplescloudmedia.activity.SettingActivity;
 import com.example.a11355.peoplescloudmedia.adapter.MineRVAdapter;
@@ -169,6 +170,7 @@ public class MineFragment extends BaseFragment implements View.OnClickListener, 
             }
             break;
             case "我的推广": {
+                startActivity(new Intent(getContext(),MyPromotionActivity.class));
             }
             break;
             case "我的名片": {
