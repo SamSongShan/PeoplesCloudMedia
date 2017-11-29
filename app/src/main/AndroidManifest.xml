@@ -156,8 +156,13 @@
         <activity android:name=".activity.SettingActivity" />
         <activity android:name=".activity.PersonalDataActivity" />
         <activity android:name=".activity.NikcAndSignatureActivity" />
-        <activity android:name=".activity.LoginActivity"></activity>
+        <activity android:name=".activity.LoginActivity" />
         <activity android:name=".activity.RegisterForBusinessActivity" />
+        <activity android:name=".activity.ForgotPasswordActivity" />
+        <activity android:name=".activity.HRichEditorViewActivity" />
+        <activity android:name=".activity.TXTEditorActivity" />
+        <activity android:name=".activity.LinkedActivity" />
+        <activity android:name=".activity.TitleEidtorActivity"></activity>
         <activity android:name=".activity.ForgotPasswordActivity" />
         <activity android:name=".activity.MyPromotionActivity"></activity>
     </application>

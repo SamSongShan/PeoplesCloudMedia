@@ -22,6 +22,7 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.a11355.peoplescloudmedia.activity.HRichEditorViewActivity;
 import com.example.a11355.peoplescloudmedia.activity.LoginActivity;
 import com.example.a11355.peoplescloudmedia.base.BaseActivity;
 import com.example.a11355.peoplescloudmedia.base.BaseDialog;
@@ -428,6 +429,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         if (!isLogin()) {//当前未登录
             startActivityForResult(new Intent(this, LoginActivity.class), Constant.Code.IntoCertifyCode);
         } else {
+            startActivity(new Intent(this, HRichEditorViewActivity.class));
+
         }
     }
 
