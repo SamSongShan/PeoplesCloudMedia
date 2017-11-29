@@ -44,7 +44,9 @@ public class MyPromotionActivity extends BaseActivity {
         fragmentList.add(MyPromotionFragment.instanceFragment(0));
         fragmentList.add(MyPromotionFragment.instanceFragment(1));
         fragmentList.add(MyPromotionFragment.instanceFragment(2));
+
         VpMyPromotionAdapter vpMyPromotionAdapter = new VpMyPromotionAdapter(getSupportFragmentManager(), fragmentList);
         vp.setAdapter(vpMyPromotionAdapter);
+        vp.setOffscreenPageLimit(2);
     }
 }

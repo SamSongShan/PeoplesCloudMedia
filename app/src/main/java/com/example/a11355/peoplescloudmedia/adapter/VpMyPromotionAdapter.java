@@ -31,4 +31,17 @@ public class VpMyPromotionAdapter extends FragmentPagerAdapter {
         return mFragments.size();
     }
 
+    @Override
+    public void onPageSelected(int position) {
+        if ( mFragments.size() > 1) { //多于1，才会循环跳转
+            if ( position < 1) { //首位之前，跳转到末尾（N）
+                position = 2;
+                setCurrentItem(position,false);
+            } else if ( position > 2) { //末位之后，跳转到首位（1）
+                setCurrentItem(1,false); //false:不显示跳转过程的动画
+                position = 1;
+            }
+        }
+    }
+
 }
