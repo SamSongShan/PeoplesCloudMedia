@@ -41,12 +41,17 @@ public class MyPromotionActivity extends BaseActivity {
         if (fragmentList == null) {
             fragmentList = new ArrayList<>();
         }
+        fragmentList.add(MyPromotionFragment.instanceFragment(2));
+
         fragmentList.add(MyPromotionFragment.instanceFragment(0));
         fragmentList.add(MyPromotionFragment.instanceFragment(1));
         fragmentList.add(MyPromotionFragment.instanceFragment(2));
 
-        VpMyPromotionAdapter vpMyPromotionAdapter = new VpMyPromotionAdapter(getSupportFragmentManager(), fragmentList);
+        fragmentList.add(MyPromotionFragment.instanceFragment(0));
+
+        VpMyPromotionAdapter vpMyPromotionAdapter = new VpMyPromotionAdapter(getSupportFragmentManager(), fragmentList,vp);
         vp.setAdapter(vpMyPromotionAdapter);
         vp.setOffscreenPageLimit(2);
+        vp.setCurrentItem(2,false);
     }
 }
