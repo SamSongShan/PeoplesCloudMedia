@@ -5,6 +5,8 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 
+import com.example.a11355.peoplescloudmedia.fragement.MyPromotionFragment;
+
 import java.util.List;
 
 /**
@@ -13,20 +15,23 @@ import java.util.List;
 
 public class VpMyPromotionAdapter extends FragmentPagerAdapter implements ViewPager.OnPageChangeListener {
 
-    private List<Fragment> mFragments;
+    private List<MyPromotionFragment> mFragments;
     private ViewPager viewPager;
 
-    public VpMyPromotionAdapter(FragmentManager fm, List<Fragment> fragments, ViewPager viewPager) {
+
+    public VpMyPromotionAdapter(FragmentManager fm, List<MyPromotionFragment> fragments, ViewPager viewPager) {
         super(fm);
-        mFragments=fragments;
+        mFragments = fragments;
+                            viewPager.addOnPageChangeListener(this);
+
         this.viewPager = viewPager;
-        viewPager.addOnPageChangeListener(this);
     }
 
+
     @Override
-    public Fragment getItem(int arg0) {
-        // TODO Auto-generated method stub
-        return mFragments.get(arg0);
+    public Fragment getItem(int position) {
+
+        return mFragments.get(position);
     }
 
     @Override
@@ -37,24 +42,21 @@ public class VpMyPromotionAdapter extends FragmentPagerAdapter implements ViewPa
 
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+        if (position==0){
+            viewPager.setCurrentItem(3,false);
+        } else if (position==4){
+            viewPager.setCurrentItem(1,false);
 
+        }
     }
 
     @Override
     public void onPageSelected(int position) {
-        if ( mFragments.size() > 1) { //多于1，才会循环跳转
-            if (position == 4) { //首位之前，跳转到末尾（N）
-                viewPager.setCurrentItem(1, false);
-            } else if (position == 0) { //末位之后，跳转到首位（1）
-                viewPager.setCurrentItem(3, false); //false:不显示跳转过程的动画
-
-            }
-        }
+        
     }
 
     @Override
     public void onPageScrollStateChanged(int state) {
 
     }
-
 }

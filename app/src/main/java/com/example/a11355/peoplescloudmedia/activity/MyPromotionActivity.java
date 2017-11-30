@@ -1,6 +1,5 @@
 package com.example.a11355.peoplescloudmedia.activity;
 
-import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
@@ -29,7 +28,7 @@ public class MyPromotionActivity extends BaseActivity {
     RecyclerView rvStore;
     @BindView(R.id.srl_store)
     SwipeRefreshLayout srlStore;
-    private List<Fragment> fragmentList;
+    private List<MyPromotionFragment> fragmentList;
 
     @Override
     protected int getViewResId() {
@@ -42,16 +41,14 @@ public class MyPromotionActivity extends BaseActivity {
             fragmentList = new ArrayList<>();
         }
         fragmentList.add(MyPromotionFragment.instanceFragment(2));
-
         fragmentList.add(MyPromotionFragment.instanceFragment(0));
         fragmentList.add(MyPromotionFragment.instanceFragment(1));
         fragmentList.add(MyPromotionFragment.instanceFragment(2));
-
         fragmentList.add(MyPromotionFragment.instanceFragment(0));
 
         VpMyPromotionAdapter vpMyPromotionAdapter = new VpMyPromotionAdapter(getSupportFragmentManager(), fragmentList,vp);
         vp.setAdapter(vpMyPromotionAdapter);
-        vp.setOffscreenPageLimit(2);
+        vp.setOffscreenPageLimit(5);
         vp.setCurrentItem(2,false);
     }
 }
