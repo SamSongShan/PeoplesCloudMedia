@@ -5,6 +5,7 @@ import android.content.Context;
 import android.support.multidex.MultiDex;
 
 import com.example.a11355.peoplescloudmedia.util.ConfigConstants;
+import com.example.a11355.peoplescloudmedia.util.LogUtils;
 import com.example.a11355.peoplescloudmedia.util.OkHttpUtil;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.uuzuche.lib_zxing.activity.ZXingLibrary;
@@ -26,6 +27,7 @@ public class AppContext extends Application {
         Fresco.initialize(this, ConfigConstants.getImagePipelineConfig(this));
         /*JPushInterface.setDebugMode(true);
         JPushInterface.init(this);*/
+        LogUtils.setDebug(true);
         initCrashReport();
         ZXingLibrary.initDisplayOpinion(this);
 

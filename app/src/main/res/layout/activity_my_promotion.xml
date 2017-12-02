@@ -11,26 +11,26 @@
     <include layout="@layout/toolbar_right_text" />
 
     <LinearLayout
+        android:layout_marginTop="1dp"
         android:clipChildren="false"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/colorWhite"
-        android:elevation="10dp"
         android:orientation="vertical">
 
         <com.example.a11355.peoplescloudmedia.custom.CustomViewPager
-
             android:paddingTop="20dp"
             android:id="@+id/vp"
             android:clipChildren="false"
             android:layout_width="match_parent"
-            android:layout_height="80dp"
+            android:layout_height="150dp"
             android:layout_marginLeft="30dp"
             android:layout_marginRight="30dp">
 
         </com.example.a11355.peoplescloudmedia.custom.CustomViewPager>
 
         <TextView
+            android:id="@+id/tv_describe"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"

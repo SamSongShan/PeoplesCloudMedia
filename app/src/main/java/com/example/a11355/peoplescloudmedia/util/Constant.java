@@ -58,6 +58,10 @@ public interface Constant {
         //视频接口
         String GetVideoList = BaseUrl + "GetVideoList";
 
+        //我的推广列表(我推荐注册的用户)
+        String GetRecommendUserList = BaseUrl + "GetRecommendUserList";
+
+
 
     }
 

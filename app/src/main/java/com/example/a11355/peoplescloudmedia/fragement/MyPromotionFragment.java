@@ -7,6 +7,8 @@ import android.widget.TextView;
 
 import com.example.a11355.peoplescloudmedia.R;
 import com.example.a11355.peoplescloudmedia.base.BaseFragment;
+import com.example.a11355.peoplescloudmedia.model.GetEntityUserEntity;
+import com.example.a11355.peoplescloudmedia.util.PhoneUtil;
 
 import butterknife.BindView;
 
@@ -40,22 +42,29 @@ public class MyPromotionFragment extends BaseFragment {
 
     @Override
     protected void init(View v) {
+        GetEntityUserEntity userInfo = PhoneUtil.getUserInfo(getContext());
+
         type = getArguments().getInt("type");
 
-            switch (type){
-                case 0:
-                    tv.setBackground(getResources().getDrawable(R.drawable.shape_bluedark_5));
-                    break;
-                case 1:
-                    tv.setBackground(getResources().getDrawable(R.drawable.shape_lightred_5));
+        switch (type) {
+            case 0:
+                tv.setBackground(getResources().getDrawable(R.drawable.shape_orangedark_5));
+                break;
+            case 1:
+                tv.setBackground(getResources().getDrawable(R.drawable.shape_lightred_5));
 
-                    break;
-                case 2:
-                    tv.setBackground(getResources().getDrawable(R.drawable.shape_orangedark_5));
+                break;
+            case 2:
+                tv.setBackground(getResources().getDrawable(R.drawable.shape_bluedark_5));
 
-                    break;
 
-            }
+                break;
+
+        }
+    }
+
+    public void setFansNum(String num) {
+        tv.setText(num);
     }
 
 }
