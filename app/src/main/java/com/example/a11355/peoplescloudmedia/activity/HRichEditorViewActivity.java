@@ -12,7 +12,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -24,6 +23,7 @@ import com.example.a11355.peoplescloudmedia.adapter.SimpleItemTouchHelperCallbac
 import com.example.a11355.peoplescloudmedia.base.EditorResultBean;
 import com.example.a11355.peoplescloudmedia.model.EContent;
 import com.example.a11355.peoplescloudmedia.model.ItemType;
+import com.example.a11355.peoplescloudmedia.util.LogUtils;
 import com.luck.picture.lib.model.FunctionConfig;
 import com.luck.picture.lib.model.LocalMediaLoader;
 import com.luck.picture.lib.model.PictureConfig;
@@ -98,7 +98,7 @@ public class HRichEditorViewActivity extends AppCompatActivity {
         for (EContent data : datas) {
             html += data.getHtml();
         }
-        Log.e("mylog", html);
+        LogUtils.e("mylog", html);
         Intent intent = getIntent();
         intent.putExtra("contents", resultBean);
         this.setResult(Activity.RESULT_OK, intent);

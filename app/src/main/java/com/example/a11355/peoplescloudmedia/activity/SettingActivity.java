@@ -8,7 +8,6 @@ import android.os.Handler;
 import android.support.v4.content.FileProvider;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -26,6 +25,7 @@ import com.example.a11355.peoplescloudmedia.util.CacheUtil;
 import com.example.a11355.peoplescloudmedia.util.ConfigConstants;
 import com.example.a11355.peoplescloudmedia.util.Constant;
 import com.example.a11355.peoplescloudmedia.util.DesUtil;
+import com.example.a11355.peoplescloudmedia.util.LogUtils;
 import com.example.a11355.peoplescloudmedia.util.OkHttpUtil;
 import com.example.a11355.peoplescloudmedia.util.PhoneUtil;
 import com.example.a11355.peoplescloudmedia.util.PreferencesUtil;
@@ -188,7 +188,7 @@ public class SettingActivity extends BaseActivity implements OkHttpUtil.OnDataLi
             dismissLoading();
             String decrypt = DesUtil.decrypt(json);
 
-            Log.e("GetAppVersion", "onResponse" + decrypt);
+            LogUtils.e("GetAppVersion", "onResponse" + decrypt);
             AppVersionEntity version = new Gson().fromJson(decrypt, AppVersionEntity.class);
             if (version.getCode() == Constant.Integers.SUC) {
                 isForce = false;
@@ -240,7 +240,7 @@ public class SettingActivity extends BaseActivity implements OkHttpUtil.OnDataLi
         downloadDialog.show(getFragmentManager(), "download");
         filePath = Environment.getExternalStorageDirectory() + "/Download/" + PhoneUtil.getAppName(this) +
                 "_" + versionName + ".apk";
-        Log.e("loge", "Download: " + filePath);
+        LogUtils.e("loge", "Download: " + filePath);
         OkHttpUtil.fileDownload(newAppLink, filePath, this, new OkHttpUtil.OnDataListener() {
             @Override
             public void onResponse(String url, String json) {//下载完成

@@ -9,7 +9,6 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
@@ -30,6 +29,7 @@ import com.example.a11355.peoplescloudmedia.model.GetEntityUserEntity;
 import com.example.a11355.peoplescloudmedia.util.BitMapUtil;
 import com.example.a11355.peoplescloudmedia.util.Constant;
 import com.example.a11355.peoplescloudmedia.util.DesUtil;
+import com.example.a11355.peoplescloudmedia.util.LogUtils;
 import com.example.a11355.peoplescloudmedia.util.OkHttpUtil;
 import com.example.a11355.peoplescloudmedia.util.PhoneUtil;
 import com.example.a11355.peoplescloudmedia.util.PreferencesUtil;
@@ -190,7 +190,7 @@ public class MineFragment extends BaseFragment implements View.OnClickListener, 
             switch (url) {
 
                 case Constant.URL.GetEntityUser: { //个人信息
-                    Log.e("loge", "GetEntityUser: " + decrypt);
+                    LogUtils.e("loge", "GetEntityUser: " + decrypt);
                     GetEntityUserEntity getEntityUserEntity = gson.fromJson(decrypt, GetEntityUserEntity.class);
 
                     if (getEntityUserEntity.getCode() == Constant.Integers.SUC) { //成功

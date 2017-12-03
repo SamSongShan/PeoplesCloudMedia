@@ -162,9 +162,9 @@
         <activity android:name=".activity.HRichEditorViewActivity" />
         <activity android:name=".activity.TXTEditorActivity" />
         <activity android:name=".activity.LinkedActivity" />
-        <activity android:name=".activity.TitleEidtorActivity"></activity>
-        <activity android:name=".activity.ForgotPasswordActivity" />
-        <activity android:name=".activity.MyPromotionActivity"></activity>
+        <activity android:name=".activity.TitleEidtorActivity" />
+        <activity android:name=".activity.MyPromotionActivity" />
+        <activity android:name=".activity.H5Activity"/>
     </application>
 
 </manifest>

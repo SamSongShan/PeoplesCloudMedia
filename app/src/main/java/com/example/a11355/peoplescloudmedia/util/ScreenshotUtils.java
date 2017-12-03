@@ -160,8 +160,8 @@ public class ScreenshotUtils {
         for (int i = 0; i < listView.getChildCount(); i++) {
             h += listView.getChildAt(i).getHeight();
         }
-        Log.e(TAG, "实际高度:" + h);
-        Log.e(TAG, "list 高度:" + listView.getHeight());
+        LogUtils.e(TAG, "实际高度:" + h);
+        LogUtils.e(TAG, "list 高度:" + listView.getHeight());
         // 创建对应大小的bitmap
         bitmap = Bitmap.createBitmap(listView.getWidth(), h,
                 Bitmap.Config.ARGB_8888);
@@ -192,8 +192,8 @@ public class ScreenshotUtils {
         for (int i = 0; i < recyclerView.getChildCount() / rowNum; i++) {
             h += recyclerView.getChildAt(i).getHeight();
         }
-        Log.e(TAG, "实际高度:" + h);
-        Log.e(TAG, "list 高度:" + recyclerView.getHeight());
+        LogUtils.e(TAG, "实际高度:" + h);
+        LogUtils.e(TAG, "list 高度:" + recyclerView.getHeight());
         // 创建对应大小的bitmap
         bitmap = Bitmap.createBitmap(recyclerView.getWidth(), h,
                 Bitmap.Config.ARGB_8888);

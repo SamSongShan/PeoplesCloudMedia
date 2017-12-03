@@ -26,7 +26,7 @@ public class NetworkUtil {
                 return true;
             }
         } catch (Exception e) {
-            Log.e("loge", "isNetWorkEnable: " + e);
+            LogUtils.e("loge", "isNetWorkEnable: " + e);
             e.printStackTrace();
         }
         return false;
@@ -39,7 +39,7 @@ public class NetworkUtil {
         ConnectivityManager connectivityManager =
                 (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         if (connectivityManager == null) {
-            Log.e("loge", "couldn't get connectivity manager");
+            LogUtils.e("loge", "couldn't get connectivity manager");
         } else {
             NetworkInfo[] networkInfo = connectivityManager.getAllNetworkInfo();
             if (networkInfo != null) {

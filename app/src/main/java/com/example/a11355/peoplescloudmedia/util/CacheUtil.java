@@ -50,7 +50,7 @@ public class CacheUtil {
         String result = null;
         try {
             File file = new File(TEXT_CACHE_DIR, getFilePath(url));
-//            Log.e("log", "getUrl: " + file.getPath());
+//            LogUtils.e("log", "getUrl: " + file.getPath());
             if (file.exists() && file.isFile() && (System.currentTimeMillis() - file.lastModified()) < l) {
                 result = FileUtil.readTextFile(file);
             }
@@ -65,7 +65,7 @@ public class CacheUtil {
      */
     public static DialogFragment setUrlCache(FragmentActivity context, String url, String data){
         File cacheDir = new File(TEXT_CACHE_DIR);
-//            Log.e("log", "setUrlCache: "+cacheDir);
+//            LogUtils.e("log", "setUrlCache: "+cacheDir);
         if (!cacheDir.exists() && FileUtil.isSdCardMounted()) {
             cacheDir.mkdirs();
         }

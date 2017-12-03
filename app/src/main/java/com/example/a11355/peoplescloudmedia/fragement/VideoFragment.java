@@ -4,7 +4,6 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 
 import com.example.a11355.peoplescloudmedia.R;
@@ -17,6 +16,7 @@ import com.example.a11355.peoplescloudmedia.model.GetVideoList;
 import com.example.a11355.peoplescloudmedia.model.GetVideoListEntity;
 import com.example.a11355.peoplescloudmedia.util.Constant;
 import com.example.a11355.peoplescloudmedia.util.DesUtil;
+import com.example.a11355.peoplescloudmedia.util.LogUtils;
 import com.example.a11355.peoplescloudmedia.util.OkHttpUtil;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -91,7 +91,7 @@ public class VideoFragment extends BaseFragment implements OkHttpUtil.OnDataList
             String decrypt = DesUtil.decrypt(json);
             switch (url) {
                 case Constant.URL.GetVideoList: {
-                    Log.e("GetVideoList", "onResponse: " + decrypt);
+                    LogUtils.e("GetVideoList", "onResponse: " + decrypt);
                     if (PageIndex == 1) {
                         videosData.clear();
                         dismissLoading();

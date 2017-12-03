@@ -6,7 +6,6 @@ import android.os.Handler;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 
 import java.io.ByteArrayInputStream;
@@ -87,7 +86,7 @@ public class OkHttpUtil {
             @Override
             public void onFailure(Call call, IOException e) {
                 if (bytesListener != null) {
-                    Log.e("loge", "onFailure: " + url + "\n" + e.getMessage());
+                    LogUtils.e("loge", "onFailure: " + url + "\n" + e.getMessage());
                     bytesListener.onFailure(url, e.getMessage());
                 }
             }
@@ -392,7 +391,7 @@ public class OkHttpUtil {
 
     private static void onFail(OnDataListener dataListener, String url, IOException e) {
         if (dataListener != null) {
-            Log.e("loge", "onFailure: " + url + "\n" + e.getMessage());
+            LogUtils.e("loge", "onFailure: " + url + "\n" + e.getMessage());
             dataListener.onFailure(url, e.getMessage());
         }
     }
@@ -406,7 +405,7 @@ public class OkHttpUtil {
                         dataListener.onResponse(url, json);
                     }
                 } catch (Exception e) {
-                    Log.e("loge", json.substring(json.length() - Math.min(40, json.length())) + "\n" + "E: "
+                    LogUtils.e("loge", json.substring(json.length() - Math.min(40, json.length())) + "\n" + "E: "
                             + e.getMessage());
                 }
             }

@@ -7,7 +7,6 @@ import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -25,6 +24,7 @@ import com.example.a11355.peoplescloudmedia.model.UploadImgEntity;
 import com.example.a11355.peoplescloudmedia.util.BitMapUtil;
 import com.example.a11355.peoplescloudmedia.util.Constant;
 import com.example.a11355.peoplescloudmedia.util.DesUtil;
+import com.example.a11355.peoplescloudmedia.util.LogUtils;
 import com.example.a11355.peoplescloudmedia.util.OkHttpUtil;
 import com.example.a11355.peoplescloudmedia.util.PhoneUtil;
 import com.example.a11355.peoplescloudmedia.util.PreferencesUtil;
@@ -272,7 +272,7 @@ public class PersonalDataActivity extends BaseActivity implements BaseDialog.OnI
             switch (url) {
                 case Constant.URL.UploadImg: {//上传头像
 
-                    Log.e("loge", "UploadImg: " + decrypt);
+                    LogUtils.e("loge", "UploadImg: " + decrypt);
                     UploadImgEntity img = new Gson().fromJson(decrypt, UploadImgEntity.class);
                     if (img.getCode() == Constant.Integers.SUC) {
                         loadingDialog = LoadingDialog.newInstance("设置中...");
@@ -288,7 +288,7 @@ public class PersonalDataActivity extends BaseActivity implements BaseDialog.OnI
                 break;
 
                 case Constant.URL.UpdateUserEntity: {
-                    Log.e("UpdateUserEntity", "UpdateUserEntity: " + decrypt);
+                    LogUtils.e("UpdateUserEntity", "UpdateUserEntity: " + decrypt);
 
                     dismissLoading();
                     SingleWordEntity img = new Gson().fromJson(decrypt, SingleWordEntity.class);

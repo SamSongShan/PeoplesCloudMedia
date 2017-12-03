@@ -21,7 +21,7 @@ public class WeChatUtil {
         String payInfo = userRecharge.getPrivateKey();
         Map<String, String> mapInfo = splitInfo(context, payInfo);
         String appid = mapInfo.get("appid");
-        /*Log.e("logp", "wechatPay: " + mapInfo.get("appid") + "\n" + mapInfo.get("partnerid") + "\n"
+        /*LogUtils.e("logp", "wechatPay: " + mapInfo.get("appid") + "\n" + mapInfo.get("partnerid") + "\n"
                 + mapInfo.get("prepayid") + "\n" + mapInfo.get("noncestr") + "\n" + mapInfo.get("timestamp")
                 + "\n" + mapInfo.get("sign"));*/
         IWXAPI api = WXAPIFactory.createWXAPI(context, appid);

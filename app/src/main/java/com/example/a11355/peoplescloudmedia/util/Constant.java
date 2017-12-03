@@ -13,7 +13,7 @@ public interface Constant {
         //本地服务器地址
         String BaseUrl = "http://service.lml9.com/Index.asmx/";
         String BaseImg = "http://service.lml9.com";
-        String BaseH5 = "http://service.lml9.com";
+        String BaseH5 = "http://net.lml9.com";
 
         String DefaultHeadImg = "res:///" + R.drawable.ic_launcher;
 
@@ -61,6 +61,13 @@ public interface Constant {
         //我的推广列表(我推荐注册的用户)
         String GetRecommendUserList = BaseUrl + "GetRecommendUserList";
 
+        //消息列表
+        String GetMessageList = BaseUrl + "GetMessageList";
+
+
+          // 消息 详情  http://localhost:1548/News/Detail?MessageId=1e7c8e24-7308-441a-a710-4db44a3dd57f
+
+        String MessageDetailsLink = BaseH5 + "/News/Detail?MessageId=";
 
 
     }

@@ -4,7 +4,6 @@ import android.content.SharedPreferences;
 import android.os.Handler;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -18,6 +17,7 @@ import com.example.a11355.peoplescloudmedia.model.MobileCodeEntity;
 import com.example.a11355.peoplescloudmedia.model.RegisteredEntity;
 import com.example.a11355.peoplescloudmedia.util.Constant;
 import com.example.a11355.peoplescloudmedia.util.DesUtil;
+import com.example.a11355.peoplescloudmedia.util.LogUtils;
 import com.example.a11355.peoplescloudmedia.util.OkHttpUtil;
 import com.example.a11355.peoplescloudmedia.util.PhoneUtil;
 import com.example.a11355.peoplescloudmedia.util.ToastUtil;
@@ -115,7 +115,7 @@ public class ForgotPasswordActivity extends BaseActivity implements OkHttpUtil.O
 
                     String jsonString = gson.toJson(new Registered("Mobile", "Android", mobile, etRegPassword.getText().toString(), "default", etBusinessName.getText().toString(), etBossName.getText().toString(), "default", "1"));
 
-                    Log.e("loge", "注册json: " + jsonString);
+                    LogUtils.e("loge", "注册json: " + jsonString);
                     OkHttpUtil.postJson(Constant.URL.Registered, DesUtil.encrypt(jsonString), this);*/
 
                 }
@@ -190,7 +190,7 @@ public class ForgotPasswordActivity extends BaseActivity implements OkHttpUtil.O
             String decrypt = DesUtil.decrypt(json);
             switch (url) {
                 case Constant.URL.GetMobileCode: {
-                    Log.e("GetMobileCode", "onResponse: " + decrypt);
+                    LogUtils.e("GetMobileCode", "onResponse: " + decrypt);
                     MobileCodeEntity mobileCode = new Gson().fromJson(decrypt, MobileCodeEntity.class);
 
                     if (mobileCode.getCode() == Constant.Integers.SUC) {
@@ -207,7 +207,7 @@ public class ForgotPasswordActivity extends BaseActivity implements OkHttpUtil.O
                 break;
                 case Constant.URL.Registered:
 
-                    Log.e("Registered", "onResponse: " + decrypt);
+                    LogUtils.e("Registered", "onResponse: " + decrypt);
                     RegisteredEntity register = new Gson().fromJson(decrypt, RegisteredEntity.class);
                     ToastUtil.initToast(this, register.getMessage(), Toast.LENGTH_LONG);
                     isRegister = false;

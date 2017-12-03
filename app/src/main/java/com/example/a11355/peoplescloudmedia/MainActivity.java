@@ -15,7 +15,6 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.RadioGroup;
@@ -37,6 +36,7 @@ import com.example.a11355.peoplescloudmedia.model.GetAppVersion;
 import com.example.a11355.peoplescloudmedia.model.GetAreaLastDateEntity;
 import com.example.a11355.peoplescloudmedia.util.Constant;
 import com.example.a11355.peoplescloudmedia.util.DesUtil;
+import com.example.a11355.peoplescloudmedia.util.LogUtils;
 import com.example.a11355.peoplescloudmedia.util.OkHttpUtil;
 import com.example.a11355.peoplescloudmedia.util.PhoneUtil;
 import com.example.a11355.peoplescloudmedia.util.PreferencesUtil;
@@ -115,7 +115,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         downloadDialog.show(getFragmentManager(), "download");
         filePath = Environment.getExternalStorageDirectory() + "/Download/" + PhoneUtil.getAppName(this) +
                 "_" + versionName + ".apk";
-        Log.e("loge", "Download: " + filePath);
+        LogUtils.e("loge", "Download: " + filePath);
         OkHttpUtil.fileDownload(newAppLink, filePath, this, new OkHttpUtil.OnDataListener() {
             @Override
             public void onResponse(String url, String json) {//下载完成
@@ -362,9 +362,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 page = 3;
 
 
-                if (!isLogin()) {//当前未登录
+              /*  if (!isLogin()) {//当前未登录
                     startActivityForResult(new Intent(this, LoginActivity.class), Constant.Code.IntoCertifyCode);
-                } else {
+                } else {*/
                     if (messageFragment == null) {
                         messageFragment = new MessageFragment();
                         transaction.add(R.id.fl_main, messageFragment, "2");
@@ -372,7 +372,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                         transaction.show(messageFragment);
                         //messageFragment.onRefresh();//强制进入刷新
                     }
-                }
+              //  }
 
 
                 break;
@@ -454,7 +454,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             switch (url) {
                 case Constant.URL.GetAppVersion: { //版本更新
 
-                    Log.e("GetAppVersion", "onResponse" + decrypt);
+                    LogUtils.e("GetAppVersion", "onResponse" + decrypt);
                     AppVersionEntity version = new Gson().fromJson(decrypt, AppVersionEntity.class);
                     if (version.getCode() == Constant.Integers.SUC) {
                         isForce = false;
@@ -492,7 +492,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 }
                 break;
                 case Constant.URL.GetAreaLastDate:
-                    Log.e("GetAreaLastDate", "onResponse" + decrypt);
+                    LogUtils.e("GetAreaLastDate", "onResponse" + decrypt);
 
                     GetAreaLastDateEntity getAreaLastDateEntity = gson.fromJson(decrypt, GetAreaLastDateEntity.class);
 

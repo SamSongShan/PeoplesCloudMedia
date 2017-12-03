@@ -6,7 +6,6 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.EditText;
@@ -20,6 +19,7 @@ import com.example.a11355.peoplescloudmedia.custom.MyCheckBox;
 import com.example.a11355.peoplescloudmedia.custom.MyRadioButton;
 import com.example.a11355.peoplescloudmedia.model.EContent;
 import com.example.a11355.peoplescloudmedia.model.LinkContent;
+import com.example.a11355.peoplescloudmedia.util.LogUtils;
 
 public class TXTEditorActivity extends AppCompatActivity {
     //整形常量区
@@ -134,7 +134,7 @@ public class TXTEditorActivity extends AppCompatActivity {
     private void getData() {
         style = "";
         content = etContent.getText().toString().trim();
-        Log.e(TAG, "getData: " + content);
+        LogUtils.e(TAG, "getData: " + content);
         if (linkContent != null && !TextUtils.isEmpty(linkContent.getLink())) {
             content = content + "<br/><a href=\"" + linkContent.getLink() + "\">" + linkContent.getTitle() + "</a><br/>";
         }
@@ -184,7 +184,7 @@ public class TXTEditorActivity extends AppCompatActivity {
         } else if (checkedIdColor == R.id.mrb_font_option_red) {
             style += GlobalField.FontColor.KEY_COLOR_RED;
         }
-        Log.e(TAG, "getData: " + content + "\n" + style);
+        LogUtils.e(TAG, "getData: " + content + "\n" + style);
         eContent.setContent(content);
         eContent.setStyle(style);
     }
@@ -192,11 +192,11 @@ public class TXTEditorActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Log.e(TAG, "startActivityForResult: -----------" + requestCode);
+        LogUtils.e(TAG, "startActivityForResult: -----------" + requestCode);
         if (requestCode == REQUEST_CODE_EDIT_LINKED && resultCode == REQUEST_CODE_EDIT_LINKED) {
             linkContent = (LinkContent) data.getSerializableExtra("linkContent");
             tvAddLinked.setText(linkContent.getTitle());
-            Log.e(TAG, "startActivityForResult: " + linkContent);
+            LogUtils.e(TAG, "startActivityForResult: " + linkContent);
         }
     }
 

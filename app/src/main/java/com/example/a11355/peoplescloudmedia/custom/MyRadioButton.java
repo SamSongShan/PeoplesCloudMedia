@@ -3,11 +3,11 @@ package com.example.a11355.peoplescloudmedia.custom;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.widget.CompoundButton;
 import android.widget.RadioButton;
 
 import com.example.a11355.peoplescloudmedia.R;
+import com.example.a11355.peoplescloudmedia.util.LogUtils;
 
 
 /**
@@ -38,7 +38,7 @@ public class MyRadioButton extends RadioButton {
         this.setOnCheckedChangeListener(new OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                Log.e(TAG, "onCheckedChanged: " + isChecked);
+                LogUtils.e(TAG, "onCheckedChanged: " + isChecked);
                 updateView();
             }
         });

@@ -3,7 +3,6 @@ package com.example.a11355.peoplescloudmedia.activity;
 import android.content.Intent;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 
@@ -14,6 +13,7 @@ import com.example.a11355.peoplescloudmedia.model.GetEntityUserEntity;
 import com.example.a11355.peoplescloudmedia.model.SingleWordEntity;
 import com.example.a11355.peoplescloudmedia.util.Constant;
 import com.example.a11355.peoplescloudmedia.util.DesUtil;
+import com.example.a11355.peoplescloudmedia.util.LogUtils;
 import com.example.a11355.peoplescloudmedia.util.OkHttpUtil;
 import com.example.a11355.peoplescloudmedia.util.PhoneUtil;
 import com.example.a11355.peoplescloudmedia.util.PreferencesUtil;
@@ -88,7 +88,7 @@ public class NikcAndSignatureActivity extends BaseActivity implements OkHttpUtil
     public void onResponse(String url, String json) {
         if (!TextUtils.isEmpty(json)) {
             String decrypt = DesUtil.decrypt(json);
-            Log.e("UpdateUserEntity", "UpdateUserEntity: " + decrypt);
+            LogUtils.e("UpdateUserEntity", "UpdateUserEntity: " + decrypt);
             dismissLoading();
             SingleWordEntity img = new Gson().fromJson(decrypt, SingleWordEntity.class);
             ToastUtil.initToast(this, img.getMessage());

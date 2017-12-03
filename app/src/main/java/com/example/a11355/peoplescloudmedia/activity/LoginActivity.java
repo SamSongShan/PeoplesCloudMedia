@@ -5,7 +5,6 @@ import android.content.SharedPreferences;
 import android.os.Handler;
 import android.text.InputType;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -28,6 +27,7 @@ import com.example.a11355.peoplescloudmedia.model.Registered;
 import com.example.a11355.peoplescloudmedia.model.RegisteredEntity;
 import com.example.a11355.peoplescloudmedia.util.Constant;
 import com.example.a11355.peoplescloudmedia.util.DesUtil;
+import com.example.a11355.peoplescloudmedia.util.LogUtils;
 import com.example.a11355.peoplescloudmedia.util.OkHttpUtil;
 import com.example.a11355.peoplescloudmedia.util.PhoneUtil;
 import com.example.a11355.peoplescloudmedia.util.StatusBarUtils;
@@ -159,7 +159,7 @@ public class LoginActivity extends BaseActivity implements RadioGroup.OnCheckedC
                     String jsonString = gson.toJson(new LoginRole("Mobile", etLoginName.getText().toString(),
                             etPassword.getText().toString()));
                     String encrypt = DesUtil.encrypt(jsonString);
-                    Log.e("loge", "login: " + encrypt);
+                    LogUtils.e("loge", "login: " + encrypt);
                     OkHttpUtil.postJson(Constant.URL.LoginRole, DesUtil.encrypt(jsonString), this);
                 }
 
@@ -197,7 +197,7 @@ public class LoginActivity extends BaseActivity implements RadioGroup.OnCheckedC
 
                     String jsonString = gson.toJson(new Registered("Mobile", "Android", mobile, etRegPassword.getText().toString(), "default", "default", "default", "default", "0"));
 
-                    Log.e("loge", "注册json: " + jsonString);
+                    LogUtils.e("loge", "注册json: " + jsonString);
                     OkHttpUtil.postJson(Constant.URL.Registered, DesUtil.encrypt(jsonString), this);
 
                 }
@@ -323,7 +323,7 @@ public class LoginActivity extends BaseActivity implements RadioGroup.OnCheckedC
             String decrypt = DesUtil.decrypt(json);
             switch (url) {
                 case Constant.URL.GetMobileCode: {
-                    Log.e("GetMobileCode", "onResponse: " + decrypt);
+                    LogUtils.e("GetMobileCode", "onResponse: " + decrypt);
                     MobileCodeEntity mobileCode = new Gson().fromJson(decrypt, MobileCodeEntity.class);
                     if (mobileCode.getCode() == Constant.Integers.SUC) {
                         etRegIdentify.requestFocus();
@@ -338,7 +338,7 @@ public class LoginActivity extends BaseActivity implements RadioGroup.OnCheckedC
                 break;
                 case Constant.URL.Registered:
 
-                    Log.e("Registered", "onResponse: " + decrypt);
+                    LogUtils.e("Registered", "onResponse: " + decrypt);
                     RegisteredEntity register = new Gson().fromJson(decrypt, RegisteredEntity.class);
                     ToastUtil.initToast(this, register.getMessage(), Toast.LENGTH_LONG);
                     isRegister = false;
@@ -352,7 +352,7 @@ public class LoginActivity extends BaseActivity implements RadioGroup.OnCheckedC
                     break;
                 case Constant.URL.LoginRole:
 
-                    Log.e("LoginRole", "onResponse: " + decrypt);
+                    LogUtils.e("LoginRole", "onResponse: " + decrypt);
                     LoginRoleEntity loginRole = new Gson().fromJson(decrypt, LoginRoleEntity.class);
                     ToastUtil.initToast(this, loginRole.getMessage(), Toast.LENGTH_LONG);
                     isRegister = false;
