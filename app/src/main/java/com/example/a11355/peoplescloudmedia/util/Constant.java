@@ -28,8 +28,7 @@ public interface Constant {
                 + "&mode=driving&region=%s&output=html&src=%s";
         String MapTrans = "http://api.map.baidu.com/ag/coord/convert?from=%d&to=%d&x=%s&y=%s";
 
-        //注册分享链接   RecommendMobile  传推荐人手机号
-        String ShearLink = "http://net.lml9.com/Webuser/Registered?RecommendMobile=";
+
         //用户注册
         String Registered = BaseUrl + "Registered";
         //获取短信
@@ -64,10 +63,28 @@ public interface Constant {
         //消息列表
         String GetMessageList = BaseUrl + "GetMessageList";
 
+        //获取文章分类列表-发现模块
+        String GetNewsTypeList = BaseUrl + "GetNewsTypeList";
 
-          // 消息 详情  http://localhost:1548/News/Detail?MessageId=1e7c8e24-7308-441a-a710-4db44a3dd57f
+        //【31】获取文章列表-发现模块(输入参数string Json)
+        String GetNewsList = BaseUrl + "GetNewsList";
 
+
+
+
+
+        //注册分享链接   RecommendMobile  传推荐人手机号
+        String ShearLink =BaseH5 + "/Webuser/Registered?RecommendMobile=";
+        // 消息 详情  http://localhost:1548/News/Detail?MessageId=1e7c8e24-7308-441a-a710-4db44a3dd57f
         String MessageDetailsLink = BaseH5 + "/News/Detail?MessageId=";
+
+       /* 发现模块文章详情页
+        http://localhost:1548/News/FindOutDetail?Uid=1218&UserId=0
+        Uid 传文章ID
+        UserId 传当前登录用户ID，未登录传defaul*/
+
+        String NewsDetailsLink = BaseH5 + "/News/FindOutDetail?Uid=%s&UserId=%s";
+
 
 
     }

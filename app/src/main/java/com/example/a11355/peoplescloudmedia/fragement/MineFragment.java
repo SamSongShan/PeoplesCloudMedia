@@ -73,6 +73,9 @@ public class MineFragment extends BaseFragment implements View.OnClickListener, 
     private String userId;
     private String token;
     private LoadingDialog loadingDialog;
+    private TextView tvCollect;
+    private TextView tvFans;
+    private TextView tvFocus;
 
     public MineFragment() {
         // Required empty public constructor
@@ -121,11 +124,22 @@ public class MineFragment extends BaseFragment implements View.OnClickListener, 
         tvFocusNum = (TextView) view.findViewById(R.id.tv_FocusNum);
         tvFansNum = (TextView) view.findViewById(R.id.tv_fansNum);
         tvCollectNum = (TextView) view.findViewById(R.id.tv_collectNum);
+        tvCollect = (TextView) view.findViewById(R.id.tv_collect);
+        tvFans = (TextView) view.findViewById(R.id.tv_fans);
+        tvFocus = (TextView) view.findViewById(R.id.tv_focus);
+
 
         sdvUserHead.setOnClickListener(this);
         tvMyQrCode.setOnClickListener(this);
         imgShear.setOnClickListener(this);
         imgSetting.setOnClickListener(this);
+
+        tvFocusNum.setOnClickListener(this);
+        tvFansNum.setOnClickListener(this);
+        tvCollectNum.setOnClickListener(this);
+        tvCollect.setOnClickListener(this);
+        tvFans.setOnClickListener(this);
+        tvFocus.setOnClickListener(this);
 
     }
 
@@ -145,9 +159,22 @@ public class MineFragment extends BaseFragment implements View.OnClickListener, 
             }
             break;
             case R.id.img_setting: {//设置
-                startActivityForResult(new Intent(getContext(), SettingActivity.class),Constant.Code.LoginCode);
+                startActivityForResult(new Intent(getContext(), SettingActivity.class), Constant.Code.LoginCode);
             }
+
             break;
+            case R.id.tv_FocusNum: // 关注
+            case R.id.tv_focus:
+
+                break;
+            case R.id.tv_fansNum:  //  粉丝
+            case R.id.tv_fans:
+
+                break;
+            case R.id.tv_collectNum: //收藏
+            case R.id.tv_collect:
+
+                break;
         }
     }
 
@@ -170,7 +197,7 @@ public class MineFragment extends BaseFragment implements View.OnClickListener, 
             }
             break;
             case "我的推广": {
-                startActivity(new Intent(getContext(),MyPromotionActivity.class));
+                startActivity(new Intent(getContext(), MyPromotionActivity.class));
             }
             break;
             case "我的名片": {

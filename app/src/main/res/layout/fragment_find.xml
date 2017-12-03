@@ -1,14 +1,26 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/primaryBg"
+    android:orientation="vertical"
     tools:context="com.example.a11355.peoplescloudmedia.fragement.FindFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <android.support.design.widget.TabLayout
+        android:id="@+id/tab_find"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="0" />
+        android:layout_height="wrap_content"
+        android:background="@color/colorWhite"
+        app:tabIndicatorColor="@color/colorAccentAlphstart"
+        app:tabMode="scrollable"
+        app:tabSelectedTextColor="@color/colorAccentAlphstart">
 
-</FrameLayout>
+    </android.support.design.widget.TabLayout>
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/vp_find"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"></android.support.v4.view.ViewPager>
+
+</LinearLayout>
