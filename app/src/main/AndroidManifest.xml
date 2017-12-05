@@ -164,7 +164,9 @@
         <activity android:name=".activity.LinkedActivity" />
         <activity android:name=".activity.TitleEidtorActivity" />
         <activity android:name=".activity.MyPromotionActivity" />
-        <activity android:name=".activity.H5Activity"/>
+        <activity android:name=".activity.H5Activity" />
+        <activity android:name=".activity.AboutUsActivity" />
+        <activity android:name=".activity.MyFocusActivity"></activity>
     </application>
 
 </manifest>

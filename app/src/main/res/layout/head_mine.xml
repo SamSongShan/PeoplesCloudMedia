@@ -28,9 +28,9 @@
                 android:layout_gravity="center_vertical"
                 android:layout_margin="8dp"
                 fresco:actualImageScaleType="centerCrop"
-                fresco:failureImage="@drawable/ic_launcher"
+                fresco:failureImage="@drawable/head"
                 fresco:failureImageScaleType="centerCrop"
-                fresco:placeholderImage="@drawable/img_loading"
+                fresco:placeholderImage="@drawable/head"
                 fresco:roundAsCircle="true"
                 fresco:viewAspectRatio="1" />
 

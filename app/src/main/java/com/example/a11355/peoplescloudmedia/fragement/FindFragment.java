@@ -6,9 +6,11 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
+import android.view.View;
 
 import com.example.a11355.peoplescloudmedia.R;
 import com.example.a11355.peoplescloudmedia.base.BaseFragment;
+import com.example.a11355.peoplescloudmedia.custom.LoadingDialog;
 import com.example.a11355.peoplescloudmedia.model.GetNewsTypeListEntity;
 import com.example.a11355.peoplescloudmedia.util.Constant;
 import com.example.a11355.peoplescloudmedia.util.DesUtil;
@@ -34,9 +36,16 @@ public class FindFragment extends BaseFragment implements OkHttpUtil.OnDataListe
     @BindView(R.id.vp_find)
     ViewPager vpFind;
     private Gson gson = new GsonBuilder().create();
+    private LoadingDialog loadingDialog;
 
     public FindFragment() {
         // Required empty public constructor
+    }
+
+    @Override
+    protected void init(View v) {
+        loadingDialog = LoadingDialog.newInstance("加载中...");
+        loadingDialog.show(getActivity().getFragmentManager());
     }
 
     @Override
@@ -52,6 +61,7 @@ public class FindFragment extends BaseFragment implements OkHttpUtil.OnDataListe
 
     @Override
     public void onResponse(String url, String json) {
+        dismissLoading();
         if (!TextUtils.isEmpty(json)) {
 
             String decrypt = DesUtil.decrypt(json);
@@ -68,7 +78,7 @@ public class FindFragment extends BaseFragment implements OkHttpUtil.OnDataListe
         vpFind.setAdapter(new FragmentPagerAdapter(getFragmentManager()) {
             @Override
             public Fragment getItem(int position) {
-                return FindArticleFragment.instanceFragment(data.get(position).getId() + "");
+                return FindArticleFragment.instanceFragment(data.get(position).getId() + "", position);
             }
 
             @Override
@@ -89,6 +99,13 @@ public class FindFragment extends BaseFragment implements OkHttpUtil.OnDataListe
 
     @Override
     public void onFailure(String url, String error) {
+
+    }
+
+    private void dismissLoading() {
+        if (loadingDialog != null) {
+            loadingDialog.dismiss();
+        }
 
     }
 }

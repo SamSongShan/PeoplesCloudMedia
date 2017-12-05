@@ -12,7 +12,7 @@ public class GetNewsListEntity {
     /**
      * Code : 200
      * Message : 获取成功
-     * Data : {"artiles":[{"id":465,"thumbs":[],"title":"【漫画税收】电子营业执照，是否应该贴花呢？","reads_count":139,"comments_count":0,"reposts_count":0,"avatar":"http://www.renzhu.com/tu/P/2014/10/24/11534083s.jpg"},{"id":289,"thumbs":[],"title":"广州广大微创整形：广州的夏天适合去丰胸隆胸吗String","reads_count":154,"comments_count":0,"reposts_count":0,"avatar":"http://www.renzhu.com/images/head.jpg"}],"total":2}
+     * Data : {"artiles":[{"id":465,"thumb":"","title":"【漫画税收】电子营业执照，是否应该贴花呢？","reads_count":139,"comments_count":0,"reposts_count":0,"avatar":"http://www.renzhu.com/tu/P/2014/10/24/11534083s.jpg","author":"铁山"},{"id":289,"thumb":"","title":"广州广大微创整形：广州的夏天适合去丰胸隆胸吗?","reads_count":155,"comments_count":0,"reposts_count":0,"avatar":"http://www.renzhu.com/images/head.jpg","author":"13798165787"}],"total":2}
      * Number : 0
      */
 
@@ -55,7 +55,7 @@ public class GetNewsListEntity {
 
     public static class DataBean {
         /**
-         * artiles : [{"id":465,"thumbs":[],"title":"【漫画税收】电子营业执照，是否应该贴花呢？","reads_count":139,"comments_count":0,"reposts_count":0,"avatar":"http://www.renzhu.com/tu/P/2014/10/24/11534083s.jpg"},{"id":289,"thumbs":[],"title":"广州广大微创整形：广州的夏天适合去丰胸隆胸吗String","reads_count":154,"comments_count":0,"reposts_count":0,"avatar":"http://www.renzhu.com/images/head.jpg"}]
+         * artiles : [{"id":465,"thumb":"","title":"【漫画税收】电子营业执照，是否应该贴花呢？","reads_count":139,"comments_count":0,"reposts_count":0,"avatar":"http://www.renzhu.com/tu/P/2014/10/24/11534083s.jpg","author":"铁山"},{"id":289,"thumb":"","title":"广州广大微创整形：广州的夏天适合去丰胸隆胸吗?","reads_count":155,"comments_count":0,"reposts_count":0,"avatar":"http://www.renzhu.com/images/head.jpg","author":"13798165787"}]
          * total : 2
          */
 
@@ -81,21 +81,24 @@ public class GetNewsListEntity {
         public static class ArtilesBean {
             /**
              * id : 465
-             * thumbs : []
+             * thumb :
              * title : 【漫画税收】电子营业执照，是否应该贴花呢？
              * reads_count : 139
              * comments_count : 0
              * reposts_count : 0
              * avatar : http://www.renzhu.com/tu/P/2014/10/24/11534083s.jpg
+             * author : 铁山
              */
 
             private int id;
+            private String thumb;
             private String title;
             private int reads_count;
             private int comments_count;
             private int reposts_count;
             private String avatar;
-            private List<String> thumbs;
+            private String author;
+
             private int type;
 
             public ArtilesBean(int type) {
@@ -116,6 +119,14 @@ public class GetNewsListEntity {
 
             public void setId(int id) {
                 this.id = id;
+            }
+
+            public String getThumb() {
+                return thumb;
+            }
+
+            public void setThumb(String thumb) {
+                this.thumb = thumb;
             }
 
             public String getTitle() {
@@ -158,12 +169,12 @@ public class GetNewsListEntity {
                 this.avatar = avatar;
             }
 
-            public List<String> getThumbs() {
-                return thumbs;
+            public String getAuthor() {
+                return author;
             }
 
-            public void setThumbs(List<String> thumbs) {
-                this.thumbs = thumbs;
+            public void setAuthor(String author) {
+                this.author = author;
             }
         }
     }

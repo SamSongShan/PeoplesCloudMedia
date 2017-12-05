@@ -15,7 +15,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.a11355.peoplescloudmedia.R;
+import com.example.a11355.peoplescloudmedia.activity.AboutUsActivity;
 import com.example.a11355.peoplescloudmedia.activity.LoginActivity;
+import com.example.a11355.peoplescloudmedia.activity.MyFocusActivity;
 import com.example.a11355.peoplescloudmedia.activity.MyPromotionActivity;
 import com.example.a11355.peoplescloudmedia.activity.MyQRCodeActivity;
 import com.example.a11355.peoplescloudmedia.activity.SettingActivity;
@@ -166,9 +168,12 @@ public class MineFragment extends BaseFragment implements View.OnClickListener, 
             case R.id.tv_FocusNum: // 关注
             case R.id.tv_focus:
 
+                startActivity(new Intent(getContext(), MyFocusActivity.class));
+
                 break;
             case R.id.tv_fansNum:  //  粉丝
             case R.id.tv_fans:
+                startActivity(new Intent(getContext(), MyPromotionActivity.class));
 
                 break;
             case R.id.tv_collectNum: //收藏
@@ -204,6 +209,8 @@ public class MineFragment extends BaseFragment implements View.OnClickListener, 
             }
             break;
             case "关于我们": {
+
+                startActivity(new Intent(getContext(), AboutUsActivity.class));
             }
             break;
 

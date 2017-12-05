@@ -53,6 +53,7 @@ public class FindArticleFragment extends BaseFragment  implements OnAdapterCallb
     private Gson gson = new GsonBuilder().create();
     private GetNewsListAdapter getNewsListAdapter;
     private String typeId;
+    private int position;
 
     public FindArticleFragment() {
         // Required empty public constructor
@@ -63,11 +64,13 @@ public class FindArticleFragment extends BaseFragment  implements OnAdapterCallb
         return R.layout.fragment_find_article;
     }
 
-    public static FindArticleFragment instanceFragment(String typeId) {
+    public static FindArticleFragment instanceFragment(String typeId, int position) {
 
         FindArticleFragment findArticleFragment = new FindArticleFragment();
         Bundle bundle = new Bundle();
         bundle.putString("typeId", typeId);
+        bundle.putInt("position", position);
+
         findArticleFragment.setArguments(bundle);
 
         return findArticleFragment;
@@ -77,6 +80,7 @@ public class FindArticleFragment extends BaseFragment  implements OnAdapterCallb
     @Override
     protected void init(View v) {
         typeId = getArguments().getString("typeId");
+        position = getArguments().getInt("position");
 
         rvStore.setLayoutManager(new LinearLayoutManager(getContext()));
         getNewsListAdapter = new GetNewsListAdapter(getActivity(), this, this);
@@ -84,8 +88,12 @@ public class FindArticleFragment extends BaseFragment  implements OnAdapterCallb
         rvStore.setAdapter(getNewsListAdapter);
         srlStore.setOnRefreshListener(this);
         getNewsListAdapter.setOnItemClickListener(this);
-        /*loadingDialog = LoadingDialog.newInstance("加载中...");
-        loadingDialog.show(getActivity().getFragmentManager());*/
+
+        if (position==0){
+            loadingDialog = LoadingDialog.newInstance("加载中...");
+            loadingDialog.show(getActivity().getFragmentManager());
+        }
+
         getNewsListAdapter.setEmptyView(R.layout.empty_tips);
         getNewsListAdapter.setEmptyTips(R.id.tv_emptyTips, "暂无数据");
     }
@@ -111,10 +119,11 @@ public class FindArticleFragment extends BaseFragment  implements OnAdapterCallb
             String decrypt = DesUtil.decrypt(json);
             switch (url) {
                 case Constant.URL.GetNewsList: {
+                    dismissLoading();
                     LogUtils.e("GetNewsList", decrypt);
                     if (PageIndex == 1) {
                         newsData.clear();
-                        dismissLoading();
+
                     }
                     removeLoadingItem();
                     GetNewsListEntity getMessageListEntity = gson.fromJson(decrypt, GetNewsListEntity.class);

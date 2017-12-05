@@ -34,13 +34,13 @@ public class GetNewsListAdapter extends AbsRecyclerViewAdapter<GetNewsListEntity
     public void onBindHolder(AbsRecyclerViewAdapter.RecyclerViewHolder holder, GetNewsListEntity.DataBean.ArtilesBean d, int position) {
         switch (d.getType()) {
             case 0:
-                holder.bindSimpleDraweeView(R.id.sdv,Uri.parse(d.getAvatar()) )
+                holder.bindSimpleDraweeView(R.id.sdv,Uri.parse(d.getThumb()) )
                         .bindTextView(R.id.tv_title, d.getTitle())
                         .bindTextView(R.id.tv_focus, d.getReads_count() + "")
                         .bindTextView(R.id.tv_review, d.getComments_count() + "")
                         .bindTextView(R.id.tv_share, d.getReposts_count() + "")
                         .bindSimpleDraweeView(R.id.sdv_from, Uri.parse(d.getAvatar()))
-                        .bindTextView(R.id.tv_from, "这个字段暂无");// TODO: 2017/12/3
+                        .bindTextView(R.id.tv_from, d.getAuthor());
 
 
                 /*View view = holder.getView(R.id.tv_focus);

@@ -102,9 +102,9 @@
                     android:layout_marginRight="5dp"
                     android:layout_toLeftOf="@+id/tv_from"
                     fresco:actualImageScaleType="focusCrop"
-                    fresco:failureImage="@drawable/img_fail"
+                    fresco:failureImage="@drawable/head"
                     fresco:failureImageScaleType="centerInside"
-                    fresco:placeholderImage="@drawable/img_loading"
+                    fresco:placeholderImage="@drawable/head"
                     fresco:placeholderImageScaleType="fitCenter"
                     fresco:roundAsCircle="true"
                     fresco:viewAspectRatio="1" />
