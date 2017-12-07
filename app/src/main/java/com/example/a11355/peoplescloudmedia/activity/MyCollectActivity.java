@@ -7,38 +7,33 @@ import android.support.v4.view.ViewPager;
 
 import com.example.a11355.peoplescloudmedia.R;
 import com.example.a11355.peoplescloudmedia.base.BaseActivity;
-import com.example.a11355.peoplescloudmedia.fragement.FocusFragment;
+import com.example.a11355.peoplescloudmedia.fragement.CollecVideoListFragment;
+import com.example.a11355.peoplescloudmedia.fragement.NewsCollectListFragment;
 import com.example.a11355.peoplescloudmedia.util.TabLayoutUtils;
 
 import butterknife.BindView;
 import butterknife.OnClick;
 
-/*
-* 我的关注
-* */
-public class MyFocusActivity extends BaseActivity {
+public class MyCollectActivity extends BaseActivity {
 
     @BindView(R.id.tab)
     TabLayout tab;
     @BindView(R.id.vp)
     ViewPager vp;
 
-    private String[] titles = {"关注", "粉丝"};
+    private String[] titles = {"文章", "视频"};
 
     @Override
     protected int getViewResId() {
-        return R.layout.activity_my_focus;
+        return R.layout.activity_my_collect;
     }
 
     @Override
     protected void init() {
-        int type = getIntent().getIntExtra("type", 0);
-
-
         vp.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager()) {
             @Override
             public Fragment getItem(int position) {
-                return FocusFragment.instance(position);
+                return position == 0 ? new NewsCollectListFragment() : new CollecVideoListFragment();
             }
 
             @Override
@@ -53,8 +48,6 @@ public class MyFocusActivity extends BaseActivity {
         });
         tab.setupWithViewPager(vp);
         TabLayoutUtils.reflex(tab, 10);
-        vp.setCurrentItem(type, false);
-
     }
 
 

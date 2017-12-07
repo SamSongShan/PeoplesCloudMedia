@@ -69,7 +69,12 @@ public interface Constant {
         //【31】获取文章列表-发现模块(输入参数string Json)
         String GetNewsList = BaseUrl + "GetNewsList";
 
+        //【38】获取文章收藏列表-发现模块(输入参数string Json)
+        String GetFindNewsCollectList = BaseUrl + "GetFindNewsCollectList";
 
+
+        //【40】获取用户视频收藏列表(输入参数string Json)
+        String GetUserCollecVideoList = BaseUrl + "GetUserCollecVideoList";
 
 
 

@@ -191,8 +191,10 @@ public class MyPromotionActivity extends BaseActivity implements ViewPager.OnPag
                     ToastUtil.initToast(this, getRecommendUserListEntity.getMessage());
                     startActivityForResult(new Intent(this, LoginActivity.class), Constant.Code.LoginCode);
 
-                } else {//其他
+                } else if (getRecommendUserListEntity.getCode() == Constant.Integers.NULL){
                     addBaseLine();
+                }else {//其他
+                    dismissLoading();
                     ToastUtil.initToast(this, getRecommendUserListEntity.getMessage());
                 }
                 myPromotionAdapter.setData(dataBeans);
