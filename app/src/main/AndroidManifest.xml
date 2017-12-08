@@ -168,6 +168,8 @@
         <activity android:name=".activity.AboutUsActivity" />
         <activity android:name=".activity.MyFocusActivity" />
         <activity android:name=".activity.MyCollectActivity"></activity>
+
+        <activity android:name=".activity.H5ActivityForNewsDetical"/>
     </application>
 
 </manifest>

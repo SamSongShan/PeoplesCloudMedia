@@ -10,7 +10,7 @@ import android.text.TextUtils;
 import android.view.View;
 
 import com.example.a11355.peoplescloudmedia.R;
-import com.example.a11355.peoplescloudmedia.activity.H5Activity;
+import com.example.a11355.peoplescloudmedia.activity.H5ActivityForNewsDetical;
 import com.example.a11355.peoplescloudmedia.adapter.GetNewsListAdapter;
 import com.example.a11355.peoplescloudmedia.base.AbsRecyclerViewAdapter;
 import com.example.a11355.peoplescloudmedia.base.BaseFragment;
@@ -183,8 +183,7 @@ public class FindArticleFragment extends BaseFragment  implements OnAdapterCallb
 
     @Override
     public void onItemClick(View v, int position) {
-        Intent intent = new Intent(getContext(), H5Activity.class);
-        intent.putExtra("title", newsData.get(position).getTitle());
+        Intent intent = new Intent(getContext(), H5ActivityForNewsDetical.class);
         intent.putExtra("url", String.format(Constant.URL.NewsDetailsLink,newsData.get(position).getId()+"", SharedPreferencesUtil.getUserId(getContext())));
         startActivity(intent);
     }
