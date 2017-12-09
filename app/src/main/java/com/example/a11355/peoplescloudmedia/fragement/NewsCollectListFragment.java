@@ -10,14 +10,14 @@ import android.view.View;
 
 import com.example.a11355.peoplescloudmedia.R;
 import com.example.a11355.peoplescloudmedia.activity.LoginActivity;
-import com.example.a11355.peoplescloudmedia.adapter.GetVideoListAdapter;
+import com.example.a11355.peoplescloudmedia.adapter.NewsCollectListAdapter;
 import com.example.a11355.peoplescloudmedia.base.AbsRecyclerViewAdapter;
 import com.example.a11355.peoplescloudmedia.base.BaseFragment;
 import com.example.a11355.peoplescloudmedia.base.OnAdapterCallbackListener;
 import com.example.a11355.peoplescloudmedia.custom.DividerGridItem;
 import com.example.a11355.peoplescloudmedia.custom.LoadingDialog;
 import com.example.a11355.peoplescloudmedia.model.GetFindNewsCollectList;
-import com.example.a11355.peoplescloudmedia.model.GetVideoListEntity;
+import com.example.a11355.peoplescloudmedia.model.GetFindNewsCollectListEntity;
 import com.example.a11355.peoplescloudmedia.util.Constant;
 import com.example.a11355.peoplescloudmedia.util.DesUtil;
 import com.example.a11355.peoplescloudmedia.util.LogUtils;
@@ -37,7 +37,7 @@ import butterknife.BindView;
  */
 // TODO: 2017/12/8 接口没接
 
-public class NewsCollectListFragment extends BaseFragment implements OkHttpUtil.OnDataListener, OnAdapterCallbackListener, SwipeRefreshLayout.OnRefreshListener, AbsRecyclerViewAdapter.OnItemClickListener {
+public class NewsCollectListFragment extends BaseFragment implements OkHttpUtil.OnDataListener, OnAdapterCallbackListener, SwipeRefreshLayout.OnRefreshListener, AbsRecyclerViewAdapter.OnItemClickListener ,View.OnClickListener{
 
     @BindView(R.id.rv_store)
     RecyclerView rvStore;
@@ -49,10 +49,10 @@ public class NewsCollectListFragment extends BaseFragment implements OkHttpUtil.
     private int PageIndex = 1;
     private int PageSize = 10;
     private int nextPage = 1;
-    private List<GetVideoListEntity.DataBean> videosData = new ArrayList<>();
+    private List<GetFindNewsCollectListEntity.DataBean.ArtilesBean> videosData = new ArrayList<>();
 
     private Gson gson = new GsonBuilder().create();
-    private GetVideoListAdapter getVideoListAdapter;
+    private NewsCollectListAdapter getVideoListAdapter;
     public NewsCollectListFragment() {
         // Required empty public constructor
     }
@@ -65,7 +65,7 @@ public class NewsCollectListFragment extends BaseFragment implements OkHttpUtil.
     @Override
     protected void init(View v) {
         rvStore.setLayoutManager(new LinearLayoutManager(getContext()));
-        getVideoListAdapter = new GetVideoListAdapter(getActivity(), this);
+        getVideoListAdapter = new NewsCollectListAdapter(getActivity(), this,this);
         rvStore.setAdapter(getVideoListAdapter);
         srlStore.setOnRefreshListener(this);
         rvStore.addItemDecoration(new DividerGridItem(getContext()));
@@ -103,26 +103,26 @@ public class NewsCollectListFragment extends BaseFragment implements OkHttpUtil.
                         dismissLoading();
                     }
                     removeLoadingItem();
-                    GetVideoListEntity getVideoListEntity = gson.fromJson(decrypt, GetVideoListEntity.class);
-                    if (getVideoListEntity.getCode() == Constant.Integers.SUC) {
-                        videosData.addAll(getVideoListEntity.getData());
-                        if (getVideoListEntity.getData().size() % PageSize == 0 && getVideoListEntity.getData().size() != 0) {//可能还有下一页
-                            videosData.add(new GetVideoListEntity.DataBean(1));
+                    GetFindNewsCollectListEntity getFindNewsCollectListEntity = gson.fromJson(decrypt, GetFindNewsCollectListEntity.class);
+                    if (getFindNewsCollectListEntity.getCode() == Constant.Integers.SUC) {
+                        videosData.addAll(getFindNewsCollectListEntity.getData().getArtiles());
+                        if (getFindNewsCollectListEntity.getData().getArtiles().size() % PageSize == 0 && getFindNewsCollectListEntity.getData().getArtiles().size() != 0) {//可能还有下一页
+                            videosData.add(new GetFindNewsCollectListEntity.DataBean.ArtilesBean(1));
                             nextPage = PageIndex + 1;
                         } else {
                             addBaseLine();
                         }
-                    }else if (getVideoListEntity.getCode() == Constant.Integers.TOKEN_OUT_OF) { //token过期
+                    }else if (getFindNewsCollectListEntity.getCode() == Constant.Integers.TOKEN_OUT_OF) { //token过期
                         dismissLoading();
-                        ToastUtil.initToast(getContext(), getVideoListEntity.getMessage());
+                        ToastUtil.initToast(getContext(), getFindNewsCollectListEntity.getMessage());
                         startActivityForResult(new Intent(getContext(), LoginActivity.class), Constant.Code.LoginCode);
 
                     }
-                    else if (getVideoListEntity.getCode() == Constant.Integers.NULL){
+                    else if (getFindNewsCollectListEntity.getCode() == Constant.Integers.NULL){
                         addBaseLine();
                     }else {//其他
                         dismissLoading();
-                        ToastUtil.initToast(getContext(), getVideoListEntity.getMessage());
+                        ToastUtil.initToast(getContext(), getFindNewsCollectListEntity.getMessage());
                     }
 
 
@@ -148,7 +148,7 @@ public class NewsCollectListFragment extends BaseFragment implements OkHttpUtil.
 
     private void addBaseLine() {
         if (PageIndex != 1) {
-            videosData.add(new GetVideoListEntity.DataBean(2));
+            videosData.add(new GetFindNewsCollectListEntity.DataBean.ArtilesBean(2));
         }
     }
 
@@ -171,6 +171,11 @@ public class NewsCollectListFragment extends BaseFragment implements OkHttpUtil.
     @Override
     public void onItemClick(View v, int position) {
 
+    }
+
+    @Override
+    public void onClick(View v) {
+        
     }
 }
 

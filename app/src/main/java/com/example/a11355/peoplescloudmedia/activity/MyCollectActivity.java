@@ -13,7 +13,9 @@ import com.example.a11355.peoplescloudmedia.util.TabLayoutUtils;
 
 import butterknife.BindView;
 import butterknife.OnClick;
-
+     /*
+     * 我的收藏
+     * */
 public class MyCollectActivity extends BaseActivity {
 
     @BindView(R.id.tab)

@@ -79,6 +79,9 @@ public class MineFragment extends BaseFragment implements View.OnClickListener, 
     private TextView tvCollect;
     private TextView tvFans;
     private TextView tvFocus;
+    private String ShearLink;
+
+    private boolean isloading=true;
 
     public MineFragment() {
         // Required empty public constructor
@@ -109,6 +112,7 @@ public class MineFragment extends BaseFragment implements View.OnClickListener, 
 
     @Override
     protected void loadData() {
+        isloading=true;
         loadingDialog = LoadingDialog.newInstance("加载中...");
         loadingDialog.show(getActivity().getFragmentManager());
         userId = PreferencesUtil.getUserId(getActivity());
@@ -148,6 +152,10 @@ public class MineFragment extends BaseFragment implements View.OnClickListener, 
 
     @Override
     public void onClick(View v) {
+        if (isloading){
+            ToastUtil.initToast(getContext(),"数据正在加载，请稍后");
+            return;
+        }
         switch (v.getId()) {
             case R.id.sdv_userHead: {//头像
                 srlStore.setRefreshing(false);
@@ -199,12 +207,16 @@ public class MineFragment extends BaseFragment implements View.OnClickListener, 
             Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher);
             BitMapUtil.saveBitmap2File(bitmap, filePath);
         }
-        PreferencesUtil.showShare(getContext(), "我发现了一个很好用的人众云媒哦~", "点击链接",
+        PreferencesUtil.showShare(getContext(), "我发现了一个很好用的人众云媒哦~", ShearLink,
                 "美好生活从这里开始，快来人众云媒\n", filePath, this);
     }
 
     @Override
     public void onItemClick(View v, int position) {
+        if (isloading){
+            ToastUtil.initToast(getContext(),"数据正在加载，请稍后");
+            return;
+        }
         switch (strings.get(position)) {
             case "我的文章": {
             }
@@ -232,6 +244,7 @@ public class MineFragment extends BaseFragment implements View.OnClickListener, 
             switch (url) {
 
                 case Constant.URL.GetEntityUser: { //个人信息
+                    isloading=false;
                     LogUtils.e("loge", "GetEntityUser: " + decrypt);
                     GetEntityUserEntity getEntityUserEntity = gson.fromJson(decrypt, GetEntityUserEntity.class);
 
@@ -264,6 +277,8 @@ public class MineFragment extends BaseFragment implements View.OnClickListener, 
         tvFocusNum.setText(data.getFocusNum() + "");
         tvFansNum.setText(data.getFansNum() + "");
         tvCollectNum.setText(data.getCollectNum() + "");
+        ShearLink=Constant.URL.ShearLink+data.getMobile();
+
 
     }
 

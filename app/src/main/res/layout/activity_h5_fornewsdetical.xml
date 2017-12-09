@@ -1,47 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:fresco="http://schemas.android.com/apk/res-auto"
     android:background="@color/primaryBg"
     android:orientation="vertical">
 
     <RelativeLayout
-        android:layout_weight="1"
         android:layout_width="match_parent"
-        android:layout_height="0dp">
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
         <WebView
             android:id="@+id/wv_h5"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent" />
+
         <ProgressBar
-            style="@style/ProgressBarH5"
             android:id="@+id/pb_h5"
+            style="@style/ProgressBarH5"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="gone"/>
+            android:visibility="gone" />
     </RelativeLayout>
 
     <RelativeLayout
-        android:layout_margin="5dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:background="@color/colorWhite"
+        android:padding="5dp">
 
         <ImageView
             android:id="@+id/img_colse"
-            android:layout_marginRight="5dp"
-            android:src="@drawable/close_b"
-            android:layout_width="25dp"
-            android:layout_height="25dp" />
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="15dp"
+            android:src="@drawable/close_b" />
+
         <com.facebook.drawee.view.SimpleDraweeView
-            android:layout_toRightOf="@+id/img_colse"
             android:id="@+id/sdv_from"
             android:layout_width="25dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:layout_marginRight="5dp"
+            android:layout_marginRight="15dp"
             android:layout_toLeftOf="@+id/tv_from"
+            android:layout_toRightOf="@+id/img_colse"
             fresco:actualImageScaleType="focusCrop"
             fresco:failureImage="@drawable/head"
             fresco:failureImageScaleType="centerInside"
@@ -49,5 +55,44 @@
             fresco:placeholderImageScaleType="fitCenter"
             fresco:roundAsCircle="true"
             fresco:viewAspectRatio="1" />
+
+        <ImageView
+            android:id="@+id/img_shear"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="15dp"
+            android:src="@drawable/shear_b" />
+
+        <ImageView
+            android:id="@+id/img_collect"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="15dp"
+            android:layout_toLeftOf="@+id/img_shear"
+            android:src="@drawable/img_collect_b" />
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/img_collect">
+
+            <TextView
+                android:id="@+id/tv_reviewNum"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <ImageView
+                android:id="@+id/img_review"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="15dp"
+                android:src="@drawable/review_b" />
+        </RelativeLayout>
+
     </RelativeLayout>
 </LinearLayout>

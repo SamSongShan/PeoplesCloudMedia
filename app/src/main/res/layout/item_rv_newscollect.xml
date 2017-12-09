@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/colorWhite"
+    android:orientation="horizontal">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:textColor="@color/colorDeepBlack"
+            android:textSize="16sp"
+            tools:text="来自人中运煤土堆的一封信" />
+        
+
+            <com.facebook.drawee.view.SimpleDraweeView
+               android:layout_margin="5dp"
+                android:id="@+id/sdv"
+                android:layout_width="match_parent"
+                android:layout_height="120dp"
+                android:layout_gravity="center"
+                fresco:actualImageScaleType="fitXY"
+                fresco:failureImage="@drawable/img_fail"
+                fresco:failureImageScaleType="centerInside"
+                fresco:placeholderImage="@drawable/img_loading"
+                fresco:placeholderImageScaleType="fitCenter"
+                fresco:viewAspectRatio="0.8"
+                fresco:roundedCornerRadius="5dp"
+                fresco:roundTopLeft="true"
+                fresco:roundTopRight="true"
+                fresco:roundBottomLeft="true"
+                fresco:roundBottomRight="true"
+
+                />
+
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp">
+
+            <TextView
+                android:id="@+id/tv_focus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toLeftOf="@+id/tv_review"
+                android:layout_centerVertical="true"
+                android:layout_gravity="center_vertical"
+                android:layout_marginRight="5dp"
+                android:drawableLeft="@drawable/watch"
+                android:drawablePadding="5dp"
+                android:ellipsize="end"
+                android:gravity="right"
+                android:textColor="@color/colorGray"
+                tools:text="100" />
+
+            <TextView
+
+                android:layout_toLeftOf="@+id/tv_share"
+                android:id="@+id/tv_review"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_gravity="center_vertical"
+                android:layout_marginRight="5dp"
+                android:drawableLeft="@drawable/review"
+                android:drawablePadding="5dp"
+                android:ellipsize="end"
+                android:gravity="right"
+                android:textColor="@color/colorGray"
+                tools:text="100" />
+
+            <TextView
+
+
+                android:id="@+id/tv_share"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_gravity="center_vertical"
+                android:layout_marginRight="5dp"
+                android:drawableLeft="@drawable/shear_gray"
+                android:drawablePadding="5dp"
+                android:ellipsize="end"
+                android:gravity="right"
+                android:textColor="@color/colorGray"
+                tools:text="100" />
+
+
+            <TextView
+                android:id="@+id/tv_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:ellipsize="end"
+                android:maxLength="10"
+                tools:text="2012-09-16" />
+
+
+        </RelativeLayout>
+
+
+    </LinearLayout>
+
+
+</LinearLayout>

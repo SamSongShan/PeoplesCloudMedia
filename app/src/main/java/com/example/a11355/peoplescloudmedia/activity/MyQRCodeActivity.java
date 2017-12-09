@@ -123,7 +123,7 @@ public class MyQRCodeActivity extends BaseActivity implements View.OnClickListen
             Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher);
             BitMapUtil.saveBitmap2File(bitmap, filePath);
         }
-        PreferencesUtil.showShare(this, "我发现了一个很好用的人众云媒哦~", "点击链接",
+        PreferencesUtil.showShare(this, "我发现了一个很好用的人众云媒哦~", ShearLink,
                 "美好生活从这里开始，快来人众云媒\n", filePath, this);
     }
 

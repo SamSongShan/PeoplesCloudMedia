@@ -77,6 +77,21 @@ public interface Constant {
         String GetUserCollecVideoList = BaseUrl + "GetUserCollecVideoList";
 
 
+        //36】添加文章收藏-发现模块(输入参数string Json)
+        String AddFindCollect = BaseUrl + "AddFindCollect";
+
+        //【37】取消文章收藏-发现模块(输入参数string Json)
+        String CancelFindCollect = BaseUrl + "CancelFindCollect";
+
+        //我的关注列表(输入参数string Json)
+        String GetAttentionToList = BaseUrl + "GetAttentionToList";
+
+        //我的粉丝列表(输入参数string Json)
+        String GetFansList = BaseUrl + "GetFansList";
+
+
+
+
 
         //注册分享链接   RecommendMobile  传推荐人手机号
         String ShearLink =BaseH5 + "/Webuser/Registered?RecommendMobile=";
@@ -90,6 +105,14 @@ public interface Constant {
 
         String NewsDetailsLink = BaseH5 + "/News/FindOutDetail?Uid=%s&UserId=%s";
 
+        /*
+        *
+        * 分享他人主页
+http://localhost:1548/webuser/OthersHome?userId=212bd12a-37f2-4eb4-ae84-6dd9e552434b
+userId 传用户ID
+        * */
+
+        String OthersHome = BaseH5 + "/webuser/OthersHome?userId=";
 
 
     }

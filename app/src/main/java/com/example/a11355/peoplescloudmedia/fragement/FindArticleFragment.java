@@ -185,6 +185,8 @@ public class FindArticleFragment extends BaseFragment  implements OnAdapterCallb
     public void onItemClick(View v, int position) {
         Intent intent = new Intent(getContext(), H5ActivityForNewsDetical.class);
         intent.putExtra("url", String.format(Constant.URL.NewsDetailsLink,newsData.get(position).getId()+"", SharedPreferencesUtil.getUserId(getContext())));
+
+        intent.putExtra("data", newsData.get(position));
         startActivity(intent);
     }
    
