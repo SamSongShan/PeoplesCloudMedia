@@ -89,8 +89,8 @@ public interface Constant {
         //我的粉丝列表(输入参数string Json)
         String GetFansList = BaseUrl + "GetFansList";
 
-
-
+          //获取文章收藏列表- 文章是否收藏
+        String GetFindOutDetail = BaseUrl + "GetFindOutDetail";
 
 
         //注册分享链接   RecommendMobile  传推荐人手机号

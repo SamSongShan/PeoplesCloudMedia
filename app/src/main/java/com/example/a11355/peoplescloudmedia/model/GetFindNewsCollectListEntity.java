@@ -1,5 +1,8 @@
 package com.example.a11355.peoplescloudmedia.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.List;
 
 /**
@@ -78,7 +81,7 @@ public class GetFindNewsCollectListEntity {
             this.artiles = artiles;
         }
 
-        public static class ArtilesBean {
+        public static class ArtilesBean implements Parcelable {
 
 
             /**
@@ -188,6 +191,50 @@ public class GetFindNewsCollectListEntity {
             public void setAuthor(String author) {
                 this.author = author;
             }
+
+            @Override
+            public int describeContents() {
+                return 0;
+            }
+
+            @Override
+            public void writeToParcel(Parcel dest, int flags) {
+                dest.writeInt(this.id);
+                dest.writeString(this.thumb);
+                dest.writeString(this.title);
+                dest.writeInt(this.reads_count);
+                dest.writeInt(this.comments_count);
+                dest.writeInt(this.reposts_count);
+                dest.writeString(this.avatar);
+                dest.writeString(this.created_at);
+                dest.writeString(this.author);
+                dest.writeInt(this.type);
+            }
+
+            protected ArtilesBean(Parcel in) {
+                this.id = in.readInt();
+                this.thumb = in.readString();
+                this.title = in.readString();
+                this.reads_count = in.readInt();
+                this.comments_count = in.readInt();
+                this.reposts_count = in.readInt();
+                this.avatar = in.readString();
+                this.created_at = in.readString();
+                this.author = in.readString();
+                this.type = in.readInt();
+            }
+
+            public static final Parcelable.Creator<ArtilesBean> CREATOR = new Parcelable.Creator<ArtilesBean>() {
+                @Override
+                public ArtilesBean createFromParcel(Parcel source) {
+                    return new ArtilesBean(source);
+                }
+
+                @Override
+                public ArtilesBean[] newArray(int size) {
+                    return new ArtilesBean[size];
+                }
+            };
         }
     }
 }

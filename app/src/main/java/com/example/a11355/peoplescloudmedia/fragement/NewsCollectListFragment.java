@@ -9,6 +9,7 @@ import android.text.TextUtils;
 import android.view.View;
 
 import com.example.a11355.peoplescloudmedia.R;
+import com.example.a11355.peoplescloudmedia.activity.H5ActivityForNewsDetical;
 import com.example.a11355.peoplescloudmedia.activity.LoginActivity;
 import com.example.a11355.peoplescloudmedia.adapter.NewsCollectListAdapter;
 import com.example.a11355.peoplescloudmedia.base.AbsRecyclerViewAdapter;
@@ -23,6 +24,7 @@ import com.example.a11355.peoplescloudmedia.util.DesUtil;
 import com.example.a11355.peoplescloudmedia.util.LogUtils;
 import com.example.a11355.peoplescloudmedia.util.OkHttpUtil;
 import com.example.a11355.peoplescloudmedia.util.PreferencesUtil;
+import com.example.a11355.peoplescloudmedia.util.SharedPreferencesUtil;
 import com.example.a11355.peoplescloudmedia.util.ToastUtil;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -170,7 +172,11 @@ public class NewsCollectListFragment extends BaseFragment implements OkHttpUtil.
 
     @Override
     public void onItemClick(View v, int position) {
+        Intent intent = new Intent(getContext(), H5ActivityForNewsDetical.class);
+        intent.putExtra("url", String.format(Constant.URL.NewsDetailsLink,videosData.get(position).getId()+"", SharedPreferencesUtil.getUserId(getContext())));
 
+        intent.putExtra("data1", videosData.get(position));
+        startActivity(intent);
     }
 
     @Override

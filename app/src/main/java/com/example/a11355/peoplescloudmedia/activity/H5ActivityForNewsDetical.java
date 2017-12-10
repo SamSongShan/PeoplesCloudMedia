@@ -18,6 +18,9 @@ import com.example.a11355.peoplescloudmedia.base.BaseActivity;
 import com.example.a11355.peoplescloudmedia.custom.LoadingDialog;
 import com.example.a11355.peoplescloudmedia.model.AddFindCollect;
 import com.example.a11355.peoplescloudmedia.model.AddFindCollectEntity;
+import com.example.a11355.peoplescloudmedia.model.GetFindNewsCollectListEntity;
+import com.example.a11355.peoplescloudmedia.model.GetFindOutDetail;
+import com.example.a11355.peoplescloudmedia.model.GetFindOutDetailEntity;
 import com.example.a11355.peoplescloudmedia.model.GetNewsListEntity;
 import com.example.a11355.peoplescloudmedia.util.BitMapUtil;
 import com.example.a11355.peoplescloudmedia.util.Constant;
@@ -52,6 +55,7 @@ public class H5ActivityForNewsDetical extends BaseActivity implements View.OnCli
     @BindView(R.id.tv_reviewNum)
     TextView tvReviewNum;
     private GetNewsListEntity.DataBean.ArtilesBean data;
+    private GetFindNewsCollectListEntity.DataBean.ArtilesBean data1;
     private String filePath;
     private String url;
     private String userId;
@@ -70,6 +74,9 @@ public class H5ActivityForNewsDetical extends BaseActivity implements View.OnCli
         url = intent.getStringExtra("url");
 
         data = intent.getParcelableExtra("data");
+        data1 = intent.getParcelableExtra("data1");
+        isCollect();
+
         webView.requestFocusFromTouch();
         webView.getSettings().setJavaScriptEnabled(true);
         webView.setWebChromeClient(new WebChromeClient() {
@@ -103,8 +110,20 @@ public class H5ActivityForNewsDetical extends BaseActivity implements View.OnCli
 
     }
 
+    private void isCollect() {
+        if (isLogin()) {
+            loadingDialog = LoadingDialog.newInstance("加载中...");
+            loadingDialog.show(getFragmentManager());
+            GetFindOutDetail getFindOutDetail = new GetFindOutDetail(data == null ? data1.getId() + "" : data.getId() + "", PreferencesUtil.getToken(this), PreferencesUtil.getUserId(this));
+
+            OkHttpUtil.postJson(Constant.URL.GetFindOutDetail, DesUtil.encrypt(gson.toJson(getFindOutDetail)), this);
+        }
+    }
+
     private void initView() {
-        sdvFrom.setImageURI(data.getAvatar());
+
+
+        sdvFrom.setImageURI(data == null ? data1.getAvatar() : data.getAvatar());
 
     }
 
@@ -119,13 +138,19 @@ public class H5ActivityForNewsDetical extends BaseActivity implements View.OnCli
             case R.id.sdv_from://点击头像
                 break;
             case R.id.img_shear: //分享
-                share();
+
+                if (data == null) {
+                    shareForcollect();
+                } else {
+                    share();
+                }
+
                 break;
             case R.id.img_collect:   //收藏
 
                 if (isLogin()) {
 
-                    AddFindCollect addFindCollect = new AddFindCollect(PreferencesUtil.getToken(this), PreferencesUtil.getUserId(this), data.getId() + "");
+                    AddFindCollect addFindCollect = new AddFindCollect(PreferencesUtil.getToken(this), PreferencesUtil.getUserId(this), data == null ? data1.getId() + "" : data.getId() + "");
 
                     if (imgCollect.isSelected()) {
                         loadingDialog = LoadingDialog.newInstance("取消收藏中...");
@@ -175,6 +200,24 @@ public class H5ActivityForNewsDetical extends BaseActivity implements View.OnCli
                 data.getAuthor(), filePath, this);
     }
 
+    //分享
+    public void shareForcollect() {
+        if (TextUtils.isEmpty(data1.getThumb())) {
+            filePath = Environment.getExternalStorageDirectory() + "/Android/data/" +
+                    getPackageName() + "/cache/logo.jpg";
+            if (!new File(filePath).exists()) {
+                Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher);
+                BitMapUtil.saveBitmap2File(bitmap, filePath);
+            } else {
+                filePath = data1.getThumb();
+            }
+        }
+
+
+        PreferencesUtil.showShare(this, data1.getTitle(), url,
+                data1.getAuthor(), filePath, this);
+    }
+
     @Override
     public void onClick(View v) { //分享复制链接
 
@@ -196,7 +239,7 @@ public class H5ActivityForNewsDetical extends BaseActivity implements View.OnCli
                     ToastUtil.initToast(this, addFindCollectEntity.getMessage());
                     if (addFindCollectEntity.getCode() == Constant.Integers.SUC) {
                         imgCollect.setSelected(false);
-                    }  else {
+                    } else {
 
                         if ("帐号已在其它地方登录".equals(addFindCollectEntity.getMessage())) {
                             startActivityForResult(new Intent(this, LoginActivity.class), Constant.Code.LoginCode);
@@ -217,6 +260,20 @@ public class H5ActivityForNewsDetical extends BaseActivity implements View.OnCli
                         imgCollect.setSelected(true);
                     } else {
                         if ("帐号已在其它地方登录".equals(addFindCollectEntity.getMessage())) {
+                            startActivityForResult(new Intent(this, LoginActivity.class), Constant.Code.LoginCode);
+                        }
+
+                    }
+                    break;
+                }
+                case Constant.URL.GetFindOutDetail: {  //是否收藏
+                    LogUtils.e("GetFindOutDetail", decrypt);
+                    GetFindOutDetailEntity getFindOutDetailEntity = gson.fromJson(decrypt, GetFindOutDetailEntity.class);
+
+                    if (getFindOutDetailEntity.getCode() == Constant.Integers.SUC) {
+                        imgCollect.setSelected(getFindOutDetailEntity.getData().isFavorited());
+                    } else {
+                        if ("帐号已在其它地方登录".equals(getFindOutDetailEntity.getMessage())) {
                             startActivityForResult(new Intent(this, LoginActivity.class), Constant.Code.LoginCode);
                         }
 

@@ -26,7 +26,7 @@ public class H5ActivityNotitle extends BaseActivity {
 
     @Override
     protected int getViewResId() {
-        return R.layout.activity_h5;
+        return R.layout.activity_h5_notitle;
     }
 
     @Override
