@@ -1,23 +1,31 @@
 package com.example.a11355.peoplescloudmedia.activity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Environment;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.View;
+import android.view.WindowManager;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.a11355.peoplescloudmedia.R;
 import com.example.a11355.peoplescloudmedia.base.BaseActivity;
+import com.example.a11355.peoplescloudmedia.custom.CustomPopupWindow;
 import com.example.a11355.peoplescloudmedia.custom.LoadingDialog;
 import com.example.a11355.peoplescloudmedia.model.AddFindCollect;
 import com.example.a11355.peoplescloudmedia.model.AddFindCollectEntity;
+import com.example.a11355.peoplescloudmedia.model.AddFindPV;
 import com.example.a11355.peoplescloudmedia.model.GetFindNewsCollectListEntity;
 import com.example.a11355.peoplescloudmedia.model.GetFindOutDetail;
 import com.example.a11355.peoplescloudmedia.model.GetFindOutDetailEntity;
@@ -27,6 +35,7 @@ import com.example.a11355.peoplescloudmedia.util.Constant;
 import com.example.a11355.peoplescloudmedia.util.DesUtil;
 import com.example.a11355.peoplescloudmedia.util.LogUtils;
 import com.example.a11355.peoplescloudmedia.util.OkHttpUtil;
+import com.example.a11355.peoplescloudmedia.util.PhoneUtil;
 import com.example.a11355.peoplescloudmedia.util.PreferencesUtil;
 import com.example.a11355.peoplescloudmedia.util.ToastUtil;
 import com.facebook.drawee.view.SimpleDraweeView;
@@ -62,6 +71,13 @@ public class H5ActivityForNewsDetical extends BaseActivity implements View.OnCli
 
     private Gson gson = new GsonBuilder().create();
     private LoadingDialog loadingDialog;
+    private TextView tvReviewNum1;
+    private ImageView imgClose;
+    private RecyclerView rv;
+    private TextView tvPl;
+    private LinearLayout llWrite;
+    private EditText etPl;
+    private TextView tvCommit;
 
     @Override
     protected int getViewResId() {
@@ -111,9 +127,12 @@ public class H5ActivityForNewsDetical extends BaseActivity implements View.OnCli
     }
 
     private void isCollect() {
+        loadingDialog = LoadingDialog.newInstance("加载中...");
+        loadingDialog.show(getFragmentManager());
+        AddFindPV addFindPV = new AddFindPV(data == null ? data1.getId() + "" : data.getId() + "");
+        OkHttpUtil.postJson(Constant.URL.AddFindPV, DesUtil.encrypt(gson.toJson(addFindPV)), this);
         if (isLogin()) {
-            loadingDialog = LoadingDialog.newInstance("加载中...");
-            loadingDialog.show(getFragmentManager());
+
             GetFindOutDetail getFindOutDetail = new GetFindOutDetail(data == null ? data1.getId() + "" : data.getId() + "", PreferencesUtil.getToken(this), PreferencesUtil.getUserId(this));
 
             OkHttpUtil.postJson(Constant.URL.GetFindOutDetail, DesUtil.encrypt(gson.toJson(getFindOutDetail)), this);
@@ -169,8 +188,16 @@ public class H5ActivityForNewsDetical extends BaseActivity implements View.OnCli
                 }
                 break;
             case R.id.img_review: //评论
+                if (isLogin()) {
+
+                    initPopu();
+                } else {
+                    ToastUtil.initToast(this, "未登录");
+
+                }
                 break;
         }
+
     }
 
     public boolean isLogin() {
@@ -280,6 +307,11 @@ public class H5ActivityForNewsDetical extends BaseActivity implements View.OnCli
                     }
                     break;
                 }
+                case Constant.URL.AddFindPV: {
+                    LogUtils.e("AddFindPV", decrypt);
+
+                }
+                break;
 
 
             }
@@ -296,6 +328,35 @@ public class H5ActivityForNewsDetical extends BaseActivity implements View.OnCli
             loadingDialog.dismiss();
         }
 
+
     }
 
+    //初始化评论Popu
+    private void initPopu() {
+        CustomPopupWindow builder = new CustomPopupWindow.Builder().setContentView(R.layout.popu_review)
+                .setwidth(LinearLayout.MarginLayoutParams.MATCH_PARENT)
+                .setheight(PhoneUtil.dp2px(this, 280))
+                .setOutSideCancel(false)
+                .setContext(this).builder();
+        backgroundAlpha(this, 0.5f);
+        builder.showAtLocation(R.layout.activity_h5_fornewsdetical, Gravity.BOTTOM, 0, 0);
+        tvReviewNum1 = (TextView) builder.getItemView(R.id.tv_reviewNum);
+        imgClose = (ImageView) builder.getItemView(R.id.img_close);
+        rv = (RecyclerView) builder.getItemView(R.id.rv);
+        tvPl = (TextView) builder.getItemView(R.id.tv_pl);
+        llWrite = (LinearLayout) builder.getItemView(R.id.ll_write);
+        etPl = (EditText) builder.getItemView(R.id.et_pl);
+        tvCommit = (TextView) builder.getItemView(R.id.tv_commit);
+
+
+    }
+
+    //0.0f和1.0f之间，0.0f完全不暗，1.0f全暗
+    public void backgroundAlpha(Activity context, float bgAlpha) {
+        WindowManager.LayoutParams lp = context.getWindow().getAttributes();
+        lp.alpha = bgAlpha;
+        // context.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+        context.getWindow().setAttributes(lp);
+
+    }
 }

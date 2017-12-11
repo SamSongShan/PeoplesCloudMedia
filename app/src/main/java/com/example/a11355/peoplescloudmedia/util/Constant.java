@@ -92,6 +92,12 @@ public interface Constant {
           //获取文章收藏列表- 文章是否收藏
         String GetFindOutDetail = BaseUrl + "GetFindOutDetail";
 
+          //34】增加文章浏览量-发现模块(输入参数string Json)
+        //获取文章收藏列表- 文章是否收藏
+        String AddFindPV = BaseUrl + "AddFindPV";
+
+
+
 
         //注册分享链接   RecommendMobile  传推荐人手机号
         String ShearLink =BaseH5 + "/Webuser/Registered?RecommendMobile=";
