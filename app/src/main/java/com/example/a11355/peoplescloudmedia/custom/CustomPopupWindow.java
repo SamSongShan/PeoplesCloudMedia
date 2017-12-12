@@ -17,7 +17,7 @@ import android.widget.PopupWindow;
  */
 
 public class CustomPopupWindow {
-    private PopupWindow mPopupWindow;
+    public PopupWindow mPopupWindow;
     private View contentview;
     private Context mContext;
 
@@ -44,6 +44,7 @@ public class CustomPopupWindow {
     public void dismiss() {
         if (mPopupWindow != null) {
             mPopupWindow.dismiss();
+
         }
     }
 

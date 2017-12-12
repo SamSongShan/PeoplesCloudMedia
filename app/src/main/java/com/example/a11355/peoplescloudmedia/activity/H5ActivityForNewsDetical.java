@@ -1,6 +1,5 @@
 package com.example.a11355.peoplescloudmedia.activity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -9,7 +8,6 @@ import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
-import android.view.WindowManager;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -78,6 +76,7 @@ public class H5ActivityForNewsDetical extends BaseActivity implements View.OnCli
     private LinearLayout llWrite;
     private EditText etPl;
     private TextView tvCommit;
+    private CustomPopupWindow builder;
 
     @Override
     protected int getViewResId() {
@@ -92,6 +91,7 @@ public class H5ActivityForNewsDetical extends BaseActivity implements View.OnCli
         data = intent.getParcelableExtra("data");
         data1 = intent.getParcelableExtra("data1");
         isCollect();
+        initView();
 
         webView.requestFocusFromTouch();
         webView.getSettings().setJavaScriptEnabled(true);
@@ -120,8 +120,6 @@ public class H5ActivityForNewsDetical extends BaseActivity implements View.OnCli
             }
         });
         webView.loadUrl(url);
-
-        initView();
 
 
     }
@@ -190,12 +188,13 @@ public class H5ActivityForNewsDetical extends BaseActivity implements View.OnCli
             case R.id.img_review: //评论
                 if (isLogin()) {
 
-                    initPopu();
+                     initPopu();
                 } else {
                     ToastUtil.initToast(this, "未登录");
 
                 }
                 break;
+
         }
 
     }
@@ -247,7 +246,28 @@ public class H5ActivityForNewsDetical extends BaseActivity implements View.OnCli
 
     @Override
     public void onClick(View v) { //分享复制链接
+        switch (v.getId()) {
+            case R.id.img_close: { //关闭popu
+                if (builder != null) {
+                    builder.dismiss();
 
+                    PhoneUtil.hideKeyboard(v);
+                    tvPl.setVisibility(View.VISIBLE);
+                    llWrite.setVisibility(View.GONE);
+
+                }
+            }
+            break;
+            case R.id.tv_commit: { //提交评论
+                PhoneUtil.hideKeyboard(v);
+            }
+            break;
+            case R.id.tv_pl: {   //显示评论输入框
+                tvPl.setVisibility(View.GONE);
+                llWrite.setVisibility(View.VISIBLE);
+            }
+            break;
+        }
     }
 
     @Override
@@ -333,13 +353,19 @@ public class H5ActivityForNewsDetical extends BaseActivity implements View.OnCli
 
     //初始化评论Popu
     private void initPopu() {
-        CustomPopupWindow builder = new CustomPopupWindow.Builder().setContentView(R.layout.popu_review)
-                .setwidth(LinearLayout.MarginLayoutParams.MATCH_PARENT)
-                .setheight(PhoneUtil.dp2px(this, 280))
+
+        builder = new CustomPopupWindow.Builder()
+                .setContext(this)
+                .setContentView(R.layout.popu_review)
+                .setwidth(LinearLayout.LayoutParams.MATCH_PARENT)
+                .setheight(LinearLayout.LayoutParams.MATCH_PARENT)
                 .setOutSideCancel(false)
-                .setContext(this).builder();
-        backgroundAlpha(this, 0.5f);
-        builder.showAtLocation(R.layout.activity_h5_fornewsdetical, Gravity.BOTTOM, 0, 0);
+                .builder()
+                .showAtLocation(R.layout.activity_h5_fornewsdetical, Gravity.BOTTOM, 0, 0);
+
+
+
+
         tvReviewNum1 = (TextView) builder.getItemView(R.id.tv_reviewNum);
         imgClose = (ImageView) builder.getItemView(R.id.img_close);
         rv = (RecyclerView) builder.getItemView(R.id.rv);
@@ -348,14 +374,14 @@ public class H5ActivityForNewsDetical extends BaseActivity implements View.OnCli
         etPl = (EditText) builder.getItemView(R.id.et_pl);
         tvCommit = (TextView) builder.getItemView(R.id.tv_commit);
 
+        imgClose.setOnClickListener(this);
+        tvCommit.setOnClickListener(this);
+        tvPl.setOnClickListener(this);
+
+        tvReviewNum1.setText(data == null ? data1.getComments_count() + "" : data.getComments_count() + "");
     }
 
-    //0.0f和1.0f之间，0.0f完全不暗，1.0f全暗
-    public void backgroundAlpha(Activity context, float bgAlpha) {
-        WindowManager.LayoutParams lp = context.getWindow().getAttributes();
-        lp.alpha = bgAlpha;
-        // context.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
-        context.getWindow().setAttributes(lp);
 
-    }
+
+
 }
