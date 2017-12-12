@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:fresco="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,105 +7,110 @@
     android:background="@color/colorWhite"
     android:orientation="vertical">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/colorWhite">
+   <LinearLayout
+       android:layout_width="match_parent"
+       android:layout_height="match_parent"
+       android:orientation="vertical">
+       <RelativeLayout
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:background="@color/colorWhite">
 
-        <TextView
-            android:id="@+id/tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:padding="10dp"
-            android:text="评论区"
-            android:textColor="@color/colorDeepBlack"
-            android:textSize="16sp" />
+           <TextView
+               android:id="@+id/tv"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:layout_centerVertical="true"
+               android:padding="10dp"
+               android:text="评论区"
+               android:textColor="@color/colorDeepBlack"
+               android:textSize="16sp" />
 
-        <TextView
-            android:id="@+id/tv_reviewNum"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_toRightOf="@+id/tv"
-            android:background="@drawable/shape_solid_red_90"
-            android:padding="5dp"
-            android:textColor="@color/colorWhite"
-            tools:text="200+" />
+           <TextView
+               android:id="@+id/tv_reviewNum"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:layout_centerVertical="true"
+               android:layout_toRightOf="@+id/tv"
+               android:background="@drawable/shape_solid_red_90"
+               android:padding="5dp"
+               android:textColor="@color/colorWhite"
+               tools:text="200+" />
 
-        <ImageView
-            android:id="@+id/img_close"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="10dp"
-            android:src="@drawable/close_b" />
-    </RelativeLayout>
+           <ImageView
+               android:id="@+id/img_close"
+               android:layout_width="20dp"
+               android:layout_height="20dp"
+               android:layout_alignParentRight="true"
+               android:layout_centerVertical="true"
+               android:layout_marginRight="10dp"
+               android:src="@drawable/close_b" />
+       </RelativeLayout>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/primaryBg" />
+       <View
+           android:layout_width="match_parent"
+           android:layout_height="1dp"
+           android:background="@color/primaryBg" />
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rv"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1">
+       <android.support.v7.widget.RecyclerView
+           android:id="@+id/rv"
+           android:layout_width="match_parent"
+           android:layout_height="0dp"
+           android:layout_weight="1">
 
-    </android.support.v7.widget.RecyclerView>
+       </android.support.v7.widget.RecyclerView>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/primaryBg" />
+       <View
+           android:layout_width="match_parent"
+           android:layout_height="1dp"
+           android:background="@color/primaryBg" />
 
-    <TextView
-        android:id="@+id/tv_pl"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:background="@drawable/shape_solid_gray_90"
-        android:drawableLeft="@drawable/write"
-        android:drawablePadding="5dp"
-        android:padding="10dp"
-        android:text="写评论" />
+       <TextView
+           android:id="@+id/tv_pl"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:layout_margin="10dp"
+           android:background="@drawable/shape_solid_gray_90"
+           android:drawableLeft="@drawable/write"
+           android:drawablePadding="5dp"
+           android:padding="10dp"
+           android:text="写评论" />
 
-    <LinearLayout
-        android:id="@+id/ll_write"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/colorLightWhite"
-        android:orientation="horizontal">
-
-
-        <EditText
-            android:id="@+id/et_pl"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:layout_weight="1"
-            android:background="@null"
-            android:drawablePadding="5dp"
-            android:hint="写评论"
-            android:padding="10dp" />
-
-        <TextView
-            android:id="@+id/tv_commit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:layout_margin="5dp"
-            android:background="@drawable/shape_solid_red_90"
-            android:paddingBottom="8dp"
-            android:paddingLeft="12dp"
-            android:paddingRight="12dp"
-            android:paddingTop="8dp"
-            android:text="发送"
-            android:textColor="@color/colorWhite" />
-
-    </LinearLayout>
+       <LinearLayout
+           android:id="@+id/ll_write"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:background="@color/colorLightWhite"
+           android:orientation="horizontal">
 
 
-</LinearLayout>
+           <EditText
+               android:id="@+id/et_pl"
+               android:layout_width="0dp"
+               android:layout_height="wrap_content"
+               android:layout_margin="10dp"
+               android:layout_weight="1"
+               android:background="@null"
+               android:drawablePadding="5dp"
+               android:hint="写评论"
+               android:padding="10dp" />
+
+           <TextView
+               android:id="@+id/tv_commit"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:layout_gravity="bottom"
+               android:layout_margin="5dp"
+               android:background="@drawable/shape_solid_red_90"
+               android:paddingBottom="8dp"
+               android:paddingLeft="12dp"
+               android:paddingRight="12dp"
+               android:paddingTop="8dp"
+               android:text="发送"
+               android:textColor="@color/colorWhite" />
+
+       </LinearLayout>
+   </LinearLayout>
+
+
+</ScrollView>

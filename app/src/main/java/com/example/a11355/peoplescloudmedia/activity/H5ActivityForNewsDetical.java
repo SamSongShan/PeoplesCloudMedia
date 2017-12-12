@@ -348,7 +348,6 @@ public class H5ActivityForNewsDetical extends BaseActivity implements View.OnCli
         etPl = (EditText) builder.getItemView(R.id.et_pl);
         tvCommit = (TextView) builder.getItemView(R.id.tv_commit);
 
-
     }
 
     //0.0f和1.0f之间，0.0f完全不暗，1.0f全暗

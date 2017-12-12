@@ -32,6 +32,7 @@ public class CustomPopupWindow {
         mPopupWindow.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
         mPopupWindow.setAnimationStyle(builder.animstyle);
+        mPopupWindow.setFocusable(true);
 
 
     }
