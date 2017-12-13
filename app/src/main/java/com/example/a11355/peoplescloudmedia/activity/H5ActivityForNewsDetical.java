@@ -23,10 +23,13 @@ import com.example.a11355.peoplescloudmedia.custom.CustomPopupWindow;
 import com.example.a11355.peoplescloudmedia.custom.LoadingDialog;
 import com.example.a11355.peoplescloudmedia.model.AddFindCollect;
 import com.example.a11355.peoplescloudmedia.model.AddFindCollectEntity;
+import com.example.a11355.peoplescloudmedia.model.AddFindComment;
+import com.example.a11355.peoplescloudmedia.model.AddFindCommentEntity;
 import com.example.a11355.peoplescloudmedia.model.AddFindPV;
 import com.example.a11355.peoplescloudmedia.model.GetFindNewsCollectListEntity;
 import com.example.a11355.peoplescloudmedia.model.GetFindOutDetail;
 import com.example.a11355.peoplescloudmedia.model.GetFindOutDetailEntity;
+import com.example.a11355.peoplescloudmedia.model.GetNewsCommentList;
 import com.example.a11355.peoplescloudmedia.model.GetNewsListEntity;
 import com.example.a11355.peoplescloudmedia.util.BitMapUtil;
 import com.example.a11355.peoplescloudmedia.util.Constant;
@@ -44,6 +47,7 @@ import java.io.File;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+
 
 
 /**
@@ -77,6 +81,10 @@ public class H5ActivityForNewsDetical extends BaseActivity implements View.OnCli
     private EditText etPl;
     private TextView tvCommit;
     private CustomPopupWindow builder;
+
+    private int PageIndex = 1;
+    private int PageSize = 5;
+    private int nextPage = 1;
 
     @Override
     protected int getViewResId() {
@@ -186,13 +194,10 @@ public class H5ActivityForNewsDetical extends BaseActivity implements View.OnCli
                 }
                 break;
             case R.id.img_review: //评论
-                if (isLogin()) {
+
 
                      initPopu();
-                } else {
-                    ToastUtil.initToast(this, "未登录");
 
-                }
                 break;
 
         }
@@ -259,12 +264,31 @@ public class H5ActivityForNewsDetical extends BaseActivity implements View.OnCli
             }
             break;
             case R.id.tv_commit: { //提交评论
-                PhoneUtil.hideKeyboard(v);
+
+
+                if (TextUtils.isEmpty(etPl.getText().toString())) {
+                    ToastUtil.initToast(this, "请添加评论");
+                } else {
+                    PhoneUtil.hideKeyboard(v);
+
+                    loadingDialog = LoadingDialog.newInstance("评论中...");
+                    loadingDialog.show(getFragmentManager());
+                    AddFindComment addFindComment = new AddFindComment(PreferencesUtil.getToken(this), PreferencesUtil.getUserId(this), data == null ? data1.getId() + "" : data.getId() + "", etPl.getText().toString());
+                    OkHttpUtil.postJson(Constant.URL.AddFindComment, DesUtil.encrypt(gson.toJson(addFindComment)), this);
+                }
             }
             break;
             case R.id.tv_pl: {   //显示评论输入框
-                tvPl.setVisibility(View.GONE);
-                llWrite.setVisibility(View.VISIBLE);
+
+                if (isLogin()) {
+
+                    tvPl.setVisibility(View.GONE);
+                    llWrite.setVisibility(View.VISIBLE);
+                } else {
+                    ToastUtil.initToast(this, "未登录");
+
+                }
+
             }
             break;
         }
@@ -332,6 +356,29 @@ public class H5ActivityForNewsDetical extends BaseActivity implements View.OnCli
 
                 }
                 break;
+                case Constant.URL.GetNewsCommentList: {//评论列表
+                    LogUtils.e("GetNewsCommentList", decrypt);
+
+                }
+                break;
+
+                case Constant.URL.AddFindComment: {//添加评论
+                    LogUtils.e("AddFindComment", decrypt);
+                    AddFindCommentEntity addFindCommentEntity = gson.fromJson(decrypt, AddFindCommentEntity.class);
+                    ToastUtil.initToast(this,addFindCommentEntity.getMessage());
+
+                    if (addFindCommentEntity.getCode()==Constant.Integers.SUC){
+                        tvPl.setVisibility(View.VISIBLE);
+                        llWrite.setVisibility(View.GONE);
+                    }else {
+                        if ("帐号已在其它地方登录".equals(addFindCommentEntity.getMessage())) {
+                            startActivityForResult(new Intent(this, LoginActivity.class), Constant.Code.LoginCode);
+                        }
+
+                    }
+
+                }
+                break;
 
 
             }
@@ -353,6 +400,8 @@ public class H5ActivityForNewsDetical extends BaseActivity implements View.OnCli
 
     //初始化评论Popu
     private void initPopu() {
+        loadingDialog = LoadingDialog.newInstance("加载中...");
+        loadingDialog.show(getFragmentManager());
 
         builder = new CustomPopupWindow.Builder()
                 .setContext(this)
@@ -379,6 +428,10 @@ public class H5ActivityForNewsDetical extends BaseActivity implements View.OnCli
         tvPl.setOnClickListener(this);
 
         tvReviewNum1.setText(data == null ? data1.getComments_count() + "" : data.getComments_count() + "");
+
+        GetNewsCommentList getNewsCommentList = new GetNewsCommentList(data == null ? data1.getId() + "" : data.getId() + "", nextPage + "", PageSize + "");
+
+        OkHttpUtil.postJson(Constant.URL.GetNewsCommentList, DesUtil.encrypt(gson.toJson(getNewsCommentList)), this);
     }
 
 

@@ -96,6 +96,14 @@ public interface Constant {
         //获取文章收藏列表- 文章是否收藏
         String AddFindPV = BaseUrl + "AddFindPV";
 
+        //【32】获取文章评论列表-发现模块(输入参数string Json)
+        String GetNewsCommentList = BaseUrl + "GetNewsCommentList";
+
+        //【33】添加文章评论-发现模块(输入参数string Json)
+        String AddFindComment  = BaseUrl + "AddFindComment ";
+
+
+
 
 
 
