@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Environment;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.Gravity;
@@ -18,8 +19,11 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.a11355.peoplescloudmedia.R;
+import com.example.a11355.peoplescloudmedia.adapter.GetNewsReviewAdapter;
 import com.example.a11355.peoplescloudmedia.base.BaseActivity;
+import com.example.a11355.peoplescloudmedia.base.OnAdapterCallbackListener;
 import com.example.a11355.peoplescloudmedia.custom.CustomPopupWindow;
+import com.example.a11355.peoplescloudmedia.custom.DividerGridItem;
 import com.example.a11355.peoplescloudmedia.custom.LoadingDialog;
 import com.example.a11355.peoplescloudmedia.model.AddFindCollect;
 import com.example.a11355.peoplescloudmedia.model.AddFindCollectEntity;
@@ -30,6 +34,7 @@ import com.example.a11355.peoplescloudmedia.model.GetFindNewsCollectListEntity;
 import com.example.a11355.peoplescloudmedia.model.GetFindOutDetail;
 import com.example.a11355.peoplescloudmedia.model.GetFindOutDetailEntity;
 import com.example.a11355.peoplescloudmedia.model.GetNewsCommentList;
+import com.example.a11355.peoplescloudmedia.model.GetNewsCommentListEntity;
 import com.example.a11355.peoplescloudmedia.model.GetNewsListEntity;
 import com.example.a11355.peoplescloudmedia.util.BitMapUtil;
 import com.example.a11355.peoplescloudmedia.util.Constant;
@@ -44,16 +49,17 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
 
 
-
 /**
  * H5页面
  */
-public class H5ActivityForNewsDetical extends BaseActivity implements View.OnClickListener, OkHttpUtil.OnDataListener {
+public class H5ActivityForNewsDetical extends BaseActivity implements View.OnClickListener, OkHttpUtil.OnDataListener, OnAdapterCallbackListener {
 
     @BindView(R.id.pb_h5)
     public ProgressBar progressBar;
@@ -85,6 +91,9 @@ public class H5ActivityForNewsDetical extends BaseActivity implements View.OnCli
     private int PageIndex = 1;
     private int PageSize = 5;
     private int nextPage = 1;
+    private GetNewsReviewAdapter getNewsReviewAdapter;
+
+    private List<GetNewsCommentListEntity.DataEntity.CommentsEntity>  dataReview=new ArrayList<>();
 
     @Override
     protected int getViewResId() {
@@ -100,7 +109,7 @@ public class H5ActivityForNewsDetical extends BaseActivity implements View.OnCli
         data1 = intent.getParcelableExtra("data1");
         isCollect();
         initView();
-
+        tvReviewNum.setText(data==null?data1.getComments_count()+"":data.getComments_count()+"");
         webView.requestFocusFromTouch();
         webView.getSettings().setJavaScriptEnabled(true);
         webView.setWebChromeClient(new WebChromeClient() {
@@ -153,7 +162,7 @@ public class H5ActivityForNewsDetical extends BaseActivity implements View.OnCli
     }
 
 
-    @OnClick({R.id.img_colse, R.id.sdv_from, R.id.img_shear, R.id.img_collect, R.id.img_review})
+    @OnClick({R.id.img_colse, R.id.sdv_from, R.id.img_shear, R.id.img_collect, R.id.img_review,R.id.tv_reviewNum})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.img_colse:   //关闭
@@ -193,10 +202,9 @@ public class H5ActivityForNewsDetical extends BaseActivity implements View.OnCli
                     ToastUtil.initToast(this, "未登录");
                 }
                 break;
-            case R.id.img_review: //评论
-
-
-                     initPopu();
+            case R.id.img_review:
+            case R.id.tv_reviewNum://评论
+                initPopu();
 
                 break;
 
@@ -358,19 +366,42 @@ public class H5ActivityForNewsDetical extends BaseActivity implements View.OnCli
                 break;
                 case Constant.URL.GetNewsCommentList: {//评论列表
                     LogUtils.e("GetNewsCommentList", decrypt);
+                    if (PageIndex == 1) {
+                        dataReview.clear();
 
+                    }
+                    removeLoadingItem();
+                    GetNewsCommentListEntity getNewsCommentListEntity = gson.fromJson(decrypt, GetNewsCommentListEntity.class);
+
+                    if (getNewsCommentListEntity.getCode()==Constant.Integers.SUC){
+                        dataReview.addAll(getNewsCommentListEntity.getData().getComments());
+                        if (getNewsCommentListEntity.getData().getComments().size() % PageSize == 0 && getNewsCommentListEntity.getData().getComments().size() != 0) {//可能还有下一页
+                            dataReview.add(new GetNewsCommentListEntity.DataEntity.CommentsEntity(1));
+                            nextPage = PageIndex + 1;
+                        } else {
+                            addBaseLine();
+                        }
+                    } else {
+                        addBaseLine();
+
+                    }
+
+                    getNewsReviewAdapter.setData(dataReview);
                 }
                 break;
 
                 case Constant.URL.AddFindComment: {//添加评论
                     LogUtils.e("AddFindComment", decrypt);
                     AddFindCommentEntity addFindCommentEntity = gson.fromJson(decrypt, AddFindCommentEntity.class);
-                    ToastUtil.initToast(this,addFindCommentEntity.getMessage());
+                    ToastUtil.initToast(this, addFindCommentEntity.getMessage());
 
-                    if (addFindCommentEntity.getCode()==Constant.Integers.SUC){
+                    if (addFindCommentEntity.getCode() == Constant.Integers.SUC) {
+                        PageIndex = 1;
+                        nextPage = 1;
+                        loadReviewData();
                         tvPl.setVisibility(View.VISIBLE);
                         llWrite.setVisibility(View.GONE);
-                    }else {
+                    } else {
                         if ("帐号已在其它地方登录".equals(addFindCommentEntity.getMessage())) {
                             startActivityForResult(new Intent(this, LoginActivity.class), Constant.Code.LoginCode);
                         }
@@ -413,8 +444,6 @@ public class H5ActivityForNewsDetical extends BaseActivity implements View.OnCli
                 .showAtLocation(R.layout.activity_h5_fornewsdetical, Gravity.BOTTOM, 0, 0);
 
 
-
-
         tvReviewNum1 = (TextView) builder.getItemView(R.id.tv_reviewNum);
         imgClose = (ImageView) builder.getItemView(R.id.img_close);
         rv = (RecyclerView) builder.getItemView(R.id.rv);
@@ -429,12 +458,41 @@ public class H5ActivityForNewsDetical extends BaseActivity implements View.OnCli
 
         tvReviewNum1.setText(data == null ? data1.getComments_count() + "" : data.getComments_count() + "");
 
+        getNewsReviewAdapter = new GetNewsReviewAdapter(this, this);
+        rv.addItemDecoration(new DividerGridItem(this));
+        rv.setLayoutManager(new LinearLayoutManager(this));
+        rv.setAdapter(getNewsReviewAdapter);
+        getNewsReviewAdapter.setEmptyView(R.layout.empty_tips);
+        getNewsReviewAdapter.setEmptyTips(R.id.tv_emptyTips, "暂无数据");
+        loadReviewData();
+    }
+
+    private void loadReviewData() {
         GetNewsCommentList getNewsCommentList = new GetNewsCommentList(data == null ? data1.getId() + "" : data.getId() + "", nextPage + "", PageSize + "");
 
         OkHttpUtil.postJson(Constant.URL.GetNewsCommentList, DesUtil.encrypt(gson.toJson(getNewsCommentList)), this);
     }
 
 
+    @Override
+    public void onCallback() {
+        if (nextPage == PageIndex + 1) {
+            PageIndex++;
+            loadReviewData();
+        }
+    }
 
+    private void removeLoadingItem() {
+        if (dataReview.size() > 0) {
+            if (dataReview.get(dataReview.size() - 1).getType() == 1) {
+                dataReview.remove(dataReview.size() - 1);
+            }
+        }
+    }
 
+    private void addBaseLine() {
+        if (PageIndex != 1) {
+            dataReview.add(new GetNewsCommentListEntity.DataEntity.CommentsEntity(2));
+        }
+    }
 }

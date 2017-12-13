@@ -79,12 +79,6 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_toLeftOf="@+id/img_collect">
-
-            <TextView
-                android:id="@+id/tv_reviewNum"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
             <ImageView
                 android:id="@+id/img_review"
                 android:layout_width="20dp"
@@ -92,6 +86,19 @@
                 android:layout_centerVertical="true"
                 android:layout_marginRight="15dp"
                 android:src="@drawable/review_b" />
+            <TextView
+                android:layout_marginLeft="-25dp"
+                android:textColor="@color/colorWhite"
+                android:padding="3dp"
+                android:textSize="7sp"
+                tools:text="120"
+                android:layout_toRightOf="@+id/img_review"
+                android:id="@+id/tv_reviewNum"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/shape_solid_red_90" />
+
+
         </RelativeLayout>
 
     </RelativeLayout>

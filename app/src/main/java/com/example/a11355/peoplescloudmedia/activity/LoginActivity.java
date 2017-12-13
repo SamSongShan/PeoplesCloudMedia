@@ -36,14 +36,20 @@ import com.facebook.drawee.view.SimpleDraweeView;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import java.util.HashMap;
+
 import butterknife.BindView;
 import butterknife.OnClick;
 import butterknife.OnTextChanged;
+import cn.sharesdk.framework.Platform;
+import cn.sharesdk.framework.PlatformActionListener;
+import cn.sharesdk.framework.ShareSDK;
+import cn.sharesdk.wechat.friends.Wechat;
 
 /*
 * 登录
 * */
-public class LoginActivity extends BaseActivity implements RadioGroup.OnCheckedChangeListener, OkHttpUtil.OnDataListener {
+public class LoginActivity extends BaseActivity implements RadioGroup.OnCheckedChangeListener, OkHttpUtil.OnDataListener, PlatformActionListener {
 
 
     @BindView(R.id.sdv)
@@ -204,8 +210,32 @@ public class LoginActivity extends BaseActivity implements RadioGroup.OnCheckedC
 
                 break;
             case R.id.btn_login_byWX:  //微信登录
+
+                authorize(ShareSDK.getPlatform(Wechat.NAME));
                 break;
         }
+    }
+
+    private void authorize(Platform plat) {
+        if (plat == null) {
+            // popupOthers();
+            return;
+        }
+        //判断指定平台是否已经完成授权
+        if (plat.isAuthValid()) {
+            plat.removeAccount(true);
+           /* String userId = plat.getDb().getUserId();
+            if (userId != null) {
+                UIHandler.sendEmptyMessage(MSG_USERID_FOUND, this);
+                login(LoginMark, userId);
+                return;
+            }*/
+        }
+        plat.setPlatformActionListener(this);
+        // true不使用SSO授权，false使用SSO授权
+        plat.SSOSetting(false);
+        //获取用户资料
+        plat.showUser(null);
     }
 
     @Override
@@ -415,5 +445,25 @@ public class LoginActivity extends BaseActivity implements RadioGroup.OnCheckedC
             setResult(RESULT_OK);
             finish();
         }
+    }
+
+    @Override
+    public void onComplete(Platform platform, int i, HashMap<String, Object> hashMap) {
+        String OpenId = platform.getDb().getUserId();
+        String jsonString = gson.toJson(new LoginRole("WeChat", OpenId,
+                "default"));
+        String encrypt = DesUtil.encrypt(jsonString);
+        LogUtils.e("loge", "login: " + encrypt);
+        OkHttpUtil.postJson(Constant.URL.LoginRole, DesUtil.encrypt(jsonString), this);
+    }
+
+    @Override
+    public void onError(Platform platform, int i, Throwable throwable) {
+
+    }
+
+    @Override
+    public void onCancel(Platform platform, int i) {
+
     }
 }
