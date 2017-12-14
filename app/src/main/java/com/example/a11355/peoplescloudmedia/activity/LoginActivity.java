@@ -219,6 +219,9 @@ public class LoginActivity extends BaseActivity implements RadioGroup.OnCheckedC
     private void authorize(Platform plat) {
         if (plat == null) {
             // popupOthers();
+
+            LogUtils.e("loge", "注册json: " + "");
+
             return;
         }
         //判断指定平台是否已经完成授权

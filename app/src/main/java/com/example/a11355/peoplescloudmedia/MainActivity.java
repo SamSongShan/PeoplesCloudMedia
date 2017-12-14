@@ -15,17 +15,19 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.a11355.peoplescloudmedia.activity.HRichEditorViewActivity;
 import com.example.a11355.peoplescloudmedia.activity.LoginActivity;
 import com.example.a11355.peoplescloudmedia.base.BaseActivity;
 import com.example.a11355.peoplescloudmedia.base.BaseDialog;
 import com.example.a11355.peoplescloudmedia.custom.ConfirmDialog;
+import com.example.a11355.peoplescloudmedia.custom.CustomPopupWindow;
 import com.example.a11355.peoplescloudmedia.custom.DownloadDialog;
 import com.example.a11355.peoplescloudmedia.fragement.FindFragment;
 import com.example.a11355.peoplescloudmedia.fragement.MessageFragment;
@@ -429,12 +431,25 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         if (!isLogin()) {//当前未登录
             startActivityForResult(new Intent(this, LoginActivity.class), Constant.Code.IntoCertifyCode);
         } else {
-            startActivity(new Intent(this, HRichEditorViewActivity.class));
-
+            //startActivity(new Intent(this, HRichEditorViewActivity.class));
+            initPopu();
         }
     }
 
 
+    //初始化发布Popu
+    private void initPopu() {
+
+        CustomPopupWindow builder = new CustomPopupWindow.Builder()
+                .setContext(this)
+                .setContentView(R.layout.popu_publish)
+                .setwidth(LinearLayout.LayoutParams.MATCH_PARENT)
+                .setheight(LinearLayout.LayoutParams.WRAP_CONTENT)
+                .setOutSideCancel(false)
+                .builder()
+                .showAtLocation(R.layout.activity_main, Gravity.BOTTOM, 0, 0);
+
+    }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

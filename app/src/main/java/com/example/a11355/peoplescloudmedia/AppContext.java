@@ -32,6 +32,7 @@ public class AppContext extends Application {
         ZXingLibrary.initDisplayOpinion(this);
 
 
+
     }
 
     private void initCrashReport() {
