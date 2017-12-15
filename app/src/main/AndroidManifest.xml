@@ -148,10 +148,10 @@
         <!-- 填写您从Mob开发者后台中得到的Appkey和AppSecret -->
         <meta-data
             android:name="Mob-AppKey"
-            android:value="您的AppKey" />
+            android:value="228309b6aa7c8" />
         <meta-data
             android:name="Mob-AppSecret"
-            android:value="您的AppSecret" />
+            android:value="2964803c3598152385d2790548450d5b" />
 
         <activity android:name=".activity.SettingActivity" />
         <activity android:name=".activity.PersonalDataActivity" />

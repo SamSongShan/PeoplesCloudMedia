@@ -7,7 +7,7 @@ android {
         config {
             keyAlias 'renzhongyunmei'
             keyPassword 'renzhongyunmei111sam111'
-            storeFile file('G:/Key/RZYM.jks')
+            storeFile file('E:/Key/RZYM.jks')
             storePassword '111sam111'
         }
     }

@@ -210,7 +210,7 @@ public class LoginActivity extends BaseActivity implements RadioGroup.OnCheckedC
 
                 break;
             case R.id.btn_login_byWX:  //微信登录
-
+                ShareSDK.isDebug();
                 authorize(ShareSDK.getPlatform(Wechat.NAME));
                 break;
         }
@@ -227,12 +227,7 @@ public class LoginActivity extends BaseActivity implements RadioGroup.OnCheckedC
         //判断指定平台是否已经完成授权
         if (plat.isAuthValid()) {
             plat.removeAccount(true);
-           /* String userId = plat.getDb().getUserId();
-            if (userId != null) {
-                UIHandler.sendEmptyMessage(MSG_USERID_FOUND, this);
-                login(LoginMark, userId);
-                return;
-            }*/
+
         }
         plat.setPlatformActionListener(this);
         // true不使用SSO授权，false使用SSO授权
