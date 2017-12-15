@@ -377,14 +377,14 @@ public class H5ActivityForNewsDetical extends BaseActivity implements View.OnCli
                     if (getNewsCommentListEntity.getCode()==Constant.Integers.SUC){
                         dataReview.addAll(getNewsCommentListEntity.getData().getComments());
 
-                        if (getNewsCommentListEntity.getData().getTotal()%PageSize>0) {
+                      /*  if (getNewsCommentListEntity.getData().getTotal()%PageSize>0) {
                             maxPage = getNewsCommentListEntity.getData().getTotal() / PageSize + 1;
 
                         }  else {
                             maxPage = getNewsCommentListEntity.getData().getTotal()/PageSize ;
-                        }
+                        }*/
 
-                        if ( maxPage>nextPage&& getNewsCommentListEntity.getData().getComments().size() != 0) {//可能还有下一页
+                        if ( /*maxPage>nextPage*/getNewsCommentListEntity.getData().getComments().size()%PageSize==0&& getNewsCommentListEntity.getData().getComments().size() != 0) {//可能还有下一页
                             dataReview.add(new GetNewsCommentListEntity.DataEntity.CommentsEntity(1));
                             nextPage = PageIndex + 1;
                         } else {

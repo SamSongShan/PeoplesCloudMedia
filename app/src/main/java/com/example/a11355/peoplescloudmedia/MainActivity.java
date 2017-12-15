@@ -17,6 +17,7 @@ import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RadioGroup;
@@ -80,6 +81,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     private MineFragment mineFragment;
     private String userId;
     private Gson gson = new GsonBuilder().create();
+    private CustomPopupWindow builder;
 
 
     @Override
@@ -440,7 +442,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     //初始化发布Popu
     private void initPopu() {
 
-        CustomPopupWindow builder = new CustomPopupWindow.Builder()
+        builder = new CustomPopupWindow.Builder()
                 .setContext(this)
                 .setContentView(R.layout.popu_publish)
                 .setwidth(LinearLayout.LayoutParams.MATCH_PARENT)
@@ -448,6 +450,17 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 .setOutSideCancel(false)
                 .builder()
                 .showAtLocation(R.layout.activity_main, Gravity.BOTTOM, 0, 0);
+
+        ImageView imgZmt = (ImageView) builder.getItemView(R.id.img_zmt);
+        ImageView imgTwbj = (ImageView) builder.getItemView(R.id.img_twbj);
+        ImageView imgRzt = (ImageView) builder.getItemView(R.id.img_rzt);
+        ImageView imgClose = (ImageView) builder.getItemView(R.id.img_close);
+
+        imgZmt.setOnClickListener(this);
+        imgTwbj.setOnClickListener(this);
+        imgRzt.setOnClickListener(this);
+        imgClose.setOnClickListener(this);
+
 
     }
     @Override
