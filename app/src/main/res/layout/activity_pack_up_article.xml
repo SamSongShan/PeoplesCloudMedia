@@ -4,16 +4,20 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/primaryBg"
+    android:background="@color/colorWhite"
     tools:context="com.example.a11355.peoplescloudmedia.activity.PickUpArticleActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="8dp"
         android:orientation="vertical">
 
         <include layout="@layout/toolbar_right_text" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="8dp"
+            android:background="@color/primaryBg" />
 
         <EditText
             android:id="@+id/et_url"
@@ -25,27 +29,34 @@
             android:hint="请将文章链接URL粘贴到输入框"
             android:padding="10dp" />
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/primaryBg" />
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="1dp"
             android:background="@color/colorWhite">
+
             <TextView
-                android:layout_marginRight="20dp"
-                android:layout_marginTop="30dp"
-                android:layout_marginBottom="40dp"
-                android:textColor="@color/colorWhite"
-                android:background="@drawable/shape_solid_red_90"
+                android:id="@+id/tv_commit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
+                android:layout_marginBottom="40dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="30dp"
                 android:layout_toLeftOf="@+id/view"
+                android:background="@drawable/shape_solid_red_90"
                 android:gravity="center"
                 android:paddingBottom="8dp"
                 android:paddingLeft="20dp"
                 android:paddingRight="20dp"
                 android:paddingTop="8dp"
-                android:text="清空" />
+                android:text="提交"
+                android:textColor="@color/colorWhite" />
+
             <View
                 android:id="@+id/view"
                 android:layout_width="1dp"
@@ -53,22 +64,128 @@
                 android:layout_centerInParent="true" />
 
             <TextView
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="30dp"
-                android:layout_marginBottom="40dp"
-                android:textColor="@color/colorRed"
-                android:background="@drawable/shape_red_white_90"
+                android:id="@+id/tv_clean"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
+                android:layout_marginBottom="40dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="30dp"
                 android:layout_toRightOf="@+id/view"
+                android:background="@drawable/shape_red_white_90"
                 android:gravity="center"
                 android:paddingBottom="8dp"
                 android:paddingLeft="20dp"
                 android:paddingRight="20dp"
                 android:paddingTop="8dp"
-                android:text="清空" />
+                android:text="清空"
+                android:textColor="@color/colorRed" />
         </RelativeLayout>
+
+        <TextView
+            android:textSize="10sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorWhite"
+            android:gravity="center"
+            android:paddingBottom="50dp"
+            android:text="说明\n1.目前仅支持微信文章、今日头条、腾讯新闻文章抓取\n 2.抓取其他网页可能会不能正常显示或编辑" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorWhite">
+
+            <TextView
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:id="@+id/tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_marginTop="10dp"
+                android:text="文章来源" />
+
+            <View
+                android:layout_width="40dp"
+                android:layout_height="1dp"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/tv"
+                android:background="@color/primaryBg" />
+
+            <View
+                android:layout_width="40dp"
+                android:layout_height="1dp"
+                android:layout_centerVertical="true"
+                android:layout_toLeftOf="@+id/tv"
+                android:background="@color/primaryBg" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.1"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ssdk_oks_classic_wechat" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="微信" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.1"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ssdk_oks_classic_wechat" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="今日头条" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.1"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ssdk_oks_classic_qq" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="QQ" />
+            </LinearLayout>
+        </LinearLayout>
+
     </LinearLayout>
 
 

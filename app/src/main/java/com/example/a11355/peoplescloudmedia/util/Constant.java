@@ -113,6 +113,16 @@ public interface Constant {
         //【获取人众推广告列表(输入参数string Json)
         String GetAdvertisingList = BaseUrl + "GetAdvertisingList ";
 
+        //【53】新增人众推文章（文章抓取）(输入参数string Json)
+        String AddRZTArticle = BaseUrl + "AddRZTArticle ";
+
+
+
+
+
+
+
+
 
         //注册分享链接   RecommendMobile  传推荐人手机号
         String ShearLink = BaseH5 + "/Webuser/Registered?RecommendMobile=";
