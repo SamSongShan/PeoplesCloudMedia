@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="140dp"
+    android:background="@color/colorWhite"
+    android:orientation="horizontal">
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:ellipsize="end"
+            android:maxLines="3"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:textColor="@color/colorDeepBlack"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            tools:text="描述" />
+
+        <TextView
+            android:id="@+id/tv_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="2017_10_10" />
+    </LinearLayout>
+
+    <com.facebook.drawee.view.SimpleDraweeView
+        android:id="@+id/sdv"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_gravity="center"
+        android:layout_margin="10dp"
+        fresco:actualImageScaleType="fitXY"
+        fresco:failureImage="@drawable/img_fail"
+        fresco:failureImageScaleType="centerInside"
+        fresco:placeholderImage="@drawable/img_loading"
+        fresco:placeholderImageScaleType="fitCenter"
+        fresco:viewAspectRatio="1" />
+
+</LinearLayout>

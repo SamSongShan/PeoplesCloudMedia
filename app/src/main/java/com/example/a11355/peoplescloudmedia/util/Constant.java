@@ -89,26 +89,33 @@ public interface Constant {
         //我的粉丝列表(输入参数string Json)
         String GetFansList = BaseUrl + "GetFansList";
 
-          //获取文章收藏列表- 文章是否收藏
+        //获取文章收藏列表- 文章是否收藏
         String GetFindOutDetail = BaseUrl + "GetFindOutDetail";
 
-          //34】增加文章浏览量-发现模块(输入参数string Json)
-        //获取文章收藏列表- 文章是否收藏
+        //34】增加文章浏览量-发现模块(输入参数string Json)
         String AddFindPV = BaseUrl + "AddFindPV";
+
+
+        //35】增加文章分享量-发现模块(输入参数string Json)
+        String AddFindSharingPV = BaseUrl + "AddFindSharingPV";
+
 
         //【32】获取文章评论列表-发现模块(输入参数string Json)
         String GetNewsCommentList = BaseUrl + "GetNewsCommentList";
 
         //【33】添加文章评论-发现模块(输入参数string Json)
-        String AddFindComment  = BaseUrl + "AddFindComment ";
+        String AddFindComment = BaseUrl + "AddFindComment ";
 
 
+        //【54】获取人众推文章列表(输入参数string Json)
+        String GetRZTArticleList = BaseUrl + "GetRZTArticleList ";
 
-
+        //【获取人众推广告列表(输入参数string Json)
+        String GetAdvertisingList = BaseUrl + "GetAdvertisingList ";
 
 
         //注册分享链接   RecommendMobile  传推荐人手机号
-        String ShearLink =BaseH5 + "/Webuser/Registered?RecommendMobile=";
+        String ShearLink = BaseH5 + "/Webuser/Registered?RecommendMobile=";
         // 消息 详情  http://localhost:1548/News/Detail?MessageId=1e7c8e24-7308-441a-a710-4db44a3dd57f
         String MessageDetailsLink = BaseH5 + "/News/Detail?MessageId=";
 
@@ -127,6 +134,15 @@ userId 传用户ID
         * */
 
         String OthersHome = BaseH5 + "/webuser/OthersHome?userId=";
+
+        /*
+        * 人众推
+文章预览页面
+http://net.lml9.com/News/RztArticle?ArticleId=a659c161-79a8-4451-baf5-6c9cd1056b3b
+ArticleId 传文章ID
+
+        * */
+        String RZTPreviewArticle = BaseH5 + "/News/RztArticle?ArticleId=";
 
 
     }

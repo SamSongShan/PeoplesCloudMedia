@@ -25,6 +25,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.a11355.peoplescloudmedia.activity.LoginActivity;
+import com.example.a11355.peoplescloudmedia.activity.RZTActivity;
 import com.example.a11355.peoplescloudmedia.base.BaseActivity;
 import com.example.a11355.peoplescloudmedia.base.BaseDialog;
 import com.example.a11355.peoplescloudmedia.custom.ConfirmDialog;
@@ -140,7 +141,33 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
     @Override
     public void onClick(View view) {
-        jumpInstall();
+        if (builder != null) {
+            builder.dismiss();
+        }
+        switch (view.getId()) {
+            case R.id.img_zmt: {  //自媒体
+
+            }
+            break;
+            case R.id.img_twbj: { //图文编辑
+            }
+            break;
+            case R.id.img_rzt: {  //人众推
+                startActivity(new Intent(this, RZTActivity.class));
+
+            }
+            break;
+            case R.id.img_close: {   //关闭
+
+            }
+            break;
+            default:
+                jumpInstall();
+                break;
+
+        }
+
+
     }
 
     /**
@@ -369,14 +396,14 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
               /*  if (!isLogin()) {//当前未登录
                     startActivityForResult(new Intent(this, LoginActivity.class), Constant.Code.IntoCertifyCode);
                 } else {*/
-                    if (messageFragment == null) {
-                        messageFragment = new MessageFragment();
-                        transaction.add(R.id.fl_main, messageFragment, "2");
-                    } else {
-                        transaction.show(messageFragment);
-                        //messageFragment.onRefresh();//强制进入刷新
-                    }
-              //  }
+                if (messageFragment == null) {
+                    messageFragment = new MessageFragment();
+                    transaction.add(R.id.fl_main, messageFragment, "2");
+                } else {
+                    transaction.show(messageFragment);
+                    //messageFragment.onRefresh();//强制进入刷新
+                }
+                //  }
 
 
                 break;
@@ -463,6 +490,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
 
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -526,7 +554,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
                     if (getAreaLastDateEntity.getCode() == 200) {
                         SharedPreferences.Editor isFirst = getSharedPreferences("isFirst", MODE_PRIVATE).edit();
-                        isFirst.putString("LastAddressModifyTime",getAreaLastDateEntity.getData().getLastDate());
+                        isFirst.putString("LastAddressModifyTime", getAreaLastDateEntity.getData().getLastDate());
                         isFirst.commit();
                     }
                     break;

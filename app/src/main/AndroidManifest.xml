@@ -167,13 +167,17 @@
         <activity android:name=".activity.H5Activity" />
         <activity android:name=".activity.AboutUsActivity" />
         <activity android:name=".activity.MyFocusActivity" />
-        <activity android:name=".activity.MyCollectActivity"></activity>
-        <activity
-            android:name=".activity.H5ActivityForNewsDetical"
-            />
-            <!--android:windowSoftInputMode="adjustResize"
-             android:windowSoftInputMode="adjustPan"-->>
+        <activity android:name=".activity.MyCollectActivity" />
+        <activity android:name=".activity.H5ActivityForNewsDetical" />
+        <!--
+             android:windowSoftInputMode="adjustResize"
+             android:windowSoftInputMode="adjustPan"
+        -->
+        >
         <activity android:name=".activity.H5ActivityNotitle" />
+        <activity android:name=".activity.RZTActivity" />
+        <activity android:name=".activity.H5ActivityForRZTPreview" />
+        <activity android:name=".activity.PickUpArticleActivity"></activity>
     </application>
 
 </manifest>

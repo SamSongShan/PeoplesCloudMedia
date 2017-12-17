@@ -34,7 +34,7 @@ public class GetNewsListAdapter extends AbsRecyclerViewAdapter<GetNewsListEntity
     public void onBindHolder(AbsRecyclerViewAdapter.RecyclerViewHolder holder, GetNewsListEntity.DataBean.ArtilesBean d, int position) {
         switch (d.getType()) {
             case 0:
-                holder.bindSimpleDraweeView(R.id.sdv,Uri.parse(d.getThumb()) )
+                holder.bindSimpleDraweeView(R.id.sdv,Uri.parse(d.getThumb()+"") )
                         .bindTextView(R.id.tv_title, d.getTitle())
                         .bindTextView(R.id.tv_focus, d.getReads_count() + "")
                         .bindTextView(R.id.tv_review, d.getComments_count() + "")

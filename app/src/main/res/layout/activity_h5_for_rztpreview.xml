@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:fresco="http://schemas.android.com/apk/res-auto"
+<LinearLayout
+    android:orientation="vertical" xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/primaryBg"
-    android:orientation="vertical">
-
+    tools:context="com.example.a11355.peoplescloudmedia.activity.H5ActivityForRZTPreview">
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -42,6 +43,7 @@
 
         <com.facebook.drawee.view.SimpleDraweeView
             android:layout_centerVertical="true"
+            android:visibility="gone"
             android:id="@+id/sdv_from"
             android:layout_width="25dp"
             android:layout_height="wrap_content"
@@ -67,15 +69,16 @@
             android:src="@drawable/shear_b" />
 
         <ImageView
-            android:id="@+id/img_collect"
+            android:id="@+id/img_edit"
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:layout_centerVertical="true"
             android:layout_marginRight="15dp"
             android:layout_toLeftOf="@+id/img_shear"
-            android:src="@drawable/img_collect_b" />
+            android:src="@drawable/edit" />
 
         <RelativeLayout
+            android:visibility="gone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"

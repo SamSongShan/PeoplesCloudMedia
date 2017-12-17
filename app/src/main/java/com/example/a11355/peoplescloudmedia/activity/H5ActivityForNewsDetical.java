@@ -146,7 +146,9 @@ public class H5ActivityForNewsDetical extends BaseActivity implements View.OnCli
         loadingDialog = LoadingDialog.newInstance("加载中...");
         loadingDialog.show(getFragmentManager());
         AddFindPV addFindPV = new AddFindPV(data == null ? data1.getId() + "" : data.getId() + "");
+         //增加浏览量
         OkHttpUtil.postJson(Constant.URL.AddFindPV, DesUtil.encrypt(gson.toJson(addFindPV)), this);
+
         if (isLogin()) {
 
             GetFindOutDetail getFindOutDetail = new GetFindOutDetail(data == null ? data1.getId() + "" : data.getId() + "", PreferencesUtil.getToken(this), PreferencesUtil.getUserId(this));
@@ -173,6 +175,9 @@ public class H5ActivityForNewsDetical extends BaseActivity implements View.OnCli
             case R.id.sdv_from://点击头像
                 break;
             case R.id.img_shear: //分享
+                AddFindPV addFindSharingPV = new AddFindPV(data == null ? data1.getId() + "" : data.getId() + "");
+
+                OkHttpUtil.postJson(Constant.URL.AddFindSharingPV, DesUtil.encrypt(gson.toJson(addFindSharingPV)),this);
 
                 if (data == null) {
                     shareForcollect();
@@ -360,11 +365,17 @@ public class H5ActivityForNewsDetical extends BaseActivity implements View.OnCli
                     }
                     break;
                 }
-                case Constant.URL.AddFindPV: {
+                case Constant.URL.AddFindPV: {  //增加浏览量
                     LogUtils.e("AddFindPV", decrypt);
 
                 }
                 break;
+                case  Constant.URL.AddFindSharingPV: {  //增加分享
+                    LogUtils.e("AddFindSharingPV", decrypt);
+
+                }
+                break;
+
                 case Constant.URL.GetNewsCommentList: {//评论列表
                     LogUtils.e("GetNewsCommentList", decrypt);
                     if (PageIndex == 1) {
@@ -489,6 +500,7 @@ public class H5ActivityForNewsDetical extends BaseActivity implements View.OnCli
             PageIndex++;
             loadReviewData();
         }
+
     }
 
     private void removeLoadingItem() {
