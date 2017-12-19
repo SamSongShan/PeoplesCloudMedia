@@ -23,5 +23,6 @@
     <string name="rich_click_add_txt">点击添加文字内容</string>
     <string name="title_edit_title">编辑标题</string>
     <string name="title_dont_null">标题不能为空</string>
+    <string name="title_activity_video">VideoActivity</string>
 
 </resources>

@@ -2,6 +2,7 @@ package com.example.a11355.peoplescloudmedia.fragement;
 
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Environment;
@@ -95,6 +96,7 @@ public class MineFragment extends BaseFragment implements View.OnClickListener, 
 
     @Override
     protected void init(View v) {
+
         //mine头布局
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.head_mine, null, false);
         MineRVAdapter mineRVAdapter = new MineRVAdapter(getContext());

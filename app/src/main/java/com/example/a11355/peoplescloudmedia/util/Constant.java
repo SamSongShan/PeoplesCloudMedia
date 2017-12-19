@@ -117,6 +117,11 @@ public interface Constant {
         String AddRZTArticle = BaseUrl + "AddRZTArticle ";
 
 
+        //【【12】用户编号获取用户实体信息(输入参数string Json)
+
+        String GetVideoDetail = BaseUrl + "GetVideoDetail";
+
+
 
 
 

@@ -107,6 +107,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     private Handler handler = new Handler();
     private LoadingDialog loadingDialog;
     private String openId;
+    private int type;
 
 
     @Override
@@ -218,7 +219,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                     loadingDialog = LoadingDialog.newInstance("绑定中...");
                     loadingDialog.show(getFragmentManager());
 
-                    String jsonString = gson.toJson(new Registered("WeChat", "Android", mobile, etRegPassword.getText().toString(), openId, "default", "default", "default", "0"));
+                    String jsonString = gson.toJson(new Registered("WeChat", "Android", mobile, etRegPassword.getText().toString(), openId, "default", "default", "default", type+""));
 
 
                     OkHttpUtil.postJson(Constant.URL.Registered, DesUtil.encrypt(jsonString), this);
@@ -245,7 +246,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 ToastUtil.initToast(this, "请输入正确的手机号码");
             } else {
                 btnIdentify.setSelected(false);
-                String jsonString = gson.toJson(new GetMobileCode(mobile, Constant.Strings.GetMobileCodeType[0]));
+                String jsonString = gson.toJson(new GetMobileCode(mobile, Constant.Strings.GetMobileCodeType[2]));
                 OkHttpUtil.postJson(Constant.URL.GetMobileCode, DesUtil.encrypt(jsonString), this);
                 //设置XX秒后重试
 
@@ -604,7 +605,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
                 if (data != null && data.getIntExtra("page", -1) != -1) {
                     openId = data.getStringExtra("OpenId");
-
+                    type = data.getIntExtra("type", 0);
                     radioGroup.getChildAt(0).performClick();
 
                     initRegestPopu();

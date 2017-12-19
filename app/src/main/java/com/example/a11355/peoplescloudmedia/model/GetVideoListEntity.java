@@ -1,5 +1,8 @@
 package com.example.a11355.peoplescloudmedia.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.List;
 
 /**
@@ -53,7 +56,7 @@ public class GetVideoListEntity {
         this.Data = Data;
     }
 
-    public static class DataBean {
+    public static class DataBean implements Parcelable {
         /**
          * VideoId : a3fd141f-f318-42c6-b1f8-e04bada2ad89
          * FullHead : ADSA
@@ -141,5 +144,45 @@ public class GetVideoListEntity {
         public void setUserHeadImg(String UserHeadImg) {
             this.UserHeadImg = UserHeadImg;
         }
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeString(this.VideoId);
+            dest.writeString(this.FullHead);
+            dest.writeString(this.FilePath);
+            dest.writeInt(this.PV);
+            dest.writeString(this.CreateDate);
+            dest.writeInt(this.EnabledMark);
+            dest.writeString(this.UserHeadImg);
+            dest.writeInt(this.type);
+        }
+
+        protected DataBean(Parcel in) {
+            this.VideoId = in.readString();
+            this.FullHead = in.readString();
+            this.FilePath = in.readString();
+            this.PV = in.readInt();
+            this.CreateDate = in.readString();
+            this.EnabledMark = in.readInt();
+            this.UserHeadImg = in.readString();
+            this.type = in.readInt();
+        }
+
+        public static final Parcelable.Creator<DataBean> CREATOR = new Parcelable.Creator<DataBean>() {
+            @Override
+            public DataBean createFromParcel(Parcel source) {
+                return new DataBean(source);
+            }
+
+            @Override
+            public DataBean[] newArray(int size) {
+                return new DataBean[size];
+            }
+        };
     }
 }

@@ -177,7 +177,12 @@
         <activity android:name=".activity.H5ActivityNotitle" />
         <activity android:name=".activity.RZTActivity" />
         <activity android:name=".activity.H5ActivityForRZTPreview" />
-        <activity android:name=".activity.PickUpArticleActivity"></activity>
+        <activity android:name=".activity.PickUpArticleActivity" />
+        <activity
+            android:name=".activity.VideoActivity"
+            android:label="@string/title_activity_video"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" ></activity>
     </application>
 
 </manifest>

@@ -396,6 +396,10 @@ public class LoginActivity extends BaseActivity implements RadioGroup.OnCheckedC
                             intent.putExtra("page", 0);
 
                             intent.putExtra("OpenId", openId);
+                            intent.putExtra("type", type);
+
+
+
 
                             setResult(RESULT_OK, intent);
                             finish();

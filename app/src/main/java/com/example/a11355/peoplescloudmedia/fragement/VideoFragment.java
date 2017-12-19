@@ -1,5 +1,6 @@
 package com.example.a11355.peoplescloudmedia.fragement;
 
+import android.content.Intent;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -7,6 +8,7 @@ import android.text.TextUtils;
 import android.view.View;
 
 import com.example.a11355.peoplescloudmedia.R;
+import com.example.a11355.peoplescloudmedia.activity.VideoActivity;
 import com.example.a11355.peoplescloudmedia.adapter.GetVideoListAdapter;
 import com.example.a11355.peoplescloudmedia.base.AbsRecyclerViewAdapter;
 import com.example.a11355.peoplescloudmedia.base.BaseFragment;
@@ -155,6 +157,12 @@ public class VideoFragment extends BaseFragment implements OkHttpUtil.OnDataList
 
     @Override
     public void onItemClick(View v, int position) {
+
+        Intent intent = new Intent(getContext(), VideoActivity.class);
+        intent.putExtra("data",videosData.get(position));
+
+        startActivity(intent);
+
 
     }
 }
