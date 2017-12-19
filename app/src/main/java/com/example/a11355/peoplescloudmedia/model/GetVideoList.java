@@ -15,15 +15,26 @@ PageSize:显示条数
 
     private String PageIndex;
     private String PageSize;
+    private String UserId;
+
+    
 
 
 
-    public GetVideoList(String pageIndex, String pageSize) {
+    public GetVideoList(String userId,String pageIndex, String pageSize) {
         PageIndex = pageIndex;
         PageSize = pageSize;
+        UserId=userId;
     }
 
 
+    public String getUserId() {
+        return UserId;
+    }
+
+    public void setUserId(String userId) {
+        UserId = userId;
+    }
 
     public String getPageIndex() {
         return PageIndex;

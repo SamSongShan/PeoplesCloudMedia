@@ -1,6 +1,5 @@
 package com.example.a11355.peoplescloudmedia;
 
-import android.app.Application;
 import android.content.Context;
 import android.support.multidex.MultiDex;
 
@@ -8,13 +7,14 @@ import com.example.a11355.peoplescloudmedia.util.ConfigConstants;
 import com.example.a11355.peoplescloudmedia.util.LogUtils;
 import com.example.a11355.peoplescloudmedia.util.OkHttpUtil;
 import com.facebook.drawee.backends.pipeline.Fresco;
+import com.mob.MobApplication;
 import com.uuzuche.lib_zxing.activity.ZXingLibrary;
 import com.wenming.library.LogReport;
 import com.wenming.library.save.imp.CrashWriter;
 import com.wenming.library.upload.email.EmailReporter;
 
 
-public class AppContext extends Application {
+public class AppContext extends MobApplication {
 
     private static AppContext instance;
 

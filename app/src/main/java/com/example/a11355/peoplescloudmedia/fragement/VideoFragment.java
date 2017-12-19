@@ -18,6 +18,7 @@ import com.example.a11355.peoplescloudmedia.util.Constant;
 import com.example.a11355.peoplescloudmedia.util.DesUtil;
 import com.example.a11355.peoplescloudmedia.util.LogUtils;
 import com.example.a11355.peoplescloudmedia.util.OkHttpUtil;
+import com.example.a11355.peoplescloudmedia.util.PreferencesUtil;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -72,7 +73,7 @@ public class VideoFragment extends BaseFragment implements OkHttpUtil.OnDataList
 
     @Override
     protected void loadData() {
-        String toJson = gson.toJson(new GetVideoList(nextPage + "", PageSize + ""));
+        String toJson = gson.toJson(new GetVideoList(PreferencesUtil.getUserId(getContext()), nextPage + "", PageSize + ""));
         OkHttpUtil.postJson(Constant.URL.GetVideoList, DesUtil.encrypt(toJson), this);
     }
 

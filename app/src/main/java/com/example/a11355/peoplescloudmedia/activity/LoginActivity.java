@@ -96,6 +96,8 @@ public class LoginActivity extends BaseActivity implements RadioGroup.OnCheckedC
 
     private int type = 0;//选中的个人0 /企业1
     private LoadingDialog loadingDialog;
+    private boolean isAutoLogin;
+    private String openId;
 
     @Override
     protected int getViewResId() {
@@ -210,7 +212,6 @@ public class LoginActivity extends BaseActivity implements RadioGroup.OnCheckedC
 
                 break;
             case R.id.btn_login_byWX:  //微信登录
-                ShareSDK.isDebug();
                 authorize(ShareSDK.getPlatform(Wechat.NAME));
                 break;
         }
@@ -389,6 +390,17 @@ public class LoginActivity extends BaseActivity implements RadioGroup.OnCheckedC
                         afterRegister(loginRole.getData().getUserId(), loginRole.getData().getToken());
                     } else {
                         dismissLoading();
+                        if (isAutoLogin) {
+
+                            Intent intent = new Intent();
+                            intent.putExtra("page", 0);
+
+                            intent.putExtra("OpenId", openId);
+
+                            setResult(RESULT_OK, intent);
+                            finish();
+                        }
+
                     }
                     break;
             }
@@ -447,10 +459,12 @@ public class LoginActivity extends BaseActivity implements RadioGroup.OnCheckedC
 
     @Override
     public void onComplete(Platform platform, int i, HashMap<String, Object> hashMap) {
-        String OpenId = platform.getDb().getUserId();
-        String jsonString = gson.toJson(new LoginRole("WeChat", OpenId,
-                "default"));
+        openId = platform.getDb().getUserId();
+        String jsonString = DesUtil.decrypt(gson.toJson(new LoginRole("WeChat", openId,
+                "default")));
         String encrypt = DesUtil.encrypt(jsonString);
+
+        isAutoLogin = true;
         LogUtils.e("loge", "login: " + encrypt);
         OkHttpUtil.postJson(Constant.URL.LoginRole, DesUtil.encrypt(jsonString), this);
     }

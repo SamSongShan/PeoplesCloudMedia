@@ -14,9 +14,13 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -31,6 +35,7 @@ import com.example.a11355.peoplescloudmedia.base.BaseDialog;
 import com.example.a11355.peoplescloudmedia.custom.ConfirmDialog;
 import com.example.a11355.peoplescloudmedia.custom.CustomPopupWindow;
 import com.example.a11355.peoplescloudmedia.custom.DownloadDialog;
+import com.example.a11355.peoplescloudmedia.custom.LoadingDialog;
 import com.example.a11355.peoplescloudmedia.fragement.FindFragment;
 import com.example.a11355.peoplescloudmedia.fragement.MessageFragment;
 import com.example.a11355.peoplescloudmedia.fragement.MineFragment;
@@ -38,6 +43,10 @@ import com.example.a11355.peoplescloudmedia.fragement.VideoFragment;
 import com.example.a11355.peoplescloudmedia.model.AppVersionEntity;
 import com.example.a11355.peoplescloudmedia.model.GetAppVersion;
 import com.example.a11355.peoplescloudmedia.model.GetAreaLastDateEntity;
+import com.example.a11355.peoplescloudmedia.model.GetMobileCode;
+import com.example.a11355.peoplescloudmedia.model.MobileCodeEntity;
+import com.example.a11355.peoplescloudmedia.model.Registered;
+import com.example.a11355.peoplescloudmedia.model.RegisteredEntity;
 import com.example.a11355.peoplescloudmedia.util.Constant;
 import com.example.a11355.peoplescloudmedia.util.DesUtil;
 import com.example.a11355.peoplescloudmedia.util.LogUtils;
@@ -58,7 +67,7 @@ import butterknife.BindView;
 import butterknife.OnClick;
 
 
-public class MainActivity extends BaseActivity implements View.OnClickListener, OkHttpUtil.OnProgressListener, RadioGroup.OnCheckedChangeListener, OkHttpUtil.OnDataListener {
+public class MainActivity extends BaseActivity implements View.OnClickListener, OkHttpUtil.OnProgressListener, RadioGroup.OnCheckedChangeListener, OkHttpUtil.OnDataListener, TextWatcher {
     @BindView(R.id.rg_mainTab)
     public RadioGroup radioGroup;
 
@@ -66,7 +75,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     private FragmentManager fragmentManager;
     private DownloadDialog downloadDialog;
     private String filePath;
-    private Handler handler = new Handler();
     private boolean isForce = false;//是否强制升级
     private int page;//要启动的Fragment的页数
 
@@ -83,6 +91,22 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     private String userId;
     private Gson gson = new GsonBuilder().create();
     private CustomPopupWindow builder;
+    private CustomPopupWindow builderPup;
+    private EditText etRegMobile;
+    private EditText etRegIdentify;
+    private Button btnIdentify;
+    private EditText etRegPassword;
+    private Button btnCommit;
+
+    private final int retryLimit = Constant.Integers.CodeRetryTime;//重试秒数上限
+    private int timeNum = retryLimit;//获取验证码倒计时
+    private long getCodeTime;//获取到验证码的时间
+    private boolean isRegister;//是否正在注册
+    private String correctCode;//正确的验证码
+    private String mobile;//获取验证码的手机号
+    private Handler handler = new Handler();
+    private LoadingDialog loadingDialog;
+    private String openId;
 
 
     @Override
@@ -161,6 +185,47 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
             }
             break;
+
+            case R.id.btn_identify: {//发送短信
+                getCode();
+            }
+            break;
+            case R.id.btn_commit: {//完成注册
+                if (isRegister) {
+                    ToastUtil.initToast(this, "请不要重复操作");
+                    break;
+                } else if (TextUtils.isEmpty(etRegMobile.getText().toString()) && etRegMobile.getText().toString().length() == 0) {
+                    ToastUtil.initToast(this, "企业/个人手机号码不能为空");
+                } else if (TextUtils.isEmpty(correctCode)) {
+                    ToastUtil.initToast(this, "请获取验证码");
+                } else if (!etRegMobile.getText().toString().equals(mobile)) {
+                    ToastUtil.initToast(this, "请填写获取验证码的手机号 或重新获取验证码");
+                } else if (etRegIdentify.getText().length() == 0) {
+                    ToastUtil.initToast(this, "请输入验证码");
+                } else if (System.currentTimeMillis() - getCodeTime >= (retryLimit + 10) * 1000) {//验证码失效
+                    ToastUtil.initToast(this, "验证码已失效 请重新获取");
+                } else if (!etRegIdentify.getText().toString().equals(correctCode)) {//验证码输入错误
+                    ToastUtil.initToast(this, "验证码错误");
+                } else if (etRegPassword.getText().length() == 0) {
+                    ToastUtil.initToast(this, "请输入密码");
+                    etRegPassword.requestFocus();
+                } else if (etRegPassword.getText().length() < 6) {//密码太短
+                    ToastUtil.initToast(this, "请输入六位数密码");
+                    etRegPassword.setText(null);
+                } else {//输入正确，注册
+                    PhoneUtil.hideKeyboard(view);
+                    isRegister = true;
+                    loadingDialog = LoadingDialog.newInstance("绑定中...");
+                    loadingDialog.show(getFragmentManager());
+
+                    String jsonString = gson.toJson(new Registered("WeChat", "Android", mobile, etRegPassword.getText().toString(), openId, "default", "default", "default", "0"));
+
+
+                    OkHttpUtil.postJson(Constant.URL.Registered, DesUtil.encrypt(jsonString), this);
+
+                }
+            }
+            break;
             default:
                 jumpInstall();
                 break;
@@ -168,6 +233,44 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         }
 
 
+    }
+
+    //获取验证码
+    private void getCode() {
+        if (btnIdentify.isSelected()) {
+            mobile = etRegMobile.getText().toString();
+            if (mobile.length() == 0) {
+                ToastUtil.initToast(this, "手机号码不能为空");
+            } else if (!mobile.matches(Constant.Strings.RegexMobile)) {
+                ToastUtil.initToast(this, "请输入正确的手机号码");
+            } else {
+                btnIdentify.setSelected(false);
+                String jsonString = gson.toJson(new GetMobileCode(mobile, Constant.Strings.GetMobileCodeType[0]));
+                OkHttpUtil.postJson(Constant.URL.GetMobileCode, DesUtil.encrypt(jsonString), this);
+                //设置XX秒后重试
+
+
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (btnIdentify != null) {
+                            btnIdentify.setText("点击重新发送 (" + timeNum + ")");
+                            if (timeNum > 0) {
+                                handler.postDelayed(this, 1000);
+                                timeNum--;
+                            } else {
+                                btnIdentify.setText("发送验证码");
+                                timeNum = retryLimit;
+                                if (etRegMobile.getText().length() == 11) {
+                                    btnIdentify.setSelected(true);
+                                }
+                            }
+                        }
+                    }
+                });
+
+            }
+        }
     }
 
     /**
@@ -218,6 +321,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
     @Override
     public void onBackPressed() {
+        handler.removeCallbacksAndMessages(null);
+
         if (isExit) {
             System.exit(0);
         } else {
@@ -496,11 +601,43 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == Constant.Code.IntoCertifyCode) {
             if (resultCode == RESULT_OK) {
-                onCheckedChanged(radioGroup, radioGroup.getCheckedRadioButtonId());
+
+                if (data != null && data.getIntExtra("page", -1) != -1) {
+                    openId = data.getStringExtra("OpenId");
+
+                    radioGroup.getChildAt(0).performClick();
+
+                    initRegestPopu();
+                } else {
+                    onCheckedChanged(radioGroup, radioGroup.getCheckedRadioButtonId());
+                }
             } else {
                 radioGroup.getChildAt(0).performClick();
             }
         }
+    }
+
+    private void initRegestPopu() {
+
+
+        builderPup = new CustomPopupWindow.Builder()
+                .setContext(this)
+                .setContentView(R.layout.popu_regist_wx)
+                .setwidth(LinearLayout.LayoutParams.MATCH_PARENT)
+                .setheight(LinearLayout.LayoutParams.MATCH_PARENT)
+                .setOutSideCancel(false)
+                .builder()
+                .showAtLocation(R.layout.activity_main, Gravity.TOP, 0, 0);
+
+        etRegMobile = (EditText) builderPup.getItemView(R.id.et_regMobile);
+        etRegIdentify = (EditText) builderPup.getItemView(R.id.et_regIdentify);
+        btnIdentify = (Button) builderPup.getItemView(R.id.btn_identify);
+        etRegPassword = (EditText) builderPup.getItemView(R.id.et_regPassword);
+        btnCommit = (Button) builderPup.getItemView(R.id.btn_commit);
+
+        btnIdentify.setOnClickListener(this);
+        btnCommit.setOnClickListener(this);
+        etRegMobile.addTextChangedListener(this);
     }
 
     @Override
@@ -558,6 +695,36 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                         isFirst.commit();
                     }
                     break;
+                case Constant.URL.GetMobileCode: {
+                    LogUtils.e("GetMobileCode", "onResponse: " + decrypt);
+                    MobileCodeEntity mobileCode = new Gson().fromJson(decrypt, MobileCodeEntity.class);
+
+                    if (mobileCode.getCode() == Constant.Integers.SUC) {
+                        etRegIdentify.requestFocus();
+                        getCodeTime = System.currentTimeMillis();
+                        correctCode = mobileCode.getData().getCode();
+//                    ToastUtil.initToast(this, correctCode);
+                    } else {
+                        ToastUtil.initToast(this, mobileCode.getMessage());
+
+                    }
+
+                }
+                break;
+                case Constant.URL.Registered:
+
+                    LogUtils.e("Registered", "onResponse: " + decrypt);
+                    RegisteredEntity register = new Gson().fromJson(decrypt, RegisteredEntity.class);
+                    ToastUtil.initToast(this, register.getMessage(), Toast.LENGTH_LONG);
+                    isRegister = false;
+                    if (register.getCode() == Constant.Integers.SUC) {
+                        //注册成功后跳过登录
+                        afterRegister(register.getData().getUserId(), register.getData().getToken());
+                    } else {
+                        handler.removeCallbacksAndMessages(null);
+                        dismissLoading();
+                    }
+                    break;
             }
         }
     }
@@ -566,4 +733,63 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     public void onFailure(String url, String error) {
 
     }
+
+    private void afterRegister(String userId, String token) {
+        //用户信息加密后保存到本地
+        SharedPreferences.Editor editor = getSharedPreferences("user", MODE_PRIVATE).edit();
+        editor.putString("UserId", DesUtil.encrypt(userId, DesUtil.LOCAL_KEY));
+        editor.putString("Token", DesUtil.encrypt(token, DesUtil.LOCAL_KEY));
+        editor.putString("LoginName", DesUtil.encrypt(mobile, DesUtil.LOCAL_KEY));
+        editor.putString("LoginPassword", DesUtil.encrypt(etRegPassword.getText().toString(), DesUtil.LOCAL_KEY));
+        editor.putLong("LoginTime", System.currentTimeMillis());
+        editor.commit();
+
+
+        dismissLoading();
+        handler.removeCallbacksAndMessages(null);
+
+
+    }
+
+
+    private void dismissLoading() {
+        if (loadingDialog != null) {
+            loadingDialog.dismiss();
+        }
+    }
+
+    @Override
+    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+    }
+    //门店手机号判断输入是否正确
+
+    @Override
+    public void onTextChanged(CharSequence s, int start, int before, int count) {
+        PhoneUtil.isEditError2WithDel(s.toString(), etRegMobile, "");
+        if (s.length() == 11 && s.toString().matches(Constant.Strings.RegexMobile)) {
+            btnIdentify.setSelected(true);
+            btnIdentify.setClickable(true);
+        } else {
+            btnIdentify.setClickable(false);
+            btnIdentify.setSelected(false);
+
+            btnIdentify.setText("发送验证码");
+            handler.removeCallbacksAndMessages(null);
+            timeNum = retryLimit;
+            isRegister = false;
+            correctCode = "";
+            mobile = "";
+            getCodeTime = 0;
+
+        }
+    }
+
+
+    @Override
+    public void afterTextChanged(Editable s) {
+
+    }
+
+
 }
