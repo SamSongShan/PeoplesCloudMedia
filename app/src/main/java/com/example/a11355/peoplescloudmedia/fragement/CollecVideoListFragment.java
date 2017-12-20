@@ -10,6 +10,7 @@ import android.view.View;
 
 import com.example.a11355.peoplescloudmedia.R;
 import com.example.a11355.peoplescloudmedia.activity.LoginActivity;
+import com.example.a11355.peoplescloudmedia.activity.VideoActivity;
 import com.example.a11355.peoplescloudmedia.adapter.GetVideoListAdapter;
 import com.example.a11355.peoplescloudmedia.base.AbsRecyclerViewAdapter;
 import com.example.a11355.peoplescloudmedia.base.BaseFragment;
@@ -30,6 +31,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+
+import static android.app.Activity.RESULT_OK;
 
 /**
  * 户视频收藏列表
@@ -168,7 +171,21 @@ public class CollecVideoListFragment extends BaseFragment implements OkHttpUtil.
 
     @Override
     public void onItemClick(View v, int position) {
+        Intent intent = new Intent(getContext(), VideoActivity.class);
+        intent.putExtra("data",videosData.get(position));
 
+        startActivityForResult(intent,Constant.Code.CollectCode);
+
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if (requestCode==Constant.Code.CollectCode){
+            if (resultCode==RESULT_OK){
+                onRefresh();
+            }
+        }
     }
 }
 

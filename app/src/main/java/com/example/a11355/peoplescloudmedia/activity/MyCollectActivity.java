@@ -30,8 +30,11 @@ public class MyCollectActivity extends BaseActivity {
         return R.layout.activity_my_collect;
     }
 
+
+
     @Override
     protected void init() {
+
         vp.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager()) {
             @Override
             public Fragment getItem(int position) {

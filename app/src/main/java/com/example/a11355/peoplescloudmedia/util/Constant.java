@@ -118,8 +118,34 @@ public interface Constant {
 
 
         //【【12】用户编号获取用户实体信息(输入参数string Json)
-
         String GetVideoDetail = BaseUrl + "GetVideoDetail";
+
+        //【16】添加视频浏览量(输入参数string Json)
+        String AddVideoPV = BaseUrl + "AddVideoPV";
+
+        //【15】添加视频收藏(输入参数string Json)
+        String AddUserCollect = BaseUrl + "AddUserCollect";
+
+        //【17】取消用户收藏(输入参数string Json)
+        String CancelUserCollect = BaseUrl + "CancelUserCollect";
+
+        //【18】添加视频分享量(输入参数string Json)
+        String AddVideoSharingPV = BaseUrl + "AddVideoSharingPV";
+
+        //【14】获取视频评论列表(输入参数string Json)
+
+        String GetUserEvaluationeList = BaseUrl + "GetUserEvaluationeList";
+
+//【13】添加视频评论(输入参数string Json)
+
+        String AddUserEvaluation = BaseUrl + "AddUserEvaluation";
+
+
+
+
+
+
+
 
 
 
@@ -159,6 +185,21 @@ ArticleId 传文章ID
         * */
         String RZTPreviewArticle = BaseH5 + "/News/RztArticle?ArticleId=";
 
+        /*
+        * 2、小视频
+分享页
+http://net.lml9.com/News/VideoSharing?VideoId=a3fd141f-f318-42c6-b1f8-e04bada2ad89
+VideoId 传视频ID
+        *
+        * */
+        String ShearVideo = BaseH5 + "/News/VideoSharing?VideoId=";
+
+        /*
+        * 文章分享页
+http://net.lml9.com/News/FindOutSharing?Uid=395
+Uid 传文章ID
+        * */
+        String ShearArticle = BaseH5 + "/News/FindOutSharing?Uid=";
 
     }
 
@@ -236,6 +277,9 @@ ArticleId 传文章ID
         int IntoCertifyCode = 0x2004;
         //登录
         int LoginCode = 0x2005;
+
+        //收藏
+        int CollectCode = 0x2006;
     }
 
     interface IdString {

@@ -7,7 +7,7 @@ android {
         config {
             keyAlias 'renzhongyunmei'
             keyPassword 'renzhongyunmei111sam111'
-            storeFile file('G:/Key/RZYM.jks')
+            storeFile file('E:/Key/RZYM.jks')
             storePassword '111sam111'
         }
     }
@@ -75,7 +75,6 @@ dependencies {
     compile files('libs/ShareSDK-Wechat-Moments-3.1.1.jar')
     //图片多选
     //视频多选
-    compile 'com.github.wenmingvs:LogReport:1.0.3'
     compile 'com.github.wenmingvs:LogReport:1.0.3'
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'

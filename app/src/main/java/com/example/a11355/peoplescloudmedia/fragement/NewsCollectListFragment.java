@@ -34,6 +34,8 @@ import java.util.List;
 
 import butterknife.BindView;
 
+import static android.app.Activity.RESULT_OK;
+
 /**
  * 文章收藏列表
  */
@@ -176,12 +178,22 @@ public class NewsCollectListFragment extends BaseFragment implements OkHttpUtil.
         intent.putExtra("url", String.format(Constant.URL.NewsDetailsLink,videosData.get(position).getId()+"", SharedPreferencesUtil.getUserId(getContext())));
 
         intent.putExtra("data1", videosData.get(position));
-        startActivity(intent);
+        startActivityForResult(intent,Constant.Code.CollectCode);
     }
 
     @Override
     public void onClick(View v) {
         
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if (requestCode==Constant.Code.CollectCode){
+            if (resultCode==RESULT_OK){
+                onRefresh();
+            }
+        }
     }
 }
 

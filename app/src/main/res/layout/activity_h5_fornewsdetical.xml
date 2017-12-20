@@ -73,7 +73,7 @@
             android:layout_centerVertical="true"
             android:layout_marginRight="15dp"
             android:layout_toLeftOf="@+id/img_shear"
-            android:src="@drawable/img_collect_b" />
+            android:src="@drawable/shape_collect_b" />
 
         <RelativeLayout
             android:layout_width="wrap_content"
