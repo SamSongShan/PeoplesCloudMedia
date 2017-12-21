@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/primaryBg"
+    android:orientation="vertical"
+
+    tools:context="com.example.a11355.peoplescloudmedia.activity.PickUpADActivity">
+
+    <include layout="@layout/toolbar_right_text" />
+
+    <View
+        android:id="@+id/Line_view"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/primaryBg" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+
+                android:layout_height="180dp"
+                android:background="@color/colorWhite">
+
+                <TextView
+                    android:id="@+id/tv_addImg"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:drawableLeft="@drawable/img_ad_add"
+                    android:drawablePadding="10dp"
+                    android:gravity="center"
+                    android:text="添加广告图片"
+                    android:textSize="20sp" />
+
+                <com.facebook.drawee.view.SimpleDraweeView
+                    android:id="@+id/sdv"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_horizontal"
+                    android:visibility="gone"
+                    fresco:actualImageScaleType="centerCrop"
+                    fresco:failureImage="@drawable/img_fail"
+                    fresco:failureImageScaleType="centerCrop"
+                    fresco:placeholderImage="@drawable/img_loading"
+                    fresco:roundAsCircle="true" />
+
+                <com.example.a11355.peoplescloudmedia.custom.SectorProgressBar
+                    android:id="@+id/spb"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_centerInParent="true"
+                    android:visibility="gone" />
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="8dp"
+                android:layout_alignParentBottom="true"
+                android:background="@color/primaryBg" />
+
+            <EditText
+                android:id="@+id/et_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorWhite"
+                android:hint="输入广告标题"
+                android:padding="20dp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_alignParentBottom="true"
+                android:background="@color/primaryBg" />
+
+            <EditText
+                android:id="@+id/et_link"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorWhite"
+                android:hint="输入广告链接"
+                android:padding="20dp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_alignParentBottom="true"
+                android:background="@color/primaryBg" />
+
+            <EditText
+                android:id="@+id/et_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorWhite"
+                android:gravity="left"
+                android:hint="输入广告内容"
+                android:lines="7"
+                android:maxLength="200"
+                android:padding="20dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorWhite"
+                android:padding="20dp"
+                android:text="注：产品描述不超过200个字符" />
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

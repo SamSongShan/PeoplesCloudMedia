@@ -280,6 +280,8 @@ Uid 传文章ID
 
         //收藏
         int CollectCode = 0x2006;
+
+        int PickUp=0x2007;
     }
 
     interface IdString {

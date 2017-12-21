@@ -1,5 +1,6 @@
 package com.example.a11355.peoplescloudmedia.activity;
 
+import android.content.Intent;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.View;
@@ -9,6 +10,7 @@ import com.example.a11355.peoplescloudmedia.R;
 import com.example.a11355.peoplescloudmedia.base.BaseActivity;
 import com.example.a11355.peoplescloudmedia.custom.LoadingDialog;
 import com.example.a11355.peoplescloudmedia.model.AddRZTArticle;
+import com.example.a11355.peoplescloudmedia.model.ModelEntity;
 import com.example.a11355.peoplescloudmedia.util.Constant;
 import com.example.a11355.peoplescloudmedia.util.DesUtil;
 import com.example.a11355.peoplescloudmedia.util.LogUtils;
@@ -79,6 +81,17 @@ public class PickUpArticleActivity extends BaseActivity implements OkHttpUtil.On
         if (!TextUtils.isEmpty(json)) {
             String decrypt = DesUtil.decrypt(json);
             LogUtils.e("AddRZTArticle",decrypt);
+
+            ModelEntity modelEntity = gson.fromJson(decrypt, ModelEntity.class);
+            ToastUtil.initToast(this, modelEntity.getMessage());
+            if (modelEntity.getCode() == Constant.Integers.SUC) {
+                etUrl.setText("");
+            } else {
+                if ("帐号已在其它地方登录".equals(modelEntity.getMessage())) {
+                    startActivityForResult(new Intent(this, LoginActivity.class), Constant.Code.LoginCode);
+
+                }
+            }
         } else {
 
         }

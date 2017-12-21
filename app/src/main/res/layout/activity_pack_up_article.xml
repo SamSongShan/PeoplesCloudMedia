@@ -138,7 +138,7 @@
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:layout_gravity="center"
-                    android:src="@drawable/ssdk_oks_classic_wechat" />
+                    android:src="@drawable/wx" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -153,11 +153,14 @@
                 android:layout_weight="0.1"
                 android:orientation="vertical">
 
-                <ImageView
+                <TextView
+                    android:gravity="center"
+                    android:textColor="@color/colorWhite"
+                    android:text="今日\n头条"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:layout_gravity="center"
-                    android:src="@drawable/ssdk_oks_classic_wechat" />
+                    android:background="@drawable/shape_solid_red_90"/>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -176,7 +179,7 @@
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:layout_gravity="center"
-                    android:src="@drawable/ssdk_oks_classic_qq" />
+                    android:src="@drawable/qq" />
 
                 <TextView
                     android:layout_width="wrap_content"

@@ -12,6 +12,7 @@ import com.example.a11355.peoplescloudmedia.R;
 import com.example.a11355.peoplescloudmedia.base.BaseActivity;
 import com.example.a11355.peoplescloudmedia.fragement.RZTAaDFragment;
 import com.example.a11355.peoplescloudmedia.fragement.RZTArticleFragment;
+import com.example.a11355.peoplescloudmedia.util.Constant;
 import com.example.a11355.peoplescloudmedia.util.TabLayoutUtils;
 
 import butterknife.BindView;
@@ -22,7 +23,7 @@ import butterknife.OnClick;
 *
 * */
 
-public class RZTActivity extends BaseActivity {
+public class RZTActivity extends BaseActivity implements ViewPager.OnPageChangeListener {
 
     @BindView(R.id.tab)
     TabLayout tab;
@@ -34,6 +35,9 @@ public class RZTActivity extends BaseActivity {
 
 
     private String[] titles = {"文章", "广告"};
+    private int currentPage = 0;
+    private RZTArticleFragment rztArticleFragment;
+    private RZTAaDFragment rztAaDFragment;
 
 
     @Override
@@ -44,10 +48,12 @@ public class RZTActivity extends BaseActivity {
     @Override
     protected void init() {
         imgAdd.setVisibility(View.VISIBLE);
+        rztArticleFragment = new RZTArticleFragment();
+        rztAaDFragment = new RZTAaDFragment();
         vp.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager()) {
             @Override
             public Fragment getItem(int position) {
-                return position == 0 ? new RZTArticleFragment() : new RZTAaDFragment();
+                return position == 0 ? rztArticleFragment :rztAaDFragment;
             }
 
             @Override
@@ -62,8 +68,10 @@ public class RZTActivity extends BaseActivity {
         });
         tab.setupWithViewPager(vp);
         TabLayoutUtils.reflex(tab, 10);
+        vp.addOnPageChangeListener(this);
 
     }
+
 
     @OnClick({R.id.toolbar_iconBack, R.id.img_add})
     public void onViewClicked(View view) {
@@ -73,10 +81,44 @@ public class RZTActivity extends BaseActivity {
                         onBackPressed();
                         break;
                     case R.id.img_add:
+                        if (currentPage == 0) {
+                            startActivityForResult(new Intent(this, PickUpArticleActivity.class), Constant.Code.PickUp);
 
-                        startActivity(new Intent(this,PickUpArticleActivity.class));
+                        } else {
+                            startActivityForResult(new Intent(this, PickUpADActivity.class), Constant.Code.PickUp);
+
+                        }
                         break;
                 }
     }
 
+    @Override
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+    }
+
+    @Override
+    public void onPageSelected(int position) {
+
+        currentPage = position;
+
+    }
+
+    @Override
+    public void onPageScrollStateChanged(int state) {
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == Constant.Code.PickUp) {
+            if (resultCode == RESULT_OK) {
+                if (currentPage == 0) {
+                    rztArticleFragment.onRefresh();
+                } else {
+                    rztAaDFragment.onRefresh();
+                }
+            }
+        }
+    }
 }

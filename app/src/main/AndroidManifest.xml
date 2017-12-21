@@ -182,7 +182,8 @@
             android:name=".activity.VideoActivity"
             android:label="@string/title_activity_video"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" ></activity>
+            android:theme="@style/AppTheme" />
+        <activity android:name=".activity.PickUpADActivity"></activity>
     </application>
 
 </manifest>
