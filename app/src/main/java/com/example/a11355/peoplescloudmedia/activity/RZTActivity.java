@@ -85,7 +85,10 @@ public class RZTActivity extends BaseActivity implements ViewPager.OnPageChangeL
                             startActivityForResult(new Intent(this, PickUpArticleActivity.class), Constant.Code.PickUp);
 
                         } else {
-                            startActivityForResult(new Intent(this, PickUpADActivity.class), Constant.Code.PickUp);
+                            Intent intent = new Intent(this, PickUpADActivity.class);
+
+                            intent.putExtra("title","广告");
+                            startActivityForResult(intent, Constant.Code.PickUp);
 
                         }
                         break;

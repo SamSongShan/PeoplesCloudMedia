@@ -6,6 +6,7 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 
 import com.example.a11355.peoplescloudmedia.R;
 import com.example.a11355.peoplescloudmedia.base.BaseActivity;
@@ -19,7 +20,10 @@ public class H5ActivityForRZTPreview extends BaseActivity {
     public ProgressBar progressBar;
     @BindView(R.id.wv_h5)
     public WebView webView;
+    @BindView(R.id.rv_botton)
+    public RelativeLayout rvBotton;
     private GetRZTArticleListEntity.DataBean data;
+    private int type;
 
     @Override
     protected int getViewResId() {
@@ -31,6 +35,11 @@ public class H5ActivityForRZTPreview extends BaseActivity {
         Intent intent = getIntent();
 
         data = intent.getParcelableExtra("data");
+        type = intent.getIntExtra("type", -1);
+        if (type == 1) {//人众推  文章跳转
+            rvBotton.setVisibility(View.GONE);
+        }
+
         webView.requestFocusFromTouch();
         webView.getSettings().setJavaScriptEnabled(true);
         webView.setWebChromeClient(new WebChromeClient() {

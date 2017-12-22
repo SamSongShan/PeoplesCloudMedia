@@ -16,6 +16,11 @@
     </com.example.a11355.peoplescloudmedia.videomodel.VideoPlayer>
 
     <RelativeLayout
+        android:background="@drawable/shape_solid_transgrayalph_90"
+        android:paddingBottom="2dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="2dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="30dp"
@@ -23,13 +28,13 @@
 
         <com.facebook.drawee.view.SimpleDraweeView
             android:id="@+id/sdv_head"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
             android:layout_centerVertical="true"
-            android:layout_marginRight="10dp"
-            fresco:actualImageScaleType="fitXY"
+            android:layout_marginRight="5dp"
+            fresco:actualImageScaleType="fitCenter"
             fresco:failureImage="@drawable/head"
-            fresco:failureImageScaleType="centerInside"
+            fresco:failureImageScaleType="fitCenter"
             fresco:placeholderImage="@drawable/head"
             fresco:placeholderImageScaleType="fitCenter"
             fresco:roundAsCircle="true"
@@ -39,15 +44,14 @@
             android:id="@+id/tv_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="3dp"
             android:layout_toRightOf="@+id/sdv_head"
             android:ellipsize="end"
             android:lines="1"
             android:textColor="@color/colorWhite"
-            android:textSize="16sp"
             tools:text="这是姓名" />
 
         <TextView
+            android:textColor="@color/colorWelfareBG"
             android:id="@+id/tv_tips"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -55,7 +59,7 @@
             android:layout_toRightOf="@+id/sdv_head"
             android:ellipsize="end"
             android:lines="1"
-            android:textColor="@color/colorWhite"
+            android:textSize="12sp"
             tools:text="共有1000人观看" />
     </RelativeLayout>
 
@@ -68,9 +72,9 @@
         android:layout_marginLeft="30dp"
         android:background="@drawable/shape_solid_transgrayalph_90"
         android:padding="10dp"
-        fresco:actualImageScaleType="fitXY"
+        fresco:actualImageScaleType="fitCenter"
         fresco:failureImage="@drawable/review_w"
-        fresco:failureImageScaleType="centerInside"
+        fresco:failureImageScaleType="fitCenter"
         fresco:placeholderImage="@drawable/review_w"
         fresco:placeholderImageScaleType="fitCenter"
         fresco:roundAsCircle="true"

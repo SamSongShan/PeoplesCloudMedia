@@ -19,9 +19,9 @@
             android:layout_width="match_parent"
             android:layout_height="120dp"
             android:layout_gravity="center"
-            fresco:actualImageScaleType="fitXY"
+            fresco:actualImageScaleType="fitCenter"
             fresco:failureImage="@drawable/img_fail"
-            fresco:failureImageScaleType="centerInside"
+            fresco:failureImageScaleType="fitCenter"
             fresco:placeholderImage="@drawable/img_loading"
             fresco:placeholderImageScaleType="fitCenter"
             fresco:viewAspectRatio="0.8" />

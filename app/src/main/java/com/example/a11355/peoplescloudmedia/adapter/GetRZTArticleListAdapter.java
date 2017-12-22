@@ -35,7 +35,10 @@ public class GetRZTArticleListAdapter extends AbsRecyclerViewAdapter<GetRZTArtic
             case 0:
                 holder.bindSimpleDraweeViewBase(R.id.sdv, d.getImageUrl())
                         .bindTextView(R.id.tv_title, d.getTitle())
-                        .bindTextView(R.id.tv_date, d.getCreateDate());
+                        .bindTextView(R.id.tv_date, d.getCreateDate())
+                        .bindTextView(R.id.tv_focus, d.getPV() + "")
+                        .bindTextView(R.id.tv_share, d.getSharingPV() + "");
+
                 break;
             case 1:
                 onAdapterCallbackListener.onCallback();

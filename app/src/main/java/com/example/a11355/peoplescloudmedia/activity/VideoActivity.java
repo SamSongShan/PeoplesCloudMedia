@@ -29,8 +29,8 @@ import com.example.a11355.peoplescloudmedia.model.AddUserEvaluation;
 import com.example.a11355.peoplescloudmedia.model.AddVideoPV;
 import com.example.a11355.peoplescloudmedia.model.AddVideoSharingPV;
 import com.example.a11355.peoplescloudmedia.model.CancelUserCollect;
-import com.example.a11355.peoplescloudmedia.model.GetUserEvaluationeListEntity;
 import com.example.a11355.peoplescloudmedia.model.GetUserEvaluationeList;
+import com.example.a11355.peoplescloudmedia.model.GetUserEvaluationeListEntity;
 import com.example.a11355.peoplescloudmedia.model.GetVideoDetail;
 import com.example.a11355.peoplescloudmedia.model.GetVideoDetailEntity;
 import com.example.a11355.peoplescloudmedia.model.GetVideoListEntity;
@@ -108,6 +108,9 @@ public class VideoActivity extends BaseActivity implements OkHttpUtil.OnDataList
     protected void init() {
         StatusBarUtils.translucentStatusBar(this, true);
         data = getIntent().getParcelableExtra("data");
+        tvTips.setText(data.getPV() + "人看过");
+        tvName.setText(data.getFullHead());
+
         //  setTimer();
 
     }
@@ -137,6 +140,7 @@ public class VideoActivity extends BaseActivity implements OkHttpUtil.OnDataList
 
                     getVideoDetailEntity = gson.fromJson(decrypt, GetVideoDetailEntity.class);
                     if (getVideoDetailEntity.getCode() == Constant.Integers.SUC) {
+                        sdvHead.setImageURI(Constant.URL.BaseImg + getVideoDetailEntity.getData().getHeadIcon());
                         Player.playVideo(Constant.URL.BaseH5 + getVideoDetailEntity.getData().getVideoPath(), "");
                         imgCollect.setSelected(getVideoDetailEntity.getData().getIsCollect() != 0);
                     } else {

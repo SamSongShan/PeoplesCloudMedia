@@ -9,16 +9,16 @@ import android.text.TextUtils;
 import android.view.View;
 
 import com.example.a11355.peoplescloudmedia.R;
-import com.example.a11355.peoplescloudmedia.activity.H5ActivityForRZTPreview;
 import com.example.a11355.peoplescloudmedia.activity.LoginActivity;
-import com.example.a11355.peoplescloudmedia.adapter.GetRZTArticleListAdapter;
+import com.example.a11355.peoplescloudmedia.activity.PickUpADActivity;
+import com.example.a11355.peoplescloudmedia.adapter.GetAdvertisingListAdapter;
 import com.example.a11355.peoplescloudmedia.base.AbsRecyclerViewAdapter;
 import com.example.a11355.peoplescloudmedia.base.BaseFragment;
 import com.example.a11355.peoplescloudmedia.base.OnAdapterCallbackListener;
 import com.example.a11355.peoplescloudmedia.custom.DividerGridItem;
 import com.example.a11355.peoplescloudmedia.custom.LoadingDialog;
+import com.example.a11355.peoplescloudmedia.model.GetAdvertisingListEntity;
 import com.example.a11355.peoplescloudmedia.model.GetFindNewsCollectList;
-import com.example.a11355.peoplescloudmedia.model.GetRZTArticleListEntity;
 import com.example.a11355.peoplescloudmedia.util.Constant;
 import com.example.a11355.peoplescloudmedia.util.DesUtil;
 import com.example.a11355.peoplescloudmedia.util.LogUtils;
@@ -53,10 +53,10 @@ public class RZTAaDFragment extends BaseFragment implements OkHttpUtil.OnDataLis
     private int PageIndex = 1;
     private int PageSize = 10;
     private int nextPage = 1;
-    private List<GetRZTArticleListEntity.DataBean> videosData = new ArrayList<>();
+    private List<GetAdvertisingListEntity.DataEntity> videosData = new ArrayList<>();
 
     private Gson gson = new GsonBuilder().create();
-    private GetRZTArticleListAdapter getRZTArticleListAdapter;
+    private GetAdvertisingListAdapter getAdvertisingListAdapter;
 
 
 
@@ -69,15 +69,15 @@ public class RZTAaDFragment extends BaseFragment implements OkHttpUtil.OnDataLis
     @Override
     protected void init(View v) {
         rvStore.setLayoutManager(new LinearLayoutManager(getContext()));
-        getRZTArticleListAdapter = new GetRZTArticleListAdapter(getActivity(), this,this);
-        rvStore.setAdapter(getRZTArticleListAdapter);
+        getAdvertisingListAdapter = new GetAdvertisingListAdapter(getActivity(), this,this);
+        rvStore.setAdapter(getAdvertisingListAdapter);
         srlStore.setOnRefreshListener(this);
         rvStore.addItemDecoration(new DividerGridItem(getContext()));
-        getRZTArticleListAdapter.setOnItemClickListener(this);
+        getAdvertisingListAdapter.setOnItemClickListener(this);
         loadingDialog = LoadingDialog.newInstance("加载中...");
         loadingDialog.show(getActivity().getFragmentManager());
-        getRZTArticleListAdapter.setEmptyView(R.layout.empty_tips);
-        getRZTArticleListAdapter.setEmptyTips(R.id.tv_emptyTips, "暂无数据");
+        getAdvertisingListAdapter.setEmptyView(R.layout.empty_tips);
+        getAdvertisingListAdapter.setEmptyTips(R.id.tv_emptyTips, "暂无数据");
     }
 
     @Override
@@ -107,31 +107,30 @@ public class RZTAaDFragment extends BaseFragment implements OkHttpUtil.OnDataLis
                         dismissLoading();
                     }
                     removeLoadingItem();
-                    GetRZTArticleListEntity getFindNewsCollectListEntity = gson.fromJson(decrypt, GetRZTArticleListEntity.class);
-                    if (getFindNewsCollectListEntity.getCode() == Constant.Integers.SUC) {
-                        videosData.addAll(getFindNewsCollectListEntity.getData());
-                        if (getFindNewsCollectListEntity.getData().size() % PageSize == 0 && getFindNewsCollectListEntity.getData().size() != 0) {//可能还有下一页
-                            videosData.add(new GetRZTArticleListEntity.DataBean(1));
+                    GetAdvertisingListEntity getAdvertisingListEntity = gson.fromJson(decrypt, GetAdvertisingListEntity.class);
+                    if (getAdvertisingListEntity.getCode() == Constant.Integers.SUC) {
+                        videosData.addAll(getAdvertisingListEntity.getData());
+                        if (getAdvertisingListEntity.getData().size() % PageSize == 0 && getAdvertisingListEntity.getData().size() != 0) {//可能还有下一页
+                            videosData.add(new GetAdvertisingListEntity.DataEntity(1));
                             nextPage = PageIndex + 1;
                         } else {
                             addBaseLine();
                         }
-                    }else if (getFindNewsCollectListEntity.getCode() == Constant.Integers.TOKEN_OUT_OF) { //token过期
+                    } else if (getAdvertisingListEntity.getCode() == Constant.Integers.TOKEN_OUT_OF) { //token过期
                         dismissLoading();
-                        ToastUtil.initToast(getContext(), getFindNewsCollectListEntity.getMessage());
+                        ToastUtil.initToast(getContext(), getAdvertisingListEntity.getMessage());
                         startActivityForResult(new Intent(getContext(), LoginActivity.class), Constant.Code.LoginCode);
 
-                    }
-                    else if (getFindNewsCollectListEntity.getCode() == Constant.Integers.NULL){
+                    } else if (getAdvertisingListEntity.getCode() == Constant.Integers.NULL) {
                         addBaseLine();
                     }else {//其他
                         dismissLoading();
-                        ToastUtil.initToast(getContext(), getFindNewsCollectListEntity.getMessage());
+                        ToastUtil.initToast(getContext(), getAdvertisingListEntity.getMessage());
                     }
 
 
                 }
-                getRZTArticleListAdapter.setData(videosData);
+                getAdvertisingListAdapter.setData(videosData);
                 break;
             }
         }
@@ -152,7 +151,7 @@ public class RZTAaDFragment extends BaseFragment implements OkHttpUtil.OnDataLis
 
     private void addBaseLine() {
         if (PageIndex != 1) {
-            videosData.add(new GetRZTArticleListEntity.DataBean(2));
+            videosData.add(new GetAdvertisingListEntity.DataEntity(2));
         }
     }
 
@@ -174,14 +173,21 @@ public class RZTAaDFragment extends BaseFragment implements OkHttpUtil.OnDataLis
 
     @Override
     public void onItemClick(View v, int position) {
-        Intent intent = new Intent(getContext(), H5ActivityForRZTPreview.class);
+        Intent intent = new Intent(getContext(), PickUpADActivity.class);
         intent.putExtra("data", videosData.get(position));
-        startActivity(intent);
+
+        intent.putExtra("title","编辑广告");
+        startActivityForResult(intent,Constant.Code.PickUp);
     }
 
     @Override
     public void onClick(View v) {
 
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        onRefresh();
     }
 }
 

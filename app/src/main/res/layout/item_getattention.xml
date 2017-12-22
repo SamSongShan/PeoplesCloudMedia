@@ -14,9 +14,10 @@
         android:layout_centerVertical="true"
         android:layout_gravity="center"
         android:layout_margin="5dp"
-        fresco:actualImageScaleType="fitXY"
+
+        fresco:actualImageScaleType="fitCenter"
         fresco:failureImage="@drawable/head"
-        fresco:failureImageScaleType="centerInside"
+        fresco:failureImageScaleType="fitCenter"
         fresco:placeholderImage="@drawable/head"
         fresco:placeholderImageScaleType="fitCenter"
         fresco:roundAsCircle="true"

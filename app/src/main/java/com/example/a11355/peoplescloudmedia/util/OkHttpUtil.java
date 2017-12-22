@@ -18,6 +18,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.Call;
@@ -39,7 +40,7 @@ import okio.Source;
  * OkHttp的工具类
  */
 public class OkHttpUtil {
-
+    public static Map<String,Call> callMap=new ConcurrentHashMap<>();
     private static OkHttpClient okHttpClient;
     private static Handler handler = new Handler();
 
@@ -304,10 +305,11 @@ public class OkHttpUtil {
     }
 
     /**
-     * post上传File -- 带进度条
+     * post上传File -- 带进度条 带取消
      */
-    /*public static void postStream(String url, String encode, final int index, final File file,
-                                  final OnProgressMultiListener progressListener, OnDataListener dataListener) {
+    public static void postStream(String url, String parameter, final int index, final File file,
+                                  final OnProgressMultiListener progressListener,
+                                  OnDataListener dataListener,String tag) {
         if (file == null) {
             return;
         }
@@ -328,7 +330,7 @@ public class OkHttpUtil {
                 int readCount = 0;//一共上传了多少字节
                 int readSize;//当前上传了多少字节
                 Buffer buffer = new Buffer();
-                while(true){
+                while (true) {
                     readSize = (int) source.read(buffer, 1024);
                     if (readSize < 0) {
                         break;
@@ -336,16 +338,56 @@ public class OkHttpUtil {
                         sink.write(buffer, readSize);
                         readCount += readSize;
                         if (progressListener != null) {
-                            int rate = (int) (readCount * 100 /contentLength());
+                            int rate = (int) (readCount * 100 / contentLength());
                             progressListener.onProgressMulti(index, rate);
                         }
                     }
                 }
             }
         };
-        createCall(encode, url, requestBody).enqueue(new OkHttpCallback(url, dataListener));
-    }*/
+        createCall(url, parameter, file.getName(), requestBody,tag)
+                .enqueue(new OkHttpCallback(url, dataListener));
 
+    }
+
+    /**
+     * 创建Call对象带取消
+     */
+    private static Call createCall(String url, String parameter, String fileName, RequestBody requestBody,String tag) {
+        MultipartBody build = new MultipartBody.Builder()
+                .setType(MultipartBody.FORM)
+                .addFormDataPart("json", parameter)
+                .addPart(Headers.of("Content-Disposition", "form-data; name=\"" + parameter.substring(0, 3) +
+                        "\"; fileName=\"" + fileName + "\""), requestBody)
+                .build();
+        Request request = new Request.Builder()
+                .url(url)
+                .post(build)
+                .build();
+        Request.Builder builder = request.newBuilder();
+        builder.tag(tag);
+        Call call = okHttpClient.newCall(request);
+        OkHttpUtil.callMap.put(tag,call);
+        return call;
+    }
+
+    /**
+     * 创建Call对象
+     */
+    private static Call createCall(String url, String parameter, String fileName, RequestBody requestBody) {
+        MultipartBody build = new MultipartBody.Builder()
+                .setType(MultipartBody.FORM)
+                .addFormDataPart("json", parameter)
+                .addPart(Headers.of("Content-Disposition", "form-data; name=\"" + parameter.substring(0, 3) +
+                        "\"; fileName=\"" + fileName + "\""), requestBody)
+                .build();
+        Request request = new Request.Builder()
+                .url(url)
+                .post(build)
+                .build();
+        request.tag();
+        return okHttpClient.newCall(request);
+    }
     /**
      * 创建Call对象
      */

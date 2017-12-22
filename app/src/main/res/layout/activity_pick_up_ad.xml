@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/primaryBg"
+    android:background="@color/colorWhite"
     android:orientation="vertical"
 
     tools:context="com.example.a11355.peoplescloudmedia.activity.PickUpADActivity">
@@ -50,11 +50,12 @@
                     android:layout_height="match_parent"
                     android:layout_gravity="center_horizontal"
                     android:visibility="gone"
-                    fresco:actualImageScaleType="centerCrop"
+                    fresco:actualImageScaleType="fitCenter"
                     fresco:failureImage="@drawable/img_fail"
-                    fresco:failureImageScaleType="centerCrop"
+                    fresco:failureImageScaleType="fitCenter"
                     fresco:placeholderImage="@drawable/img_loading"
-                    fresco:roundAsCircle="true" />
+                    fresco:placeholderImageScaleType="fitCenter"
+                    />
 
                 <com.example.a11355.peoplescloudmedia.custom.SectorProgressBar
                     android:id="@+id/spb"

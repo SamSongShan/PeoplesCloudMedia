@@ -173,6 +173,8 @@ public class RZTArticleFragment extends BaseFragment implements OkHttpUtil.OnDat
     public void onItemClick(View v, int position) {
         Intent intent = new Intent(getContext(), H5ActivityForRZTPreview.class);
         intent.putExtra("data", videosData.get(position));
+
+        intent.putExtra("type",1);
         startActivity(intent);
     }
 

@@ -27,6 +27,7 @@
     </RelativeLayout>
 
     <RelativeLayout
+        android:id="@+id/rv_botton"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_marginTop="5dp"
@@ -51,9 +52,9 @@
             android:layout_marginRight="15dp"
             android:layout_toLeftOf="@+id/tv_from"
             android:layout_toRightOf="@+id/img_colse"
-            fresco:actualImageScaleType="focusCrop"
+            fresco:actualImageScaleType="fitCenter"
             fresco:failureImage="@drawable/head"
-            fresco:failureImageScaleType="centerInside"
+            fresco:failureImageScaleType="fitCenter"
             fresco:placeholderImage="@drawable/head"
             fresco:placeholderImageScaleType="fitCenter"
             fresco:roundAsCircle="true"

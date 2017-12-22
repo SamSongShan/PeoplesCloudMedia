@@ -140,6 +140,10 @@ public interface Constant {
 
         String AddUserEvaluation = BaseUrl + "AddUserEvaluation";
 
+//【50】新增/修改人众推广告(输入参数string Json)
+
+        String UpdateAdvertising = BaseUrl + "UpdateAdvertising";
+
 
 
 
