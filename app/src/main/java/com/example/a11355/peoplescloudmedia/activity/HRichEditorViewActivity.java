@@ -39,6 +39,7 @@ import io.valuesfeng.picker.utils.PicturePickerUtils;
 
 import static com.luck.picture.lib.model.FunctionConfig.MODE_MULTIPLE;
 
+
 public class HRichEditorViewActivity extends AppCompatActivity {
 
 

@@ -183,7 +183,8 @@
             android:label="@string/title_activity_video"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
-        <activity android:name=".activity.PickUpADActivity"></activity>
+        <activity android:name=".activity.PickUpADActivity" />
+        <activity android:name=".activity.FindSearchActivity"></activity>
     </application>
 
 </manifest>

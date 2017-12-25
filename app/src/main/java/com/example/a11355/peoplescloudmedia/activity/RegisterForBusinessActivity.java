@@ -208,7 +208,14 @@ public class RegisterForBusinessActivity extends BaseActivity implements OkHttpU
 //                    ToastUtil.initToast(this, correctCode);
                     } else {
                         ToastUtil.initToast(this, mobileCode.getMessage());
+                        btnIdentify.setText("发送验证码");
 
+                        timeNum = retryLimit;
+                        isRegister = false;
+                        correctCode = "";
+                        mobile = "";
+                        getCodeTime = 0;
+                        handler.removeCallbacksAndMessages(null);
                     }
 
                 }
@@ -223,8 +230,16 @@ public class RegisterForBusinessActivity extends BaseActivity implements OkHttpU
                         //注册成功后跳过登录
                         afterRegister(register.getData().getUserId(), register.getData().getToken());
                     } else {
+                        btnIdentify.setText("发送验证码");
+
+                        timeNum = retryLimit;
+                        isRegister = false;
+                        correctCode = "";
+                        mobile = "";
+                        getCodeTime = 0;
                         handler.removeCallbacksAndMessages(null);
                         dismissLoading();
+
                     }
                     break;
             }

@@ -361,7 +361,14 @@ public class LoginActivity extends BaseActivity implements RadioGroup.OnCheckedC
 //                    ToastUtil.initToast(this, correctCode);
                     } else {
                         ToastUtil.initToast(this, mobileCode.getMessage());
+                        btnIdentify.setText("发送验证码");
 
+                        timeNum = retryLimit;
+                        isRegister = false;
+                        correctCode = "";
+                        mobile = "";
+                        getCodeTime = 0;
+                        handler.removeCallbacksAndMessages(null);
                     }
                 }
                 break;
@@ -375,6 +382,13 @@ public class LoginActivity extends BaseActivity implements RadioGroup.OnCheckedC
                         //注册成功后跳过登录
                         afterRegister(register.getData().getUserId(), register.getData().getToken());
                     } else {
+                        btnIdentify.setText("发送验证码");
+
+                        timeNum = retryLimit;
+                        isRegister = false;
+                        correctCode = "";
+                        mobile = "";
+                        getCodeTime = 0;
                         handler.removeCallbacksAndMessages(null);
                         dismissLoading();
                     }

@@ -145,6 +145,10 @@ public interface Constant {
         String UpdateAdvertising = BaseUrl + "UpdateAdvertising";
 
 
+//【46】获取首页轮播图列表(输入参数string Json)
+
+        String GetHomeRotateList = BaseUrl + "GetHomeRotateList";
+
 
 
 
