@@ -16,6 +16,8 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.a11355.peoplescloudmedia.R;
 import com.example.a11355.peoplescloudmedia.activity.TXTEditorActivity;
 import com.example.a11355.peoplescloudmedia.model.EContent;
@@ -75,12 +77,25 @@ public class RichEditorAdapter extends RecyclerView.Adapter<RichEditorAdapter.My
                 if (TextUtils.isEmpty(eContent.getUrl())) {
                     holder.ivPic.setImageResource(R.drawable.img);
                 } else {
+
+                    RequestOptions options = new RequestOptions()
+                            .placeholder(R.color.ucrop_color_grey)
+                            .centerCrop()
+                            .diskCacheStrategy(DiskCacheStrategy.ALL);
+
+                    Glide.with(context)
+                            .load(eContent.getUrl())
+                            .transition(DrawableTransitionOptions.withCrossFade())
+                            .apply(options)
+                            .into(holder.ivPic);
+
+                  /*
                     Glide.with(context)
                             .load(eContent.getUrl())
                             .diskCacheStrategy(DiskCacheStrategy.ALL)
                             .placeholder(R.drawable.img)
                             .error(R.drawable.img)
-                            .into(holder.ivPic);
+                            .into(holder.ivPic);*/
                 }
                 break;
             case ItemType.TXT:

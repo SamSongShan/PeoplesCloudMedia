@@ -12,27 +12,44 @@
         android:src="@drawable/add" />
 
     <LinearLayout
+        android:visibility="gone"
         android:id="@+id/ll_additem_addarea"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:background="@drawable/shape_change_bg"
+        android:layout_margin="5dp"
+        android:background="@drawable/shape_solid_white"
         android:orientation="horizontal"
-        android:visibility="gone">
+        android:padding="5dp">
 
         <ImageView
             android:id="@+id/iv_additem_txt"
             style="@style/additem"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
             android:src="@drawable/txt" />
 
         <ImageView
             android:id="@+id/iv_additem_img"
             style="@style/additem"
+
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
             android:src="@drawable/img" />
 
         <ImageView
             android:id="@+id/iv_additem_video"
             style="@style/additem"
+
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
             android:src="@drawable/video" />
+
+        <ImageView
+            android:id="@+id/iv_additem_insert"
+            style="@style/additem"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:src="@drawable/insert" />
     </LinearLayout>
 </LinearLayout>

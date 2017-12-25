@@ -5,8 +5,6 @@ import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -14,33 +12,34 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.example.a11355.peoplescloudmedia.R;
 import com.example.a11355.peoplescloudmedia.adapter.RichEditorAdapter;
 import com.example.a11355.peoplescloudmedia.adapter.SimpleItemTouchHelperCallback;
+import com.example.a11355.peoplescloudmedia.base.BaseActivity;
 import com.example.a11355.peoplescloudmedia.base.EditorResultBean;
+import com.example.a11355.peoplescloudmedia.custom.SectorProgressBar;
 import com.example.a11355.peoplescloudmedia.model.EContent;
 import com.example.a11355.peoplescloudmedia.model.ItemType;
 import com.example.a11355.peoplescloudmedia.util.LogUtils;
-import com.luck.picture.lib.model.FunctionConfig;
-import com.luck.picture.lib.model.LocalMediaLoader;
-import com.luck.picture.lib.model.PictureConfig;
-import com.yalantis.ucrop.entity.LocalMedia;
+import com.facebook.drawee.view.SimpleDraweeView;
+
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.OnClick;
 import io.valuesfeng.picker.Picker;
 import io.valuesfeng.picker.engine.GlideEngine;
 import io.valuesfeng.picker.utils.PicturePickerUtils;
 
-import static com.luck.picture.lib.model.FunctionConfig.MODE_MULTIPLE;
 
 
-public class HRichEditorViewActivity extends AppCompatActivity {
+public class HRichEditorViewActivity extends BaseActivity {
 
 
     /**
@@ -49,9 +48,31 @@ public class HRichEditorViewActivity extends AppCompatActivity {
     private static final int ANIMATION_DURATION = 300;//移动时间
     private static final int REQUEST_CODE_CHOOSE_BG = 1001;//选择背景
     private static final int REQUEST_CODE_CHOOSE_ITEM_IMG = 1002;//更改item图片
-    private static final int REQUEST_CODE_SET_TITLE = 1003;//设置标题
+    private static final int REQUEST_CODE_SET_TITLE = 1003;
     private static final int REQUEST_CODE_CHOOSE_IMGS = 1004;//多选图片
     private static final int REQUEST_CODE_EDIT_TXT = 1005;//编辑文本
+    private static final int REQUEST_CODE_SET_TITLE_MY = 1006;//设置标题
+
+    @BindView(R.id.tv_addImg)
+    TextView tvAddImg;
+    @BindView(R.id.sdv)
+    SimpleDraweeView sdv;
+    @BindView(R.id.spb)
+    SectorProgressBar spb;
+    @BindView(R.id.tv_addMusic)
+    TextView tvAddMusic;
+    @BindView(R.id.tv_addedMusic)
+    TextView tvAddedMusic;
+    @BindView(R.id.img_change)
+    ImageView imgChange;
+    @BindView(R.id.tv_title)
+    TextView tvTitle;
+    @BindView(R.id.tv_content)
+    TextView tvContent;
+    @BindView(R.id.ll_content)
+    LinearLayout llContent;
+    @BindView(R.id.ll_additem_addarea)
+    LinearLayout llAdditemAddarea;
     private float translateDistance = 0;//移动的距离
     /**
      * 字符区
@@ -73,23 +94,27 @@ public class HRichEditorViewActivity extends AppCompatActivity {
     private List<EContent> datas;
     private Uri bgUri;//背景图片的uri
 
-    /**
+  /*  *//**
      * 视频回调方法
-     */
+     *//*
     private PictureConfig.OnSelectResultCallback videoResultCallback = new PictureConfig.OnSelectResultCallback() {
         @Override
         public void onSelectSuccess(List<LocalMedia> resultList) {
             datas.get(adapter.getCurClickItemIndex()).setUrl(resultList.get(0).toString());
             adapter.notifyDataSetChanged();
         }
-    };
+    };*/
+
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_hrich_editor_view);
+    protected int getViewResId() {
+        return R.layout.activity_hrich_editor_view;
+    }
+
+    @Override
+    protected void init() {
         initView();
-        defaultChoiceIMG();
+        //defaultChoiceIMG();
     }
 
     public void onSubmit(View view) {
@@ -111,7 +136,7 @@ public class HRichEditorViewActivity extends AppCompatActivity {
      */
     private void defaultChoiceIMG() {
         Picker.from(this)
-                .count(20)
+                .count(1)
                 .enableCamera(true)
                 .setEngine(new GlideEngine())
                 .forResult(REQUEST_CODE_CHOOSE_IMGS);
@@ -209,6 +234,11 @@ public class HRichEditorViewActivity extends AppCompatActivity {
     private void dropItem(int postion) {
         datas.remove(postion);
         adapter.notifyDataSetChanged();
+
+        if (datas.size() == 0) {
+            llAdditemAddarea.setVisibility(View.VISIBLE);
+
+        }
     }
 
 
@@ -218,6 +248,10 @@ public class HRichEditorViewActivity extends AppCompatActivity {
      * @param postion
      */
     private void swapDown(final int postion) {
+
+        if (datas.size() == 1) {
+            return;
+        }
         if (translateDistance == 0) {
             translateDistance = adapter.getItemHight(linearLayoutManager) + 10;
         }
@@ -285,7 +319,7 @@ public class HRichEditorViewActivity extends AppCompatActivity {
      * 获取视频
      */
     private void getVideo() {
-        FunctionConfig config = new FunctionConfig();
+        /*FunctionConfig config = new FunctionConfig();
         config.setType(LocalMediaLoader.TYPE_VIDEO);
         config.setCompress(true);
         config.setMaxSelectNum(1);
@@ -297,7 +331,7 @@ public class HRichEditorViewActivity extends AppCompatActivity {
         config.setCompressFlag(1);
         config.setCheckNumMode(true);
         PictureConfig.init(config);
-        PictureConfig.getPictureConfig().openPhoto(this, videoResultCallback);
+        PictureConfig.getPictureConfig().openPhoto(this, videoResultCallback);*/
     }
 
     public void onBack(View view) {
@@ -328,11 +362,17 @@ public class HRichEditorViewActivity extends AppCompatActivity {
             tvArtTitle.setText(articleTitle);
         } else if (requestCode == REQUEST_CODE_CHOOSE_BG && resultCode == RESULT_OK) {//选择背景
             bgUri = PicturePickerUtils.obtainResult(data).get(0);
-            Glide.with(this)
+            tvAddImg.setVisibility(View.GONE);
+            sdv.setVisibility(View.VISIBLE);
+            imgChange.setVisibility(View.VISIBLE);
+            sdv.setImageURI(bgUri);
+
+
+            /*Glide.with(this)
                     .load(bgUri)
                     .placeholder(R.drawable.default_adv)
                     .error(R.drawable.default_adv)
-                    .into(ivArtBGImg);
+                    .into(sdv);*/
 
         } else if (requestCode == REQUEST_CODE_CHOOSE_ITEM_IMG && resultCode == RESULT_OK) {//选择item的图片
             datas.get(adapter.getCurClickItemIndex()).setUrl(PicturePickerUtils.obtainResult(data).get(0).toString());
@@ -343,6 +383,9 @@ public class HRichEditorViewActivity extends AppCompatActivity {
             datas.get(adapter.getCurClickItemIndex()).setStyle(eContent.getStyle());
             adapter.notifyDataSetChanged();
         } else if (requestCode == REQUEST_CODE_CHOOSE_IMGS && resultCode == RESULT_OK) {//第一次进入页面需要选择图片
+            llAdditemAddarea.setVisibility(View.GONE);
+            llContent.setVisibility(View.GONE);
+
             List<Uri> uris = PicturePickerUtils.obtainResult(data);
             if (uris != null && uris.size() > 0) {
                 EContent eContent;
@@ -355,6 +398,41 @@ public class HRichEditorViewActivity extends AppCompatActivity {
                 adapter.notifyDataSetChanged();
             }
 
+        } else if (requestCode == REQUEST_CODE_SET_TITLE_MY && resultCode == RESULT_OK) { //设置标题
+            tvTitle.setText(data.getStringExtra("title"));
+        }
+    }
+
+    @OnClick({R.id.tv_addImg, R.id.sdv, R.id.tv_addMusic, R.id.tv_addedMusic, R.id.img_change, R.id.tv_title, R.id.tv_content, R.id.iv_additem_txt, R.id.iv_additem_img, R.id.iv_additem_video, R.id.iv_additem_insert})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.tv_addImg:
+                onChangeBG(view);
+                break;
+            case R.id.sdv:
+                break;
+            case R.id.tv_addMusic:
+                break;
+            case R.id.tv_addedMusic:
+                break;
+            case R.id.img_change:
+                onChangeBG(view);
+                break;
+            case R.id.tv_title:
+
+                startActivityForResult(new Intent(this, EditTitleActivity.class), REQUEST_CODE_SET_TITLE_MY);
+                break;
+            case R.id.tv_content:
+                break;
+            case R.id.iv_additem_txt:
+                break;
+            case R.id.iv_additem_img:
+                defaultChoiceIMG();
+                break;
+            case R.id.iv_additem_video:
+                break;
+            case R.id.iv_additem_insert:
+                break;
         }
     }
 }

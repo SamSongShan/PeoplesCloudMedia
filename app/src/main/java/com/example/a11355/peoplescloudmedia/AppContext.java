@@ -1,6 +1,9 @@
 package com.example.a11355.peoplescloudmedia;
 
 import android.content.Context;
+import android.os.Build;
+import android.os.StrictMode;
+import android.support.annotation.RequiresApi;
 import android.support.multidex.MultiDex;
 
 import com.example.a11355.peoplescloudmedia.util.ConfigConstants;
@@ -18,6 +21,7 @@ public class AppContext extends MobApplication {
 
     private static AppContext instance;
 
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
     @Override
     public void onCreate() {
         super.onCreate();
@@ -30,7 +34,9 @@ public class AppContext extends MobApplication {
         LogUtils.setDebug(true);
         initCrashReport();
         ZXingLibrary.initDisplayOpinion(this);
-
+        StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+        StrictMode.setVmPolicy(builder.build());
+        builder.detectFileUriExposure();
 
 
     }

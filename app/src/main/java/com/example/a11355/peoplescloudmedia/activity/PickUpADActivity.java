@@ -79,8 +79,7 @@ public class PickUpADActivity extends BaseActivity implements BaseDialog.OnItemC
     protected void init() {
 
 
-        tvAddImg.setFocusableInTouchMode(true);
-        tvAddImg.setFocusable(true);
+
         title = getIntent().getStringExtra("title");
         data = getIntent().getParcelableExtra("data");
 
@@ -97,6 +96,8 @@ public class PickUpADActivity extends BaseActivity implements BaseDialog.OnItemC
             etContent.setText(data.getContent());
 
         }
+        tvAddImg.setFocusableInTouchMode(true);
+        tvAddImg.setFocusable(true);
         GetEntityUserEntity getEntityUserEntity = PhoneUtil.getUserInfo(this);
 
         if (getEntityUserEntity != null) {
@@ -126,6 +127,8 @@ public class PickUpADActivity extends BaseActivity implements BaseDialog.OnItemC
                     ToastUtil.initToast(PickUpADActivity.this, "请输入广告内容");
                 } else {
                     UpdateAdvertising updateAdvertising = new UpdateAdvertising(PreferencesUtil.getToken(PickUpADActivity.this), PreferencesUtil.getUserId(PickUpADActivity.this), AdvertisingId, imgUrl, etTitle.getText().toString().trim(), etLink.getText().toString().trim(), etContent.getText().toString().trim());
+
+                    LogUtils.e("11",gson.toJson(updateAdvertising));
                     OkHttpUtil.postJson(Constant.URL.UpdateAdvertising, DesUtil.encrypt(gson.toJson(updateAdvertising)), PickUpADActivity.this);
 
                 }
@@ -180,6 +183,8 @@ public class PickUpADActivity extends BaseActivity implements BaseDialog.OnItemC
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
                 case Constant.Code.AlbumCode://打开相册

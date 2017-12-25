@@ -187,6 +187,8 @@ public class RZTAaDFragment extends BaseFragment implements OkHttpUtil.OnDataLis
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
         onRefresh();
     }
 }

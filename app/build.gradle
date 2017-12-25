@@ -7,7 +7,7 @@ android {
         config {
             keyAlias 'renzhongyunmei'
             keyPassword 'renzhongyunmei111sam111'
-            storeFile file('E:/Key/RZYM.jks')
+            storeFile file('G:/Key/RZYM.jks')
             storePassword '111sam111'
         }
     }
@@ -91,8 +91,11 @@ dependencies {
     compile 'com.android.support:support-v4:25.3.1'
     compile 'cn.carbswang.android:NumberPickerView:1.1.1'
     compile 'com.android.support:multidex:1.0.1'
-    compile 'com.github.valuesfeng:androidpicturepicker:1.0.0'
-    compile 'com.github.LuckSiege.PictureSelector:picture_library:v1.2.5'
     testCompile 'junit:junit:4.12'
     apt 'com.jakewharton:butterknife-compiler:8.4.0'
+    compile project(path: ':gallery')
+
+    compile project(':picture_library')
+
+
 }

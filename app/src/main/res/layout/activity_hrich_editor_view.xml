@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     android:orientation="vertical">
 
-    <include layout="@layout/mcc_public_title" />
+    <include layout="@layout/toolbar_right_text" />
 
     <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
@@ -20,46 +21,151 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="150dp">
+                android:layout_height="180dp"
+                android:layout_margin="20dp"
+                android:background="@drawable/shape_radius_white_15">
 
-                <ImageView
-                    android:id="@+id/iv_richeditor_bg"
+                <TextView
+                    android:id="@+id/tv_addImg"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:drawableLeft="@drawable/img_ad_add"
+                    android:drawablePadding="10dp"
+                    android:gravity="center"
+                    android:text="添加封面"
+                    android:textSize="20sp" />
+
+                <com.facebook.drawee.view.SimpleDraweeView
+                    android:id="@+id/sdv"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/default_adv" />
+                    android:layout_gravity="center_horizontal"
+                    android:visibility="gone"
+                    fresco:actualImageScaleType="fitCenter"
+                    fresco:failureImage="@drawable/img_fail"
+                    fresco:failureImageScaleType="fitCenter"
+                    fresco:placeholderImage="@drawable/img_loading"
+                    fresco:placeholderImageScaleType="fitCenter" />
 
+                <com.example.a11355.peoplescloudmedia.custom.SectorProgressBar
+                    android:id="@+id/spb"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_centerInParent="true"
+                    android:visibility="gone" />
 
                 <TextView
-                    android:id="@+id/tv_richeditor_title"
-                    android:layout_width="match_parent"
+                    android:id="@+id/tv_addMusic"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
                     android:layout_margin="10dp"
-                    android:clickable="true"
-                    android:ellipsize="end"
-                    android:maxLines="2"
-                    android:onClick="onSetTitle"
-                    android:text="点击设置标题"
-                    android:textColor="#fff"
-                    android:textSize="24sp" />
-
+                    android:background="@drawable/shape_solid_graylight_20"
+                    android:padding="5dp"
+                    android:text="添加音乐" />
 
                 <TextView
-                    android:id="@+id/tv_richeditor_changebg"
+                    android:id="@+id/tv_addedMusic"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_margin="10dp"
+                    android:background="@drawable/shape_solid_pinklight_20"
+                    android:padding="5dp"
+                    android:text="找自己的"
+                    android:visibility="gone" />
+
+                <ImageView
+                    android:visibility="gone"
+                    android:id="@+id/img_change"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
                     android:layout_alignParentRight="true"
                     android:layout_margin="10dp"
-                    android:background="@drawable/shape_change_bg"
-                    android:clickable="true"
-                    android:onClick="onChangeBG"
-                    android:paddingBottom="2dp"
-                    android:paddingLeft="6dp"
-                    android:paddingRight="6dp"
-                    android:paddingTop="2dp"
-                    android:text="更换封面" />
+                    android:src="@drawable/img_change"
+                     />
             </RelativeLayout>
+
+
+            <TextView
+                android:id="@+id/tv_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:text="标题"
+                android:textSize="18sp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="@color/colorGray" />
+
+            <LinearLayout
+                android:id="@+id/ll_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:text="正文"
+                    android:textSize="18sp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:background="@color/colorGray" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_additem_addarea"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="20dp"
+                android:background="@drawable/shape_solid_white"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <ImageView
+                    android:id="@+id/iv_additem_txt"
+                    style="@style/additem"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:src="@drawable/txt" />
+
+                <ImageView
+                    android:id="@+id/iv_additem_img"
+                    style="@style/additem"
+
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:src="@drawable/img" />
+
+                <ImageView
+                    android:id="@+id/iv_additem_video"
+                    style="@style/additem"
+
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:src="@drawable/video" />
+
+                <ImageView
+                    android:id="@+id/iv_additem_insert"
+                    style="@style/additem"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:src="@drawable/insert" />
+            </LinearLayout>
+
+
             <!--这里需要嵌套一层相对布局，在android6.0的手机上面的item才会全部显示出来-->
             <RelativeLayout
                 android:layout_width="match_parent"

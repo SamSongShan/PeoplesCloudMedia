@@ -114,6 +114,8 @@ public class RZTActivity extends BaseActivity implements ViewPager.OnPageChangeL
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
         if (requestCode == Constant.Code.PickUp) {
             if (resultCode == RESULT_OK) {
                 if (currentPage == 0) {

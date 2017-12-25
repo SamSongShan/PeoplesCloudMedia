@@ -2,7 +2,6 @@ package com.example.a11355.peoplescloudmedia.fragement;
 
 
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Environment;
@@ -22,6 +21,7 @@ import com.example.a11355.peoplescloudmedia.activity.MyCollectActivity;
 import com.example.a11355.peoplescloudmedia.activity.MyFocusActivity;
 import com.example.a11355.peoplescloudmedia.activity.MyPromotionActivity;
 import com.example.a11355.peoplescloudmedia.activity.MyQRCodeActivity;
+import com.example.a11355.peoplescloudmedia.activity.PersonalDataActivity;
 import com.example.a11355.peoplescloudmedia.activity.SettingActivity;
 import com.example.a11355.peoplescloudmedia.adapter.MineRVAdapter;
 import com.example.a11355.peoplescloudmedia.base.AbsRecyclerViewAdapter;
@@ -161,6 +161,8 @@ public class MineFragment extends BaseFragment implements View.OnClickListener, 
         switch (v.getId()) {
             case R.id.sdv_userHead: {//头像
                 srlStore.setRefreshing(false);
+                startActivityForResult(new Intent(getContext(), PersonalDataActivity.class), Constant.Code.LoginCode);
+
             }
             break;
             case R.id.tv_myQrCode: {//我的二维码
