@@ -30,6 +30,7 @@ import android.widget.Toast;
 
 import com.example.a11355.peoplescloudmedia.activity.LoginActivity;
 import com.example.a11355.peoplescloudmedia.activity.RZTActivity;
+import com.example.a11355.peoplescloudmedia.activity.ZMTZZActivity;
 import com.example.a11355.peoplescloudmedia.base.BaseActivity;
 import com.example.a11355.peoplescloudmedia.base.BaseDialog;
 import com.example.a11355.peoplescloudmedia.custom.ConfirmDialog;
@@ -171,6 +172,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         }
         switch (view.getId()) {
             case R.id.img_zmt: {  //自媒体
+
+                startActivity(new Intent(this, ZMTZZActivity.class));
 
             }
             break;
