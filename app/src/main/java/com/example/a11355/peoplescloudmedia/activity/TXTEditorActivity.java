@@ -1,10 +1,11 @@
 package com.example.a11355.peoplescloudmedia.activity;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
@@ -14,22 +15,35 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.example.a11355.peoplescloudmedia.R;
+import com.example.a11355.peoplescloudmedia.base.BaseActivity;
 import com.example.a11355.peoplescloudmedia.base.GlobalField;
 import com.example.a11355.peoplescloudmedia.custom.MyCheckBox;
 import com.example.a11355.peoplescloudmedia.custom.MyRadioButton;
 import com.example.a11355.peoplescloudmedia.model.EContent;
 import com.example.a11355.peoplescloudmedia.model.LinkContent;
 import com.example.a11355.peoplescloudmedia.util.LogUtils;
+import com.example.a11355.peoplescloudmedia.util.ToastUtil;
+import com.example.a11355.peoplescloudmedia.util.ToolBarUtil;
 
-public class TXTEditorActivity extends AppCompatActivity {
+import butterknife.BindView;
+import butterknife.OnClick;
+import jp.wasabeef.richeditor.RichEditor;
+
+public class TXTEditorActivity extends BaseActivity {
     //整形常量区
     private static final int REQUEST_CODE_EDIT_TXT = 1005;//编辑文本
     private static final int REQUEST_CODE_EDIT_LINKED = 2001;//编辑链接
     //字符常量区
     private static final String TAG = "TXTEditorActivity";
+    @BindView(R.id.toolbar_text)
+    Toolbar toolbarText;
+    @BindView(R.id.editor)
+    RichEditor mEditor;
+
 
     private boolean isBold;//是否选中了加粗
     private boolean isInter;//是否选中了斜体
+    private boolean isLine;//是否选中下划线
 
     private String style = "";
     private String content = "";
@@ -53,22 +67,77 @@ public class TXTEditorActivity extends AppCompatActivity {
     //链接对象
     private LinkContent linkContent;
 
+    private int currentIndexFontSize = 1;//当前字体大小
+    private int currentIndexCorlor = 0;//当前颜色
+    private int currentIndexAlgin = 0;//当前对齐方式
+    private String html = "";
+
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    protected int getViewResId() {
+        return R.layout.activity_txteditor;
+
+    }
+
+    @Override
+    protected void init() {
+        ToolBarUtil.initToolBar(toolbarText, "编辑文字", new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        }, "完成", new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (TextUtils.isEmpty(mEditor.getHtml())) {
+                    ToastUtil.initToast(TXTEditorActivity.this, "编辑内容不能为空");
+                } else {
+                    Intent data = new Intent();
+                    Bundle bundle = new Bundle();
+                    String content = mEditor.getHtml();
+                    eContent.setContent(content);
+                    mEditor.removeFormat();
+                    eContent.setStyle(content);
+
+                    bundle.putSerializable("eContent", eContent);
+                    data.putExtras(bundle);
+                    setResult(REQUEST_CODE_EDIT_TXT, data);
+                    finish();
+                }
+
+            }
+        });
         initView();
         setListener();
+        mEditor.setOnTextChangeListener(new RichEditor.OnTextChangeListener() {
+            @Override
+            public void onTextChange(String text) {
+                html = text;
+            }
+        });
+        mEditor.setEditorFontSize(16);
+        mEditor.setEditorFontColor(Color.BLACK);
+        //mEditor.setEditorBackgroundColor(Color.BLUE);
+        //mEditor.setBackgroundColor(Color.BLUE);
+        //mEditor.setBackgroundResource(R.drawable.bg);
+        mEditor.setPadding(10, 10, 10, 10);
+        //mEditor.setBackground("https://raw.githubusercontent.com/wasabeef/art/master/chip.jpg");
+        mEditor.setPlaceholder("不超过500字");
+
         eContent = (EContent) getIntent().getSerializableExtra("eContent");
-        echoStyle();
+
+        if (eContent!=null){
+            mEditor.setHtml(eContent.getStyle());
+        }
+        /*echoStyle();*/
     }
 
     /**
      * 初始化视图
      */
     private void initView() {
-        View view = View.inflate(this, R.layout.activity_txteditor, null);
-        setContentView(view);
-        ((TextView) view.findViewById(R.id.tv_public_title)).setText(getString(R.string.txt_edit_content));
+
+        ((TextView) findViewById(R.id.tv_public_title)).setText(getString(R.string.txt_edit_content));
         tvAddLinked = (TextView) findViewById(R.id.tv_txteditor_addlinked);
         rbFontSize = (MyRadioButton) findViewById(R.id.iv_font_option_a);
         rbFontBold = (MyRadioButton) findViewById(R.id.iv_font_option_b);
@@ -194,9 +263,15 @@ public class TXTEditorActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         LogUtils.e(TAG, "startActivityForResult: -----------" + requestCode);
         if (requestCode == REQUEST_CODE_EDIT_LINKED && resultCode == REQUEST_CODE_EDIT_LINKED) {
+
+
             linkContent = (LinkContent) data.getSerializableExtra("linkContent");
             tvAddLinked.setText(linkContent.getTitle());
             LogUtils.e(TAG, "startActivityForResult: " + linkContent);
+
+
+            mEditor.insertLink(linkContent.getLink(), linkContent.getTitle());
+
         }
     }
 
@@ -266,137 +341,181 @@ public class TXTEditorActivity extends AppCompatActivity {
 
     /**
      * 设置字体颜色选择监听
+     *
+     *
      */
     private void setTextColorListener() {
         findViewById(R.id.mrb_font_option_black).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                etContent.setTextColor(GlobalField.FontColor.COLOR_BLACK);
+                mEditor.setTextColor(GlobalField.FontColor.COLOR_BLACK);
+                currentIndexCorlor = 0;
+                //etContent.setTextColor(GlobalField.FontColor.COLOR_BLACK);
             }
         });
         findViewById(R.id.mrb_font_option_gray).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                etContent.setTextColor(GlobalField.FontColor.COLOR_GRAY);
+                mEditor.setTextColor(GlobalField.FontColor.COLOR_GRAY);
+                currentIndexCorlor = 1;
+                //etContent.setTextColor(GlobalField.FontColor.COLOR_GRAY);
             }
         });
         findViewById(R.id.mrb_font_option_blackgray).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                etContent.setTextColor(GlobalField.FontColor.COLOR_BLACKGRAY);
+                mEditor.setTextColor(GlobalField.FontColor.COLOR_BLACKGRAY);
+                currentIndexCorlor = 2;
+                //etContent.setTextColor(GlobalField.FontColor.COLOR_BLACKGRAY);
             }
         });
         findViewById(R.id.mrb_font_option_blue).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                etContent.setTextColor(GlobalField.FontColor.COLOR_BLUE);
+                mEditor.setTextColor(GlobalField.FontColor.COLOR_BLUE);
+                currentIndexCorlor = 3;
+                //etContent.setTextColor(GlobalField.FontColor.COLOR_BLUE);
             }
         });
         findViewById(R.id.mrb_font_option_green).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                etContent.setTextColor(GlobalField.FontColor.COLOR_GREEN);
+                mEditor.setTextColor(GlobalField.FontColor.COLOR_GREEN);
+                currentIndexCorlor = 4;
+                //etContent.setTextColor(GlobalField.FontColor.COLOR_GREEN);
             }
         });
         findViewById(R.id.mrb_font_option_yellow).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                etContent.setTextColor(GlobalField.FontColor.COLOR_YELLOW);
+                mEditor.setTextColor(GlobalField.FontColor.COLOR_YELLOW);
+                currentIndexCorlor = 5;
+                //  etContent.setTextColor(GlobalField.FontColor.COLOR_YELLOW);
             }
         });
         findViewById(R.id.mrb_font_option_violet).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                etContent.setTextColor(GlobalField.FontColor.COLOR_VOILET);
+                mEditor.setTextColor(GlobalField.FontColor.COLOR_VOILET);
+                currentIndexCorlor = 6;
+                //etContent.setTextColor(GlobalField.FontColor.COLOR_VOILET);
             }
         });
         findViewById(R.id.mrb_font_option_white).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                etContent.setTextColor(GlobalField.FontColor.COLOR_WHITE);
+                mEditor.setTextColor(GlobalField.FontColor.COLOR_WHITE);
+                currentIndexCorlor = 7;
+                //etContent.setTextColor(GlobalField.FontColor.COLOR_WHITE);
             }
         });
         findViewById(R.id.mrb_font_option_red).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                etContent.setTextColor(GlobalField.FontColor.COLOR_RED);
+                mEditor.setTextColor(GlobalField.FontColor.COLOR_RED);
+                currentIndexCorlor = 8;
+                //etContent.setTextColor(GlobalField.FontColor.COLOR_RED);
             }
         });
     }
 
     /**
      * 设置字体对齐监听
+     *
+     //
      */
     private void setTextAlginListener() {
         findViewById(R.id.mrb_font_option_left).setOnClickListener(new View.OnClickListener() {//居左显示
             @Override
             public void onClick(View v) {
-                etContent.setGravity(Gravity.START);
+                mEditor.setAlignLeft();
+                currentIndexAlgin = 0;
+                //etContent.setGravity(Gravity.START);
             }
         });
         findViewById(R.id.mrb_font_option_center).setOnClickListener(new View.OnClickListener() {//居中显示
             @Override
             public void onClick(View v) {
-                etContent.setGravity(Gravity.CENTER_HORIZONTAL);
+                mEditor.setAlignCenter();
+                currentIndexAlgin = 1;
+                // etContent.setGravity(Gravity.CENTER_HORIZONTAL);
             }
         });
         findViewById(R.id.mrb_font_option_right).setOnClickListener(new View.OnClickListener() {//居右显示
             @Override
             public void onClick(View v) {
-                etContent.setGravity(Gravity.RIGHT);
+                mEditor.setAlignRight();
+                currentIndexAlgin = 2;
+                //etContent.setGravity(Gravity.RIGHT);
             }
         });
     }
 
+    private void setOtherDefoult() {
+        mEditor.removeFormat();
+
+       /* rgFontSize.getChildAt(currentIndexFontSize).performClick();
+        rgFontColor.getChildAt(currentIndexCorlor).performClick();
+        rgFontAlign.getChildAt(currentIndexAlgin).performClick();
+        if (isInter) {
+            mEditor.setItalic();
+        }
+        if (isLine) {
+            mEditor.setUnderline();
+        }
+        if (isBold) {
+            mEditor.setBold();
+        }*/
+
+
+    }
     /**
      * 设置字体加粗、斜线、下划线监听
      */
-    private void setTextStyleListener() {
+    private void setTextStyleListener() {//粗体
         findViewById(R.id.mcb_font_option_border).setOnClickListener(new View.OnClickListener() {//加粗
             @Override
             public void onClick(View v) {
                 isBold = !isBold;
                 if (((MyCheckBox) v).isChecked()) {
-                    if (isInter) {
-                        etContent.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD_ITALIC));
-                    } else {
-                        etContent.setTypeface(Typeface.DEFAULT_BOLD);
-                    }
+                    mEditor.setBold();
+
                 } else {
-                    if (isInter) {
-                        etContent.setTypeface(Typeface.defaultFromStyle(Typeface.ITALIC));
-                    } else {
-                        etContent.setTypeface(Typeface.DEFAULT);
-                    }
+                    mEditor.setBold();
+                    // setOtherDefoult();
+
+
                 }
             }
-        });
+        });//斜体
         findViewById(R.id.mcb_font_option_inter).setOnClickListener(new View.OnClickListener() {//斜体
             @Override
             public void onClick(View v) {
                 isInter = !isInter;
                 if (((MyCheckBox) v).isChecked()) {
-                    if (isBold) {
-                        etContent.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD_ITALIC));
-                    } else {
-                        etContent.setTypeface(Typeface.defaultFromStyle(Typeface.ITALIC));
-                    }
+
+                    mEditor.setItalic();
+                    //etContent.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD_ITALIC));
+
                 } else {
-                    if (isBold) {
-                        etContent.setTypeface(Typeface.DEFAULT_BOLD);
-                    } else {
-                        etContent.setTypeface(Typeface.DEFAULT);
-                    }
+                    mEditor.setItalic();
+                    // setOtherDefoult();
                 }
             }
-        });
+        });//下划线
         findViewById(R.id.mcb_font_option_line).setOnClickListener(new View.OnClickListener() {//下划线
             @Override
             public void onClick(View v) {
+                isLine = !isLine;
                 if (((MyCheckBox) v).isChecked()) {
-                    etContent.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG);
+                    mEditor.setUnderline();
+
+                    // etContent.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG);
                 } else {
-                    etContent.getPaint().setFlags(0);
+                    mEditor.setUnderline();
+                    //setOtherDefoult();
+                    // mEditor.removeFormat();
+                    // etContent.getPaint().setFlags(0);
 //                    etContent.setTypeface(Typeface.DEFAULT);
                 }
                 etContent.setText(etContent.getText().toString());
@@ -405,6 +524,7 @@ public class TXTEditorActivity extends AppCompatActivity {
         });
     }
 
+
     /**
      * 设置字体大小的监听
      */
@@ -412,27 +532,28 @@ public class TXTEditorActivity extends AppCompatActivity {
         findViewById(R.id.mrb_font_option_add).setOnClickListener(new View.OnClickListener() {//字体增大
             @Override
             public void onClick(View v) {
-                if (((MyRadioButton) v).isChecked()) {
-                    etContent.setTextSize(GlobalField.FontSize.SIZE_18);
-                } else {
-                    etContent.setTextSize(GlobalField.FontSize.SIZE_16);
-                }
+
+                mEditor.setFontSize(5);
+                // etContent.setTextSize(GlobalField.FontSize.SIZE_16);
+                currentIndexFontSize = 0;
             }
         });
         findViewById(R.id.mrb_font_option_normal).setOnClickListener(new View.OnClickListener() {//正常字体
             @Override
             public void onClick(View v) {
-                etContent.setTextSize(GlobalField.FontSize.SIZE_16);
+                mEditor.setFontSize(4);
+                currentIndexFontSize = 1;
+                //etContent.setTextSize(GlobalField.FontSize.SIZE_16);
             }
         });
         findViewById(R.id.mrb_font_option_sub).setOnClickListener(new View.OnClickListener() {//小号字体
             @Override
             public void onClick(View v) {
-                if (((MyRadioButton) v).isChecked()) {
-                    etContent.setTextSize(GlobalField.FontSize.SIZE_14);
-                } else {
-                    etContent.setTextSize(GlobalField.FontSize.SIZE_16);
-                }
+
+                mEditor.setFontSize(3);
+                currentIndexFontSize = 2;
+                //etContent.setTextSize(GlobalField.FontSize.SIZE_14);
+
             }
         });
     }
@@ -546,4 +667,18 @@ public class TXTEditorActivity extends AppCompatActivity {
         }
     }
 
+
+    @OnClick({R.id.action_undo, R.id.action_redo})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.action_undo:
+
+                mEditor.undo();
+                break;
+            case R.id.action_redo:
+                mEditor.redo();
+
+                break;
+        }
+    }
 }

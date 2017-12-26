@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -68,7 +69,12 @@ public class RichEditorAdapter extends RecyclerView.Adapter<RichEditorAdapter.My
             holder.ivDown.setVisibility(View.GONE);
         }
         //设置内容
-        holder.tvDesc.setText(TextUtils.isEmpty(eContent.getContent()) ? context.getString(R.string.rich_click_add_txt): eContent.getContent());
+        if (TextUtils.isEmpty(eContent.getContent())){
+            holder.tvDesc.setText(context.getString(R.string.rich_click_add_txt));
+        }else {
+            holder.tvDesc.setText(Html.fromHtml(eContent.getContent()));
+        }
+        //holder.tvDesc.setText(TextUtils.isEmpty(eContent.getContent()) ? context.getString(R.string.rich_click_add_txt): eContent.getContent());
         /**
          * 根据类型显示item的图片
          */

@@ -6,6 +6,8 @@ import android.widget.GridView;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 
 import io.valuesfeng.picker.R;
 
@@ -47,25 +49,38 @@ public class GlideEngine implements LoadEngine {
     @Override
     public void displayImage(String path, ImageView imageView) {
         chargeInit(imageView.getContext());
-        Glide.with(imageView.getContext())
-                .load(path)
+        RequestOptions options = new RequestOptions()
                 .centerCrop()
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .error(img_loading)
                 .placeholder(img_loading)
-                .dontAnimate()
+                .dontAnimate();
+        Glide.with(imageView.getContext())
+                .load(path)
+                .apply(options)
                 .into(imageView);
     }
 
     @Override
     public void displayCameraItem(ImageView imageView) {
         chargeInit(imageView.getContext());
+        RequestOptions options = new RequestOptions()
+                .placeholder(img_camera)
+                .centerCrop()
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .error(img_camera)
+                .dontAnimate();
         Glide.with(imageView.getContext())
                 .load(img_camera)
-                .centerCrop()
+                .apply(options)
+                .into(imageView);
+
+       /* Glide.with(imageView.getContext())
+                .load(img_camera)
                 .error(img_camera)
                 .placeholder(img_camera)
                 .dontAnimate()
-                .into(imageView);
+                .into(imageView);*/
     }
 
     private void chargeInit(Context context) {

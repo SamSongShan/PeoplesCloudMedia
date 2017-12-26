@@ -5,7 +5,11 @@
     android:fitsSystemWindows="true"
     android:orientation="vertical">
 
-    <include layout="@layout/mcc_public_title" />
+    <include
+        layout="@layout/mcc_public_title"
+        android:visibility="gone" />
+
+    <include layout="@layout/toolbar_right_text" />
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -77,19 +81,19 @@
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
 
-                        <com.example.a11355.peoplescloudmedia.custom.MyCheckBox
+                        <com.example.a11355.peoplescloudmedia.custom.MyRadioButton
                             android:id="@+id/mrb_font_option_add"
                             style="@style/fontchange"
                             app:checkedResId="@drawable/font_add_selected"
                             app:unCheckedResId="@drawable/font_add" />
 
-                        <com.example.a11355.peoplescloudmedia.custom.MyCheckBox
+                        <com.example.a11355.peoplescloudmedia.custom.MyRadioButton
                             android:id="@+id/mrb_font_option_normal"
                             style="@style/fontchange"
                             app:checkedResId="@drawable/font_selected"
                             app:unCheckedResId="@drawable/font_unselected" />
 
-                        <com.example.a11355.peoplescloudmedia.custom.MyCheckBox
+                        <com.example.a11355.peoplescloudmedia.custom.MyRadioButton
                             android:id="@+id/mrb_font_option_sub"
                             style="@style/fontchange"
                             app:checkedResId="@drawable/font_sub_selected"
@@ -113,19 +117,19 @@
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
 
-                        <com.example.a11355.peoplescloudmedia.custom.MyCheckBox
+                        <com.example.a11355.peoplescloudmedia.custom.MyRadioButton
                             android:id="@+id/mrb_font_option_left"
                             style="@style/fontchange"
                             app:checkedResId="@drawable/font_left_selected"
                             app:unCheckedResId="@drawable/font_left" />
 
-                        <com.example.a11355.peoplescloudmedia.custom.MyCheckBox
+                        <com.example.a11355.peoplescloudmedia.custom.MyRadioButton
                             android:id="@+id/mrb_font_option_center"
                             style="@style/fontchange"
                             app:checkedResId="@drawable/font_center_selected"
                             app:unCheckedResId="@drawable/font_center" />
 
-                        <com.example.a11355.peoplescloudmedia.custom.MyCheckBox
+                        <com.example.a11355.peoplescloudmedia.custom.MyRadioButton
                             android:id="@+id/mrb_font_option_right"
                             style="@style/fontchange"
                             app:checkedResId="@drawable/font_right_selected"
@@ -212,6 +216,48 @@
                 android:layout_height="1.0dip"
                 android:background="#11000000" />
 
+            <RelativeLayout
+                android:padding="3dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/tv_chooseAll"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_marginLeft="3.0dip"
+                    android:layout_marginRight="10dp"
+                    android:background="@drawable/shape_solid_transgrayalph_90"
+                    android:drawablePadding="5.0dip"
+                    android:ellipsize="end"
+                    android:maxLength="6"
+                    android:paddingBottom="5.0dip"
+                    android:paddingLeft="5.0dip"
+                    android:paddingRight="10.0dip"
+                    android:paddingTop="5.0dip"
+                    android:text="全选"
+                    android:textColor="#ffffffff" />
+
+                <TextView
+                    android:id="@+id/tv_txteditor_addlinked"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginLeft="3.0dip"
+                    android:layout_marginRight="10dp"
+                    android:background="@drawable/shape_solid_transgrayalph_90"
+                    android:drawableLeft="@drawable/linked_txt"
+                    android:drawablePadding="5.0dip"
+                    android:ellipsize="end"
+                    android:maxLength="6"
+                    android:paddingBottom="5.0dip"
+                    android:paddingLeft="5.0dip"
+                    android:paddingRight="10.0dip"
+                    android:paddingTop="5.0dip"
+                    android:text="@string/txt_click_btn_add_link"
+                    android:textColor="#ffffffff" />
+            </RelativeLayout>
             <LinearLayout
                 android:id="@+id/ll_font_option_area"
                 android:layout_width="fill_parent"
@@ -221,31 +267,26 @@
                 android:paddingBottom="10.0dip"
                 android:paddingTop="10.0dip">
 
-                <TextView
-                    android:id="@+id/tv_txteditor_addlinked"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="3.0dip"
-                    android:background="@drawable/shape_linked"
-                    android:drawableLeft="@drawable/linked_txt"
-                    android:drawablePadding="5.0dip"
-                    android:ellipsize="end"
-                    android:maxLength="6"
-                    android:paddingBottom="2.0dip"
-                    android:paddingLeft="5.0dip"
-                    android:paddingRight="10.0dip"
-                    android:paddingTop="2.0dip"
-                    android:text="@string/txt_click_btn_add_link"
-                    android:textColor="#ffffffff" />
+
 
                 <RadioGroup
                     android:id="@+id/rg_font_option_b"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1.0"
-                    android:gravity="right"
                     android:orientation="horizontal">
 
+                    <com.example.a11355.peoplescloudmedia.custom.MyRadioButton
+                        android:layout_marginLeft="10dp"
+                        android:id="@+id/action_undo"
+                        style="@style/fontoption"
+                        app:checkedResId="@drawable/back_left_text"
+                        app:unCheckedResId="@drawable/back_left_text" />
+                    <com.example.a11355.peoplescloudmedia.custom.MyRadioButton
+                        android:id="@+id/action_redo"
+                        style="@style/fontoption"
+                        app:checkedResId="@drawable/back_right_text"
+                        app:unCheckedResId="@drawable/back_right_text" />
                     <com.example.a11355.peoplescloudmedia.custom.MyRadioButton
                         android:id="@+id/iv_font_option_b"
                         style="@style/fontoption"
@@ -283,17 +324,23 @@
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:orientation="vertical">
+                <jp.wasabeef.richeditor.RichEditor
+                    android:id="@+id/editor"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:maxLength="500"
+                    android:padding="5dp"
+                    android:gravity="start"
 
+                    />
                 <EditText
+                    android:visibility="gone"
                     android:id="@+id/et_txteditor_content"
                     style="?android:attr/textViewStyle"
                     android:layout_width="match_parent"
                     android:layout_height="fill_parent"
                     android:background="@drawable/shape_item_bg"
-                    android:gravity="start"
                     android:hint="@string/txt_not_out_5000words"
-                    android:maxLength="5000"
-                    android:padding="5dp"
                     android:textColorHint="#ffc6c1c1"
                     android:textSize="16.0sp" />
             </LinearLayout>

@@ -3,6 +3,7 @@ package com.luck.picture.lib;
 import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
@@ -18,6 +19,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -45,6 +47,7 @@ import com.luck.picture.lib.tools.DoubleUtils;
 import com.luck.picture.lib.tools.LightStatusBarUtils;
 import com.luck.picture.lib.tools.PictureFileUtils;
 import com.luck.picture.lib.tools.ScreenUtils;
+import com.luck.picture.lib.tools.StatusBarUtils;
 import com.luck.picture.lib.tools.StringUtils;
 import com.luck.picture.lib.widget.FolderPopWindow;
 import com.luck.picture.lib.widget.PhotoPopupWindow;
@@ -106,6 +109,7 @@ public class PictureSelectorActivity extends PictureBaseActivity implements View
             }
         }
     };
+    private ImageButton back;
 
     //EventBus 3.0 回调
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -178,6 +182,9 @@ public class PictureSelectorActivity extends PictureBaseActivity implements View
             setContentView(R.layout.picture_selector);
             initView(savedInstanceState);
         }
+
+        StatusBarUtils.setStatusBarLightMode(this, Color.WHITE);
+
     }
 
 
@@ -197,6 +204,11 @@ public class PictureSelectorActivity extends PictureBaseActivity implements View
         rl_bottom = (RelativeLayout) findViewById(R.id.rl_bottom);
         id_ll_ok = (LinearLayout) findViewById(R.id.id_ll_ok);
         tv_empty = (TextView) findViewById(R.id.tv_empty);
+
+
+        back = (ImageButton) findViewById(R.id.toolbar_back);
+        back.setOnClickListener(this);
+
         rl_bottom.setVisibility(config.selectionMode == PictureConfig.SINGLE ? View.GONE : View.VISIBLE);
         isNumComplete(numComplete);
         if (config.mimeType == PictureMimeType.ofAll()) {
@@ -457,7 +469,7 @@ public class PictureSelectorActivity extends PictureBaseActivity implements View
     @Override
     public void onClick(View v) {
         int id = v.getId();
-        if (id == R.id.picture_left_back || id == R.id.picture_right) {
+        if (id == R.id.picture_left_back || id == R.id.picture_right||id ==R.id.toolbar_back) {
             if (folderWindow.isShowing()) {
                 folderWindow.dismiss();
             } else {

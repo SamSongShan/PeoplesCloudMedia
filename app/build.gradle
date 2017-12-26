@@ -7,7 +7,7 @@ android {
         config {
             keyAlias 'renzhongyunmei'
             keyPassword 'renzhongyunmei111sam111'
-            storeFile file('G:/Key/RZYM.jks')
+            storeFile file('E:/Key/RZYM.jks')
             storePassword '111sam111'
         }
     }
@@ -93,6 +93,8 @@ dependencies {
     compile 'com.android.support:multidex:1.0.1'
     testCompile 'junit:junit:4.12'
     apt 'com.jakewharton:butterknife-compiler:8.4.0'
+    compile 'jp.wasabeef:richeditor-android:1.2.2'
+
     compile project(path: ':gallery')
 
     compile project(':picture_library')

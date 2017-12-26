@@ -9,8 +9,8 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
 
-    <string name="txt_not_out_5000words">不能超过5000字</string>
-    <string name="txt_click_btn_add_link">点击添加链接</string>
+    <string name="txt_not_out_5000words">不超过500字</string>
+    <string name="txt_click_btn_add_link">添加链接</string>
     <string name="txt_edit_content">编辑内容</string>
     <string name="link_address">链接地址</string>
     <string name="link_add">添加链接</string>
