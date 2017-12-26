@@ -1,7 +1,6 @@
-package com.example.a11355.peoplescloudmedia.util;
+package io.valuesfeng.picker.utils;
 
 
-import com.example.a11355.peoplescloudmedia.R;
 
 /**
  * 常量
@@ -15,7 +14,6 @@ public interface Constant {
         String BaseImg = "http://service.lml9.com";
         String BaseH5 = "http://net.lml9.com";
 
-        String DefaultHeadImg = "res:///" + R.drawable.head;
 
         String WeChatToken = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=" + ID.WeChat_APP_ID +
                 "&secret=" + ID.WeChat_APP_Secret + "&code=%s&grant_type=authorization_code";

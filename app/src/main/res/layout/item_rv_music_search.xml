@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/colorWhite"
+    android:orientation="horizontal">
+
+    <com.facebook.drawee.view.SimpleDraweeView
+        android:id="@+id/sdv_Head"
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_margin="10dp"
+        fresco:actualImageScaleType="fitCenter"
+        fresco:failureImage="@drawable/head"
+        fresco:failureImageScaleType="fitCenter"
+        fresco:placeholderImage="@drawable/head"
+        fresco:placeholderImageScaleType="fitCenter"
+        fresco:roundAsCircle="true"
+        fresco:viewAspectRatio="1" />
+
+    <LinearLayout
+        android:layout_gravity="center_vertical"
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_name"
+            android:ellipsize="end"
+            android:lines="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:textSize="16sp"
+            tools:text="歌名" />
+
+        <TextView
+            android:id="@+id/tv_singer"
+            android:ellipsize="end"
+            android:lines="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="歌手" />
+
+
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/img_play"
+        android:layout_gravity="center_vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:src="@drawable/selector_music" />
+
+</LinearLayout>

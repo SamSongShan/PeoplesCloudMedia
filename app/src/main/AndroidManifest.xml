@@ -186,7 +186,8 @@
         <activity android:name=".activity.PickUpADActivity" />
         <activity android:name=".activity.FindSearchActivity" />
         <activity android:name=".activity.ZMTZZActivity" />
-        <activity android:name=".activity.EditTitleActivity"></activity>
+        <activity android:name=".activity.EditTitleActivity" />
+        <activity android:name=".activity.GetMusicListActivity"></activity>
     </application>
 
 </manifest>

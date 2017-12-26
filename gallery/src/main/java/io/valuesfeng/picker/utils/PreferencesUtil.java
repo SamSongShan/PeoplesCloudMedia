@@ -1,4 +1,4 @@
-package com.example.a11355.peoplescloudmedia.util;
+package io.valuesfeng.picker.utils;
 
 import android.app.Activity;
 import android.content.Context;
@@ -6,7 +6,6 @@ import android.content.SharedPreferences;
 import android.view.View;
 
 import com.example.a11355.peoplescloudmedia.R;
-import com.example.a11355.peoplescloudmedia.model.GetEntityUserEntity;
 import com.example.a11355.peoplescloudmedia.model.UpdateUserEntity;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -136,14 +135,14 @@ public class PreferencesUtil {
 
     /**
      * 获取本地的用户信息
-     */
-    public static GetEntityUserEntity.DataBean getUserInfo(Context context) {
+     *//*
+    public static UserInfoEntity.DataEntity getUserInfo(Context context) {
         SharedPreferences userInfo = context.getSharedPreferences("userInfo", context.MODE_PRIVATE);
         String info = userInfo.getString("UserInfo", null);
         if (info != null) {
             try {
                 info = DesUtil.decrypt(info, DesUtil.LOCAL_KEY);
-                GetEntityUserEntity infoEntity = new Gson().fromJson(info, GetEntityUserEntity.class);
+                UserInfoEntity infoEntity = new Gson().fromJson(info, UserInfoEntity.class);
                 return infoEntity.getData();
             } catch (Exception e) {
                 e.printStackTrace();
@@ -151,7 +150,7 @@ public class PreferencesUtil {
             }
         }
         return null;
-    }
+    }*/
 
     public static void showShare(Context context, String title, String url, String text, String imgPath,
                                  View.OnClickListener listener) {

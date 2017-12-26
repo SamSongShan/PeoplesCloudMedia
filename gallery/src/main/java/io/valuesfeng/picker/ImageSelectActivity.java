@@ -29,7 +29,9 @@ import io.valuesfeng.picker.control.SelectedUriCollection;
 import io.valuesfeng.picker.model.Album;
 import io.valuesfeng.picker.model.SelectionSpec;
 import io.valuesfeng.picker.utils.BundleUtils;
+import io.valuesfeng.picker.utils.Constant;
 import io.valuesfeng.picker.utils.MediaStoreCompat;
+import io.valuesfeng.picker.utils.OkHttpUtil;
 import io.valuesfeng.picker.utils.StatusBarUtils;
 
 
@@ -265,6 +267,9 @@ public class ImageSelectActivity extends FragmentActivity implements AlbumCollec
             if (mCollection.isEmpty()) {
                 Toast.makeText(getApplicationContext(), "未选择图片", Toast.LENGTH_LONG).show();
             } else {
+                mCollection.asList().get(0).getEncodedPath()
+                OkHttpUtil.postStream(Constant.URL.UploadImg, SH, 0, bitmap, this, this,"1");
+
                 setResult();
             }
         } else if (i == R.id.tv_preview) { //预览

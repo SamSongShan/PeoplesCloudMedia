@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.text.TextUtils;
 import android.view.View;
@@ -24,6 +25,7 @@ import com.example.a11355.peoplescloudmedia.custom.SectorProgressBar;
 import com.example.a11355.peoplescloudmedia.model.EContent;
 import com.example.a11355.peoplescloudmedia.model.ItemType;
 import com.example.a11355.peoplescloudmedia.util.LogUtils;
+import com.example.a11355.peoplescloudmedia.util.ToolBarUtil;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.config.PictureConfig;
@@ -40,7 +42,6 @@ import io.valuesfeng.picker.engine.GlideEngine;
 import io.valuesfeng.picker.utils.PicturePickerUtils;
 
 
-
 public class HRichEditorViewActivity extends BaseActivity {
 
 
@@ -54,6 +55,8 @@ public class HRichEditorViewActivity extends BaseActivity {
     private static final int REQUEST_CODE_CHOOSE_IMGS = 1004;//多选图片
     private static final int REQUEST_CODE_EDIT_TXT = 1005;//编辑文本
     private static final int REQUEST_CODE_SET_TITLE_MY = 1006;//设置标题
+    private static final int REQUEST_CODE_SET_Music = 1007;//设置标题
+
 
     @BindView(R.id.tv_addImg)
     TextView tvAddImg;
@@ -75,6 +78,18 @@ public class HRichEditorViewActivity extends BaseActivity {
     LinearLayout llContent;
     @BindView(R.id.ll_additem_addarea)
     LinearLayout llAdditemAddarea;
+    @BindView(R.id.toolbar_text)
+    Toolbar toolbarText;
+    @BindView(R.id.iv_additem_txt)
+    ImageView ivAdditemTxt;
+    @BindView(R.id.iv_additem_img)
+    ImageView ivAdditemImg;
+    @BindView(R.id.iv_additem_video)
+    ImageView ivAdditemVideo;
+    @BindView(R.id.iv_additem_insert)
+    ImageView ivAdditemInsert;
+    @BindView(R.id.rv_itemlist)
+    RecyclerView rvItemlist;
     private float translateDistance = 0;//移动的距离
     /**
      * 字符区
@@ -96,7 +111,9 @@ public class HRichEditorViewActivity extends BaseActivity {
     private List<EContent> datas;
     private Uri bgUri;//背景图片的uri
 
-  /*  *//**
+  /*  */
+
+    /**
      * 视频回调方法
      *//*
     private PictureConfig.OnSelectResultCallback videoResultCallback = new PictureConfig.OnSelectResultCallback() {
@@ -106,8 +123,6 @@ public class HRichEditorViewActivity extends BaseActivity {
             adapter.notifyDataSetChanged();
         }
     };*/
-
-
     @Override
     protected int getViewResId() {
         return R.layout.activity_hrich_editor_view;
@@ -115,6 +130,17 @@ public class HRichEditorViewActivity extends BaseActivity {
 
     @Override
     protected void init() {
+        ToolBarUtil.initToolBar(toolbarText, "图文编辑", new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        }, "完成", new View.OnClickListener() {   //完成
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
         initView();
         //defaultChoiceIMG();
     }
@@ -448,6 +474,10 @@ public class HRichEditorViewActivity extends BaseActivity {
 
         } else if (requestCode == REQUEST_CODE_SET_TITLE_MY && resultCode == RESULT_OK) { //设置标题
             tvTitle.setText(data.getStringExtra("title"));
+        } else if (requestCode == REQUEST_CODE_SET_TITLE_MY && resultCode == RESULT_OK) {  //音乐
+            tvAddedMusic.setVisibility(View.VISIBLE);
+            tvAddMusic.setVisibility(View.GONE);
+            tvAddedMusic.setText("");
         }
     }
 
@@ -460,8 +490,11 @@ public class HRichEditorViewActivity extends BaseActivity {
             case R.id.sdv:
                 break;
             case R.id.tv_addMusic:
+
+                startActivityForResult(new Intent(this,GetMusicListActivity.class),REQUEST_CODE_SET_Music);
                 break;
             case R.id.tv_addedMusic:
+                startActivityForResult(new Intent(this,GetMusicListActivity.class),REQUEST_CODE_SET_Music);
                 break;
             case R.id.img_change:
                 onChangeBG(view);
@@ -494,6 +527,7 @@ public class HRichEditorViewActivity extends BaseActivity {
         datas.add(0, eContent);
         adapter.notifyDataSetChanged();
     }
+
 
 }
 
