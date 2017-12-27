@@ -5,7 +5,8 @@ package com.example.a11355.peoplescloudmedia.model;
  */
 
 public class ItemType {
-    public static final String IMG = "img";
-    public static final String VIDEO = "video";
-    public static final String TXT = "txt";
+    public static final String IMG = "2";
+    public static final String VIDEO = "3";
+    public static final String TXT = "1";
+    public static final String AD = "4";
 }

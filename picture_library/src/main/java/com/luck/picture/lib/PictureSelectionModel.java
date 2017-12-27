@@ -392,13 +392,14 @@ public class PictureSelectionModel {
      *
      * @param requestCode Identity of the request Activity or Fragment.
      */
-    public void forResult(int requestCode) {
+    public void forResult(int requestCode,String enCode) {
         if (!DoubleUtils.isFastDoubleClick()) {
             Activity activity = selector.getActivity();
             if (activity == null) {
                 return;
             }
             Intent intent = new Intent(activity, PictureSelectorActivity.class);
+            intent.putExtra("enCode",enCode);
             Fragment fragment = selector.getFragment();
             if (fragment != null) {
                 fragment.startActivityForResult(intent, requestCode);

@@ -95,9 +95,8 @@ public class TXTEditorActivity extends BaseActivity {
                     Intent data = new Intent();
                     Bundle bundle = new Bundle();
                     String content = mEditor.getHtml();
-                    eContent.setContent(content);
+                    eContent.setTexts(content);
                     mEditor.removeFormat();
-                    eContent.setStyle(content);
 
                     bundle.putSerializable("eContent", eContent);
                     data.putExtras(bundle);
@@ -126,9 +125,9 @@ public class TXTEditorActivity extends BaseActivity {
 
         eContent = (EContent) getIntent().getSerializableExtra("eContent");
 
-        if (eContent!=null){
+       /* if (eContent!=null){
             mEditor.setHtml(eContent.getStyle());
-        }
+        }*/
         /*echoStyle();*/
     }
 
@@ -162,21 +161,21 @@ public class TXTEditorActivity extends BaseActivity {
      * 回显样式
      */
     private void echoStyle() {
-        if (!TextUtils.isEmpty(eContent.getContent())) {
-            String content = eContent.getContent();
+        if (!TextUtils.isEmpty(eContent.getTexts())) {
+            String content = eContent.getTexts();
             if (content.contains("<br/><a href=")) {//回显需要去掉链接
                 content = content.substring(0, content.indexOf("<br/><a href="));
             }
             etContent.setText(content);
             etContent.setSelection(content.length());
         }
-        if (!TextUtils.isEmpty(eContent.getStyle())) {
+        /*if (!TextUtils.isEmpty(eContent.getStyle())) {
             String style = eContent.getStyle();
             setFontBold(style);//回显字体加粗方式
             setFontAlign(style);//回显字体对齐方式
             setFontSize(style);//回显字体大小
             setFontColor(style);//回显字体颜色
-        }
+        }*/
 
     }
 
@@ -254,8 +253,8 @@ public class TXTEditorActivity extends BaseActivity {
             style += GlobalField.FontColor.KEY_COLOR_RED;
         }
         LogUtils.e(TAG, "getData: " + content + "\n" + style);
-        eContent.setContent(content);
-        eContent.setStyle(style);
+        eContent.setTexts(content);
+
     }
 
     @Override

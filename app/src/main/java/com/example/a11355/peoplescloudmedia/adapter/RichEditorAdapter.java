@@ -23,6 +23,7 @@ import com.example.a11355.peoplescloudmedia.R;
 import com.example.a11355.peoplescloudmedia.activity.TXTEditorActivity;
 import com.example.a11355.peoplescloudmedia.model.EContent;
 import com.example.a11355.peoplescloudmedia.model.ItemType;
+import com.example.a11355.peoplescloudmedia.util.Constant;
 
 import java.util.Collections;
 import java.util.List;
@@ -39,6 +40,7 @@ import io.valuesfeng.picker.engine.GlideEngine;
 public class RichEditorAdapter extends RecyclerView.Adapter<RichEditorAdapter.MyViewHolder> implements ItemTouchHelperAdapter {
     private List<EContent> datas;
     private Activity context;
+    private String enCode;
     private static final int REQUEST_CODE_CHOOSE_ITEM_IMG = 1002;//更改item图片
     private static final int REQUEST_CODE_EDIT_TXT = 1005;//编辑文本
     private int curClickItemIndex = 0;//当前点击的item
@@ -47,9 +49,10 @@ public class RichEditorAdapter extends RecyclerView.Adapter<RichEditorAdapter.My
     private OnItemClickListener onItemClickListener;
 
 
-    public RichEditorAdapter(Activity context, List<EContent> datas) {
+    public RichEditorAdapter(Activity context, List<EContent> datas,String enCode) {
         this.datas = datas;
         this.context = context;
+        this.enCode = enCode;
     }
 
     @Override
@@ -60,6 +63,7 @@ public class RichEditorAdapter extends RecyclerView.Adapter<RichEditorAdapter.My
     @Override
     public void onBindViewHolder(final MyViewHolder holder, final int position) {
         final EContent eContent = datas.get(position);
+        holder.iv_item_video.setVisibility(View.GONE);
         /**
          * 隐藏第一个item的上箭头和最后一个item的下箭头
          */
@@ -69,18 +73,18 @@ public class RichEditorAdapter extends RecyclerView.Adapter<RichEditorAdapter.My
             holder.ivDown.setVisibility(View.GONE);
         }
         //设置内容
-        if (TextUtils.isEmpty(eContent.getContent())){
+        if (TextUtils.isEmpty(eContent.getTexts())){
             holder.tvDesc.setText(context.getString(R.string.rich_click_add_txt));
         }else {
-            holder.tvDesc.setText(Html.fromHtml(eContent.getContent()));
+            holder.tvDesc.setText(Html.fromHtml(eContent.getTexts()));
         }
         //holder.tvDesc.setText(TextUtils.isEmpty(eContent.getContent()) ? context.getString(R.string.rich_click_add_txt): eContent.getContent());
         /**
          * 根据类型显示item的图片
          */
-        switch (eContent.getType()) {
+        switch (eContent.getMediaType()) {
             case ItemType.IMG:
-                if (TextUtils.isEmpty(eContent.getUrl())) {
+                if (TextUtils.isEmpty(eContent.getFilePath())) {
                     holder.ivPic.setImageResource(R.drawable.img);
                 } else {
 
@@ -90,7 +94,7 @@ public class RichEditorAdapter extends RecyclerView.Adapter<RichEditorAdapter.My
                             .diskCacheStrategy(DiskCacheStrategy.ALL);
 
                     Glide.with(context)
-                            .load(eContent.getUrl())
+                            .load(eContent.getFilePath())
                             .transition(DrawableTransitionOptions.withCrossFade())
                             .apply(options)
                             .into(holder.ivPic);
@@ -108,7 +112,23 @@ public class RichEditorAdapter extends RecyclerView.Adapter<RichEditorAdapter.My
                 holder.ivPic.setImageResource(R.drawable.txt_item);
                 break;
             case ItemType.VIDEO:
-                holder.ivPic.setImageResource(R.drawable.video_item);
+
+                if (!TextUtils.isEmpty(eContent.getVideoImg())){
+                    RequestOptions options = new RequestOptions()
+                            .placeholder(R.color.ucrop_color_grey)
+                            .centerCrop()
+                            .diskCacheStrategy(DiskCacheStrategy.ALL);
+                    Glide.with(context)
+                            .load(Constant.URL.BaseImg+eContent.getVideoImg())
+                            .transition(DrawableTransitionOptions.withCrossFade())
+                            .apply(options)
+                            .into(holder.ivPic);
+
+                    holder.iv_item_video.setVisibility(View.VISIBLE);
+                }else {
+                    holder.ivPic.setImageResource(R.drawable.video_item);
+
+                }
                 break;
         }
         /**
@@ -117,10 +137,10 @@ public class RichEditorAdapter extends RecyclerView.Adapter<RichEditorAdapter.My
         holder.ivPic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (eContent.getType().equals(ItemType.IMG)) {
+                if (eContent.getMediaType().equals(ItemType.IMG)) {
                     curClickItemIndex = position;
                     toChoiseItemPic();
-                } else if (eContent.getType().equals(ItemType.VIDEO)) {
+                } else if (eContent.getMediaType().equals(ItemType.VIDEO)) {
                     curClickItemIndex = position;
                     toChoiseItemVideo();
                 }
@@ -241,7 +261,7 @@ public class RichEditorAdapter extends RecyclerView.Adapter<RichEditorAdapter.My
                 .count(1)
                 .enableCamera(true)
                 .setEngine(new GlideEngine())
-                .forResult(REQUEST_CODE_CHOOSE_ITEM_IMG);
+                .forResult(REQUEST_CODE_CHOOSE_ITEM_IMG,enCode);
     }
 
     /**
@@ -361,7 +381,7 @@ public class RichEditorAdapter extends RecyclerView.Adapter<RichEditorAdapter.My
      * 创建viewholder类
      */
     class MyViewHolder extends RecyclerView.ViewHolder {
-        ImageView ivPic, ivUp, ivDown, ivDrop, ivAddItem, ivAddTxt, ivAddImg, ivAddVideo;
+        ImageView ivPic, ivUp, ivDown, ivDrop, ivAddItem, ivAddTxt, ivAddImg, ivAddVideo,iv_item_video;
         TextView tvDesc;
         RelativeLayout rvItem;
         LinearLayout rvAddItemArea;
@@ -379,6 +399,7 @@ public class RichEditorAdapter extends RecyclerView.Adapter<RichEditorAdapter.My
             ivDrop = (ImageView) itemView.findViewById(R.id.iv_item_delete);
             tvDesc = (TextView) itemView.findViewById(R.id.tv_item_desc);
             rvAddItemArea = (LinearLayout) itemView.findViewById(R.id.ll_additem_addarea);
+            iv_item_video = (ImageView) itemView.findViewById(R.id.iv_item_video);
         }
     }
 }

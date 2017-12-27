@@ -205,7 +205,7 @@ public class RegisterForBusinessActivity extends BaseActivity implements OkHttpU
                         etRegIdentify.requestFocus();
                         getCodeTime = System.currentTimeMillis();
                         correctCode = mobileCode.getData().getCode();
-//                    ToastUtil.initToast(this, correctCode);
+                   ToastUtil.initToast(this, correctCode);
                     } else {
                         ToastUtil.initToast(this, mobileCode.getMessage());
                         btnIdentify.setText("发送验证码");

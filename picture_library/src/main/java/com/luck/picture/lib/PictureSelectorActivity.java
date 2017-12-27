@@ -3,6 +3,7 @@ package com.luck.picture.lib;
 import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -15,6 +16,7 @@ import android.support.v4.content.FileProvider;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SimpleItemAnimator;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.Animation;
@@ -22,10 +24,13 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.luck.picture.lib.adapter.PictureAlbumDirectoryAdapter;
 import com.luck.picture.lib.adapter.PictureImageGridAdapter;
 import com.luck.picture.lib.config.PictureConfig;
@@ -36,19 +41,26 @@ import com.luck.picture.lib.entity.EventEntity;
 import com.luck.picture.lib.entity.LocalMedia;
 import com.luck.picture.lib.entity.LocalMediaFolder;
 import com.luck.picture.lib.model.LocalMediaLoader;
+import com.luck.picture.lib.model.UploadImgEntity;
 import com.luck.picture.lib.observable.ImagesObservable;
 import com.luck.picture.lib.permissions.RxPermissions;
 import com.luck.picture.lib.rxbus2.RxBus;
 import com.luck.picture.lib.rxbus2.Subscribe;
 import com.luck.picture.lib.rxbus2.ThreadMode;
+import com.luck.picture.lib.tools.Constant;
 import com.luck.picture.lib.tools.DateUtils;
 import com.luck.picture.lib.tools.DebugUtil;
+import com.luck.picture.lib.tools.DesUtil;
 import com.luck.picture.lib.tools.DoubleUtils;
 import com.luck.picture.lib.tools.LightStatusBarUtils;
+import com.luck.picture.lib.tools.LogUtils;
+import com.luck.picture.lib.tools.OkHttpUtil;
 import com.luck.picture.lib.tools.PictureFileUtils;
 import com.luck.picture.lib.tools.ScreenUtils;
 import com.luck.picture.lib.tools.StatusBarUtils;
 import com.luck.picture.lib.tools.StringUtils;
+import com.luck.picture.lib.tools.VideoUtils;
+import com.luck.picture.lib.widget.DownloadDialogCopy;
 import com.luck.picture.lib.widget.FolderPopWindow;
 import com.luck.picture.lib.widget.PhotoPopupWindow;
 import com.yalantis.ucrop.UCrop;
@@ -66,7 +78,7 @@ import io.reactivex.disposables.Disposable;
 
 public class PictureSelectorActivity extends PictureBaseActivity implements View.OnClickListener,
         PictureAlbumDirectoryAdapter.OnItemClickListener,
-        PictureImageGridAdapter.OnPhotoSelectChangedListener, PhotoPopupWindow.OnItemClickListener {
+        PictureImageGridAdapter.OnPhotoSelectChangedListener, PhotoPopupWindow.OnItemClickListener, OkHttpUtil.OnProgressMultiListener, OkHttpUtil.OnDataListener {
     private final static String TAG = PictureSelectorActivity.class.getSimpleName();
     private static final int SHOW_DIALOG = 0;
     private static final int DISMISS_DIALOG = 1;
@@ -110,6 +122,11 @@ public class PictureSelectorActivity extends PictureBaseActivity implements View
         }
     };
     private ImageButton back;
+    private String enCode;
+    private DownloadDialogCopy downloadDialog1;
+    private TextView btnInstall;
+    private UploadImgEntity Video;
+    private String videoUrl;
 
     //EventBus 3.0 回调
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -145,6 +162,8 @@ public class PictureSelectorActivity extends PictureBaseActivity implements View
         if (!RxBus.getDefault().isRegistered(this)) {
             RxBus.getDefault().register(this);
         }
+
+
         rxPermissions = new RxPermissions(this);
         mHandler.sendEmptyMessage(STATUSBAR);
         if (config.camera) {
@@ -182,7 +201,7 @@ public class PictureSelectorActivity extends PictureBaseActivity implements View
             setContentView(R.layout.picture_selector);
             initView(savedInstanceState);
         }
-
+        enCode = getIntent().getStringExtra("enCode");
         StatusBarUtils.setStatusBarLightMode(this, Color.WHITE);
 
     }
@@ -528,7 +547,17 @@ public class PictureSelectorActivity extends PictureBaseActivity implements View
                 // 图片才压缩，视频不管
                 compressImage(images);
             } else {
-                onResult(images);
+
+                downloadDialog1 = DownloadDialogCopy.newInstance("视频上传中...", false, this);
+                downloadDialog1.show(getFragmentManager());
+
+
+                File file = new File(images.get(0).getPath());
+                OkHttpUtil.postStream(Constant.URL.UploadVideo, enCode, 1, file, this, this, "file");
+
+
+
+
             }
         }
     }
@@ -636,6 +665,85 @@ public class PictureSelectorActivity extends PictureBaseActivity implements View
         }
     }
 
+    @Override
+    public void onProgressMulti(int index, final int rate) {
+        ProgressBar progressBar = downloadDialog1.getProgressBar();
+        btnInstall = downloadDialog1.getBtnInstall();
+        if (progressBar != null) {
+            progressBar.setProgress(rate);
+        }
+        if (btnInstall != null) {
+
+
+            this.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    btnInstall.setVisibility(View.VISIBLE);
+                    btnInstall.setText(rate + "%");
+
+                }
+            });
+        }
+    }
+
+    @Override
+    public void onResponse(String url, String json) {
+        if (!TextUtils.isEmpty(json)) {
+            String decrypt = DesUtil.decrypt(json);
+            //上传视频文件
+            switch (url) {
+                case Constant.URL.UploadVideo: {
+                    dismissLoading();
+                    LogUtils.e("UploadVideo", decrypt);
+                    Video = new Gson().fromJson(decrypt, UploadImgEntity.class);
+                    Toast.makeText(this, Video.getMessage(), Toast.LENGTH_LONG).show();
+
+                    if (Video.getCode() == Constant.Integers.SUC) {
+                        downloadDialog1 = DownloadDialogCopy.newInstance("缩略图上传中...", false, this);
+                        downloadDialog1.show(getFragmentManager());
+                        videoUrl = Video.getData();
+                        Bitmap bitmapVideo = VideoUtils.getVideoThumbnail(images.get(0).getPath());
+                        OkHttpUtil.postStream(Constant.URL.UploadImg, enCode, 0, bitmapVideo, this, this);
+                    } else {
+                        Toast.makeText(this, Video.getMessage(), Toast.LENGTH_LONG).show();
+
+                    }
+                }
+                break;
+                case Constant.URL.UploadImg: {
+                    dismissLoading();
+                    LogUtils.e("UploadImg", decrypt);
+                    UploadImgEntity img = new Gson().fromJson(decrypt, UploadImgEntity.class);
+                    Toast.makeText(this, img.getMessage(), Toast.LENGTH_LONG).show();
+                    if (img.getCode() == Constant.Integers.SUC) {
+                       /* File file = new File(images.get(0).getPath());
+                        OkHttpUtil.postStream(Constant.URL.UploadVideo, enCode, 1, file, this, this, "file");*/
+
+                        onResult(images, videoUrl, img.getData());
+
+                    } else {
+                    }
+
+                }
+                break;
+            }
+
+        }
+    }
+
+    @Override
+    public void onFailure(String url, String error) {
+
+    }
+
+    private void dismissLoading() {
+
+        if (downloadDialog1 != null) {
+            downloadDialog1.dismiss();
+
+        }
+
+    }
     /**
      * 播放音频点击事件
      */
@@ -1098,4 +1206,6 @@ public class PictureSelectorActivity extends PictureBaseActivity implements View
                 break;
         }
     }
+
+
 }

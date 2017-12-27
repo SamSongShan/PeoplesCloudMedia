@@ -321,7 +321,8 @@ public class OkHttpUtil {
 
             @Override
             public long contentLength() throws IOException {
-                return file.length();
+                long length = file.length();
+                return length;
             }
 
             @Override
@@ -366,6 +367,10 @@ public class OkHttpUtil {
                 .build();
         Request.Builder builder = request.newBuilder();
         builder.tag(tag);
+
+        if (okHttpClient == null) {
+            initOkHttp();
+        }
         Call call = okHttpClient.newCall(request);
         OkHttpUtil.callMap.put(tag,call);
         return call;
@@ -404,8 +409,41 @@ public class OkHttpUtil {
                 .url(url)
                 .post(build)
                 .build();
-        return okHttpClient.newCall(request);
-    }
+        if (okHttpClient == null) {
+            initOkHttp();
+        }
+        Call call = okHttpClient.newCall(request);
+        return call;
+    }  /**
+    /* * 创建Call对象
+     *//*
+    private static Call createCall(String encode, String url, RequestBody requestBody,String tag) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss", Locale.getDefault());
+        String fileName = encode + "_" + sdf.format(new Date()) + ".jpg";
+        MultipartBody build = new MultipartBody.Builder()
+                .setType(MultipartBody.FORM)
+                .addFormDataPart("EnCode", encode)
+                .addPart(Headers.of("Content-Disposition", "form-data; name=\"" + encode +
+                        "\"; fileName=\"" + fileName + "\""), requestBody)
+                .build();
+        Request request = new Request.Builder()
+                .url(url)
+                .post(build)
+                .build();
+
+        Request.Builder builder = request.newBuilder();
+        builder.tag(tag);
+
+        if (okHttpClient == null) {
+            initOkHttp();
+        }
+        Call call = okHttpClient.newCall(request);
+        OkHttpUtil.callMap.put(tag,call);
+        return call;
+
+       // return okHttpClient.newCall(request);
+    }*/
+
 
     /**
      * 结果回调

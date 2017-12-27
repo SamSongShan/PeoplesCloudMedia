@@ -156,7 +156,7 @@ public class ForgotPasswordActivity extends BaseActivity implements OkHttpUtil.O
                 ToastUtil.initToast(this, "请输入正确的手机号码");
             } else {
                 btnIdentify.setSelected(false);
-                String jsonString = gson.toJson(new GetMobileCode(mobile, Constant.Strings.GetMobileCodeType[0]));
+                String jsonString = gson.toJson(new GetMobileCode(mobile, Constant.Strings.GetMobileCodeType[1]));
                 OkHttpUtil.postJson(Constant.URL.GetMobileCode, DesUtil.encrypt(jsonString), this);
                 //设置XX秒后重试
 
@@ -197,7 +197,7 @@ public class ForgotPasswordActivity extends BaseActivity implements OkHttpUtil.O
                         etRegIdentify.requestFocus();
                         getCodeTime = System.currentTimeMillis();
                         correctCode = mobileCode.getData().getCode();
-//                    ToastUtil.initToast(this, correctCode);
+                    ToastUtil.initToast(this, correctCode);
                     } else {
                         ToastUtil.initToast(this, mobileCode.getMessage());
 

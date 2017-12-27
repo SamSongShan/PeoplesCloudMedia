@@ -14,6 +14,9 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+import com.luck.picture.lib.model.GetEntityUserEntity;
+
 import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
@@ -465,10 +468,10 @@ public class PhoneUtil {
         }
         return null;
     }*/
+/*
+    *
+     * 获取本地的用户信息*/
 
- /* *//*  *//**//**
-     * 获取本地的用户信息
-     *//*
     public static GetEntityUserEntity getUserInfo(Context context) {
         SharedPreferences userInfo = context.getSharedPreferences("userInfo", context.MODE_PRIVATE);
         String info = userInfo.getString("UserInfo", null);
@@ -483,7 +486,7 @@ public class PhoneUtil {
             }
         }
         return null;
-    }*/
+    }
 
 
     /**

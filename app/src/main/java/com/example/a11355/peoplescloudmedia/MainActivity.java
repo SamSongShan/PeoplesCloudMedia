@@ -709,7 +709,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                         etRegIdentify.requestFocus();
                         getCodeTime = System.currentTimeMillis();
                         correctCode = mobileCode.getData().getCode();
-//                    ToastUtil.initToast(this, correctCode);
+                    ToastUtil.initToast(this, correctCode);
                     } else {
                         ToastUtil.initToast(this, mobileCode.getMessage());
 

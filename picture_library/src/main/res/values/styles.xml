@@ -122,5 +122,11 @@
         <item name="contentInsetStart">0dp</item>
         <item name="contentInsetEnd">0dp</item>
     </style>
-
+    <!-- 下载对话框样式 -->
+    <style name="ProgressBarDownload" parent="@android:style/Widget.ProgressBar.Horizontal">
+        <item name="android:maxHeight">20dp</item>
+        <item name="android:minHeight">12dp</item>
+        <item name="android:indeterminateOnly">false</item>
+        <item name="android:indeterminateDrawable">@android:drawable/progress_indeterminate_horizontal</item>
+    </style>
 </resources>

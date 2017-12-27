@@ -21,11 +21,6 @@ import android.net.Uri;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 
-
-import com.bumptech.glide.Glide;
-import com.squareup.picasso.Picasso;
-
-import java.io.Serializable;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
@@ -169,7 +164,7 @@ public final class Picker {
      *
      * @param requestCode identity of the requester activity.
      */
-    public void forResult(int requestCode) {
+    public void forResult(int requestCode,String enCode) {
         if (engine == null)
             throw new ExceptionInInitializerError(LoadEngine.INITIALIZE_ENGINE_ERROR);
 
@@ -181,6 +176,8 @@ public final class Picker {
         mSelectionSpec.setEngine(engine);
         Intent intent = new Intent(activity, ImageSelectActivity.class);
         intent.putExtra(ImageSelectActivity.EXTRA_SELECTION_SPEC, mSelectionSpec);
+
+        intent.putExtra("enCode", enCode);
 //        intent.putExtra(ImageSelectActivity.EXTRA_ENGINE, (Serializable) engine);
         intent.putParcelableArrayListExtra(ImageSelectActivity.EXTRA_RESUME_LIST, (ArrayList<? extends android.os.Parcelable>) mResumeList);
 

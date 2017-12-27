@@ -396,6 +396,17 @@ public class PictureBaseActivity extends FragmentActivity {
      *
      * @param images
      */
+    protected void onResult(List<LocalMedia> images,String VideoUrl,String photoUrl) {
+        dismissCompressDialog();
+        if (config.camera
+                && config.selectionMode == PictureConfig.MULTIPLE
+                && selectionMedias != null) {
+            images.addAll(images.size() > 0 ? images.size() - 1 : 0, selectionMedias);
+        }
+        Intent intent = PictureSelector.putIntentResult(images,VideoUrl,photoUrl);
+        setResult(RESULT_OK, intent);
+        closeActivity();
+    }
     protected void onResult(List<LocalMedia> images) {
         dismissCompressDialog();
         if (config.camera
@@ -407,7 +418,6 @@ public class PictureBaseActivity extends FragmentActivity {
         setResult(RESULT_OK, intent);
         closeActivity();
     }
-
     /**
      * Close Activity
      */

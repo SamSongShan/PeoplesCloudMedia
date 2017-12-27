@@ -29,9 +29,7 @@ import io.valuesfeng.picker.control.SelectedUriCollection;
 import io.valuesfeng.picker.model.Album;
 import io.valuesfeng.picker.model.SelectionSpec;
 import io.valuesfeng.picker.utils.BundleUtils;
-import io.valuesfeng.picker.utils.Constant;
 import io.valuesfeng.picker.utils.MediaStoreCompat;
-import io.valuesfeng.picker.utils.OkHttpUtil;
 import io.valuesfeng.picker.utils.StatusBarUtils;
 
 
@@ -62,13 +60,14 @@ public class ImageSelectActivity extends FragmentActivity implements AlbumCollec
     private TextView tvNum;
     private TextView tvCommit;
     private TextView tvPreview;
+    private String enCode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_image_select);
         StatusBarUtils.setStatusBarLightMode(this, Color.WHITE);
-
+        enCode = getIntent().getStringExtra("enCode");
 
         tvNum = (TextView) findViewById(R.id.tv_num);
         tvCommit = (TextView) findViewById(R.id.tv_commit);
@@ -176,7 +175,7 @@ public class ImageSelectActivity extends FragmentActivity implements AlbumCollec
                 mCollection.add(captured);
                 mMediaStoreCompat.cleanUp(mCapturePhotoUriHolder);
                 if (mCollection.isSingleChoose()) {   //选择一张返回
-                    // setResult();
+                     setResult();
                 }
             }
         }
@@ -267,10 +266,13 @@ public class ImageSelectActivity extends FragmentActivity implements AlbumCollec
             if (mCollection.isEmpty()) {
                 Toast.makeText(getApplicationContext(), "未选择图片", Toast.LENGTH_LONG).show();
             } else {
-                mCollection.asList().get(0).getEncodedPath()
-                OkHttpUtil.postStream(Constant.URL.UploadImg, SH, 0, bitmap, this, this,"1");
 
-                setResult();
+
+             /*   mCollection.asList().get(0).getEncodedPath()
+                OkHttpUtil.postStream(Constant.URL.UploadImg, SH, 0, bitmap, this, this,"1");*/
+
+               /* OkHttpUtil.postStream(Constant.URL.UploadImg, enCode, 0, bitmapVideo, this, this);
+                setResult();*/
             }
         } else if (i == R.id.tv_preview) { //预览
         }

@@ -101,7 +101,17 @@ public final class PictureSelector {
     public static Intent putIntentResult(List<LocalMedia> data) {
         return new Intent().putExtra(PictureConfig.EXTRA_RESULT_SELECTION, (Serializable) data);
     }
-
+    /**
+     * @param data
+     * @return Put image Intent Data
+     */
+    public static Intent putIntentResult(List<LocalMedia> data,String VideoUrl,String photoUrl) {
+        Intent intent = new Intent();
+        intent.putExtra(PictureConfig.EXTRA_RESULT_SELECTION, (Serializable) data);
+        intent.putExtra("VideoUrl",VideoUrl);
+        intent.putExtra("photoUrl",photoUrl);
+        return intent;
+    }
     /**
      * @param bundle
      * @return get Selector  LocalMedia

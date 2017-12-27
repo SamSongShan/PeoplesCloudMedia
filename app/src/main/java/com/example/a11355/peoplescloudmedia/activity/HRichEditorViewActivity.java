@@ -23,10 +23,19 @@ import com.example.a11355.peoplescloudmedia.base.BaseActivity;
 import com.example.a11355.peoplescloudmedia.base.EditorResultBean;
 import com.example.a11355.peoplescloudmedia.custom.SectorProgressBar;
 import com.example.a11355.peoplescloudmedia.model.EContent;
+import com.example.a11355.peoplescloudmedia.model.GetEntityUser;
+import com.example.a11355.peoplescloudmedia.model.GetEntityUserEntity;
 import com.example.a11355.peoplescloudmedia.model.ItemType;
+import com.example.a11355.peoplescloudmedia.util.Constant;
+import com.example.a11355.peoplescloudmedia.util.DesUtil;
 import com.example.a11355.peoplescloudmedia.util.LogUtils;
+import com.example.a11355.peoplescloudmedia.util.OkHttpUtil;
+import com.example.a11355.peoplescloudmedia.util.PreferencesUtil;
+import com.example.a11355.peoplescloudmedia.util.ToastUtil;
 import com.example.a11355.peoplescloudmedia.util.ToolBarUtil;
 import com.facebook.drawee.view.SimpleDraweeView;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.config.PictureConfig;
 import com.luck.picture.lib.config.PictureMimeType;
@@ -41,8 +50,10 @@ import io.valuesfeng.picker.Picker;
 import io.valuesfeng.picker.engine.GlideEngine;
 import io.valuesfeng.picker.utils.PicturePickerUtils;
 
+import static com.mob.MobSDK.getContext;
 
-public class HRichEditorViewActivity extends BaseActivity {
+
+public class HRichEditorViewActivity extends BaseActivity implements OkHttpUtil.OnDataListener {
 
 
     /**
@@ -105,11 +116,14 @@ public class HRichEditorViewActivity extends BaseActivity {
     private TextView tvArtTitle;
     private ImageView ivArtBGImg;
 
+    private Gson gson = new GsonBuilder().create();
+
     /**
      * 数据区
      */
     private List<EContent> datas;
     private Uri bgUri;//背景图片的uri
+    private String enCode="";
 
   /*  */
 
@@ -133,7 +147,7 @@ public class HRichEditorViewActivity extends BaseActivity {
         ToolBarUtil.initToolBar(toolbarText, "图文编辑", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                onBackPressed();
             }
         }, "完成", new View.OnClickListener() {   //完成
             @Override
@@ -141,6 +155,19 @@ public class HRichEditorViewActivity extends BaseActivity {
 
             }
         });
+        GetEntityUserEntity.DataBean userInfo = PreferencesUtil.getUserInfo(this);
+        if (userInfo == null) {
+            String jsonUser = gson.toJson(new GetEntityUser(PreferencesUtil.getToken(this), PreferencesUtil.getUserId(this)));
+            OkHttpUtil.postJson(Constant.URL.GetEntityUser, DesUtil.encrypt(jsonUser), this);
+        } else {
+            enCode = userInfo.getEnCode();
+
+        }
+
+
+
+
+
         initView();
         //defaultChoiceIMG();
     }
@@ -148,11 +175,8 @@ public class HRichEditorViewActivity extends BaseActivity {
     public void onSubmit(View view) {
         EditorResultBean resultBean = new EditorResultBean();
         resultBean.setContents(datas);
-        String html = "";
-        for (EContent data : datas) {
-            html += data.getHtml();
-        }
-        LogUtils.e("mylog", html);
+
+
         Intent intent = getIntent();
         intent.putExtra("contents", resultBean);
         this.setResult(Activity.RESULT_OK, intent);
@@ -167,7 +191,7 @@ public class HRichEditorViewActivity extends BaseActivity {
                 .count(1)
                 .enableCamera(true)
                 .setEngine(new GlideEngine())
-                .forResult(REQUEST_CODE_CHOOSE_IMGS);
+                .forResult(REQUEST_CODE_CHOOSE_IMGS,enCode);
     }
 
 
@@ -192,7 +216,7 @@ public class HRichEditorViewActivity extends BaseActivity {
         datas = new ArrayList<>();
 
 //        rvItemList.setHasFixedSize(true);//最重要的这句，不然recycleview不显示
-        adapter = new RichEditorAdapter(this, datas);
+        adapter = new RichEditorAdapter(this, datas,enCode);
         rvItemList.setAdapter(adapter);
 
         adapter.setOnDownUpChangeListener(new RichEditorAdapter.OnDownUpChangeListener() {
@@ -223,13 +247,13 @@ public class HRichEditorViewActivity extends BaseActivity {
                 EContent eContent = new EContent();
                 switch (itemType) {
                     case ItemType.IMG:
-                        eContent.setType(ItemType.IMG);
+                        eContent.setMediaType(ItemType.IMG);
                         break;
                     case ItemType.VIDEO:
-                        eContent.setType(ItemType.VIDEO);
+                        eContent.setMediaType(ItemType.VIDEO);
                         break;
                     case ItemType.TXT:
-                        eContent.setType(ItemType.TXT);
+                        eContent.setMediaType(ItemType.TXT);
                         break;
                 }
                 datas.add(index, eContent);
@@ -268,7 +292,7 @@ public class HRichEditorViewActivity extends BaseActivity {
 
         if (datas.size() == 0) {
             llAdditemAddarea.setVisibility(View.VISIBLE);
-
+            llContent.setVisibility(View.VISIBLE);
         }
     }
 
@@ -343,7 +367,7 @@ public class HRichEditorViewActivity extends BaseActivity {
                 .count(1)
                 .enableCamera(true)
                 .setEngine(new GlideEngine())
-                .forResult(REQUEST_CODE_CHOOSE_BG);
+                .forResult(REQUEST_CODE_CHOOSE_BG,enCode);
     }
 
     /**
@@ -405,7 +429,7 @@ public class HRichEditorViewActivity extends BaseActivity {
                 //.videoQuality()// 视频录制质量 0 or 1
                 //.videoSecond()//显示多少秒以内的视频or音频也可适用
                 //.recordVideoSecond()//录制视频秒数 默认60s
-                .forResult(PictureConfig.CHOOSE_REQUEST);//结果回调onActivityResult code
+                .forResult(PictureConfig.CHOOSE_REQUEST, enCode);//结果回调onActivityResult code
     }
 
     public void onBack(View view) {
@@ -449,12 +473,11 @@ public class HRichEditorViewActivity extends BaseActivity {
                     .into(sdv);*/
 
         } else if (requestCode == REQUEST_CODE_CHOOSE_ITEM_IMG && resultCode == RESULT_OK) {//选择item的图片
-            datas.get(adapter.getCurClickItemIndex()).setUrl(PicturePickerUtils.obtainResult(data).get(0).toString());
+            datas.get(adapter.getCurClickItemIndex()).setFilePath(PicturePickerUtils.obtainResult(data).get(0).toString());
             adapter.notifyDataSetChanged();
         } else if (requestCode == REQUEST_CODE_EDIT_TXT && resultCode == REQUEST_CODE_EDIT_TXT) {//编辑文字
             EContent eContent = (EContent) data.getSerializableExtra("eContent");
-            datas.get(adapter.getCurClickItemIndex()).setContent(eContent.getContent());
-            datas.get(adapter.getCurClickItemIndex()).setStyle(eContent.getStyle());
+            datas.get(adapter.getCurClickItemIndex()).setTexts(eContent.getTexts());
             adapter.notifyDataSetChanged();
         } else if (requestCode == REQUEST_CODE_CHOOSE_IMGS && resultCode == RESULT_OK) {//第一次进入页面需要选择图片
             llAdditemAddarea.setVisibility(View.GONE);
@@ -465,8 +488,8 @@ public class HRichEditorViewActivity extends BaseActivity {
                 EContent eContent;
                 for (Uri uri : uris) {
                     eContent = new EContent();
-                    eContent.setUrl(uri.toString());
-                    eContent.setType(ItemType.IMG);
+                    eContent.setFilePath(uri.toString());
+                    eContent.setMediaBlockId(ItemType.IMG);
                     datas.add(eContent);
                 }
                 adapter.notifyDataSetChanged();
@@ -478,11 +501,23 @@ public class HRichEditorViewActivity extends BaseActivity {
             tvAddedMusic.setVisibility(View.VISIBLE);
             tvAddMusic.setVisibility(View.GONE);
             tvAddedMusic.setText("");
+        } else if (requestCode == PictureConfig.CHOOSE_REQUEST && resultCode == RESULT_OK) {//视频
+
+
+            datas.get(adapter.getCurClickItemIndex()).setFilePath(data.getStringExtra("VideoUrl"));
+            datas.get(adapter.getCurClickItemIndex()).setVideoImg(data.getStringExtra("photoUrl"));
+            adapter.notifyDataSetChanged();
+
         }
     }
 
+
     @OnClick({R.id.tv_addImg, R.id.sdv, R.id.tv_addMusic, R.id.tv_addedMusic, R.id.img_change, R.id.tv_title, R.id.tv_content, R.id.iv_additem_txt, R.id.iv_additem_img, R.id.iv_additem_video, R.id.iv_additem_insert})
     public void onViewClicked(View view) {
+        if (TextUtils.isEmpty(enCode)) {
+            ToastUtil.initToast(this, "数据加载中");
+            return;
+        }
         switch (view.getId()) {
             case R.id.tv_addImg:
                 onChangeBG(view);
@@ -507,27 +542,83 @@ public class HRichEditorViewActivity extends BaseActivity {
                 break;
             case R.id.iv_additem_txt:
                 addTextType();
+                llAdditemAddarea.setVisibility(View.GONE);
+                llContent.setVisibility(View.GONE);
                 break;
             case R.id.iv_additem_img:
-                defaultChoiceIMG();
+                addImgType();
+                llAdditemAddarea.setVisibility(View.GONE);
+                llContent.setVisibility(View.GONE);
+                //defaultChoiceIMG();
                 break;
             case R.id.iv_additem_video:
-                getVideo();
+                addVideoType();
+                llAdditemAddarea.setVisibility(View.GONE);
+                llContent.setVisibility(View.GONE);
                 break;
             case R.id.iv_additem_insert:
                 break;
         }
     }
 
+    //新建一个IMG类型的东西
+    private void addImgType() {
+        EContent eContent = new EContent();
+
+        eContent.setMediaType(ItemType.IMG);
+        datas.add(0, eContent);
+        adapter.notifyDataSetChanged();
+    }
+
+    //新建一个VIDEO类型的东西
+    private void addVideoType() {
+        EContent eContent = new EContent();
+
+        eContent.setMediaType(ItemType.VIDEO);
+        datas.add(0, eContent);
+        adapter.notifyDataSetChanged();
+    }
     //新建一个text类型的东西
     private void addTextType() {
         EContent eContent = new EContent();
 
-        eContent.setType(ItemType.TXT);
+        eContent.setMediaType(ItemType.TXT);
         datas.add(0, eContent);
         adapter.notifyDataSetChanged();
     }
 
 
+    @Override
+    public void onResponse(String url, String json) {
+        if (!TextUtils.isEmpty(json)) {
+            String decrypt = DesUtil.decrypt(json);
+            switch (url) {
+
+                case Constant.URL.GetEntityUser: { //个人信息
+                    LogUtils.e("loge", "GetEntityUser: " + decrypt);
+                    GetEntityUserEntity getEntityUserEntity = gson.fromJson(decrypt, GetEntityUserEntity.class);
+
+                    if (getEntityUserEntity.getCode() == Constant.Integers.SUC) { //成功
+                        PreferencesUtil.saveUserInfo(this, DesUtil.encrypt(decrypt, DesUtil.LOCAL_KEY));
+                        enCode = getEntityUserEntity.getData().getEnCode();
+
+                    } else if (getEntityUserEntity.getCode() == Constant.Integers.TOKEN_OUT_OF) { //token过期
+                        ToastUtil.initToast(getContext(), getEntityUserEntity.getMessage());
+                        startActivityForResult(new Intent(getContext(), LoginActivity.class), Constant.Code.LoginCode);
+
+                    } else {//其他
+                        ToastUtil.initToast(getContext(), getEntityUserEntity.getMessage());
+                    }
+
+                }
+                break;
+            }
+        }
+    }
+
+    @Override
+    public void onFailure(String url, String error) {
+
+    }
 }
 

@@ -1,7 +1,5 @@
 package com.example.a11355.peoplescloudmedia.model;
 
-import android.text.TextUtils;
-
 import java.io.Serializable;
 
 /**
@@ -10,93 +8,85 @@ import java.io.Serializable;
  */
 
 public class EContent implements Serializable {
-    private String url;
-    private String content;
-    private String style;
-    private String type;
+    /*
+    * 媒体块实体列表(MediaBlockId媒体主键-新增传default,
+    * FilePath媒体文件路径,
+    * Texts文字,
+    * MediaType媒体类型(1-文本文字，2-图片文字，3-视频文字，4-广告),
+     * VideoImg:视频缩略图,
+     * SortCode排序码默认从1开始,
+     * isDelete是否删除(默认传0，删除传1))
+    * */
+    private String MediaBlockId;
+    private String FilePath;
+    private String Texts;
+    private String MediaType;
+    private String VideoImg;
+    private String SortCode;
+    private String isDelete;
+
+
+
 
     public EContent() {
     }
 
-    public EContent(String url, String type) {
-        this.url = url;
-        this.type = type;
+    public String getMediaBlockId() {
+        return MediaBlockId;
     }
 
-    public EContent(String url, String content, String style, String type) {
-        this.url = url;
-        this.content = content;
-        this.style = style;
-        this.type = type;
+    public void setMediaBlockId(String mediaBlockId) {
+        MediaBlockId = mediaBlockId;
     }
 
-    public String getType() {
-        return type;
+    public String getFilePath() {
+        return FilePath;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setFilePath(String filePath) {
+        FilePath = filePath;
     }
 
-    public String getUrl() {
-        return url;
+    public String getTexts() {
+        return Texts;
     }
 
-    public void setUrl(String url) {
-        this.url = url;
+    public void setTexts(String texts) {
+        Texts = texts;
     }
 
-    public String getContent() {
-        return content;
+    public String getMediaType() {
+        return MediaType;
     }
 
-    public void setContent(String content) {
-        this.content = content;
+    public void setMediaType(String mediaType) {
+        MediaType = mediaType;
     }
 
-    public String getStyle() {
-        return style;
+    public String getVideoImg() {
+        return VideoImg;
     }
 
-    public void setStyle(String style) {
-        this.style = style;
+    public void setVideoImg(String videoImg) {
+        VideoImg = videoImg;
+    }
+
+    public String getSortCode() {
+        return SortCode;
+    }
+
+    public void setSortCode(String sortCode) {
+        SortCode = sortCode;
+    }
+
+    public String getIsDelete() {
+        return isDelete;
+    }
+
+    public void setIsDelete(String isDelete) {
+        this.isDelete = isDelete;
     }
 
 
-    @Override
-    public String toString() {
-        return "EContent{" +
-                "url='" + url + '\'' +
-                ", content='" + content + '\'' +
-                ", style='" + style + '\'' +
-                ", type='" + type + '\'' +
-                '}';
-    }
 
-    public String getHtml() {
-        String html = "";
-        switch (type) {
-            case ItemType.IMG:
-                if (!TextUtils.isEmpty(content)) {
-                    html = "<div style='" + style + "' >" + content + "</div><img src='" + url + "' />";
-                } else {
-                    html = "<img src='" + url + "' />";
-                }
-                html += "<br/>";
-                break;
-            case ItemType.VIDEO:
-                if (!TextUtils.isEmpty(content)) {
-                    html = "<div style='" + style + "' >" + content + "</div><video src='" + url + "' />";
-                } else {
-                    html = "<video src='" + url + "' />";
-                }
-                html += "<br/>";
-                break;
-            case ItemType.TXT:
-                html = "<div style='" + style + "' >" + content + "</div>";
-                html += "<br/>";
-                break;
-        }
-        return html;
-    }
 }
