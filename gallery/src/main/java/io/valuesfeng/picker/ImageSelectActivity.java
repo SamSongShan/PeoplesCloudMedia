@@ -2,6 +2,7 @@ package io.valuesfeng.picker;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
@@ -9,6 +10,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Parcelable;
 import android.support.v4.app.FragmentActivity;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -17,9 +19,12 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 
@@ -28,12 +33,19 @@ import io.valuesfeng.picker.control.PictureCollection;
 import io.valuesfeng.picker.control.SelectedUriCollection;
 import io.valuesfeng.picker.model.Album;
 import io.valuesfeng.picker.model.SelectionSpec;
+import io.valuesfeng.picker.model.UploadImgEntity;
+import io.valuesfeng.picker.utils.BitMapUtil;
 import io.valuesfeng.picker.utils.BundleUtils;
+import io.valuesfeng.picker.utils.Constant;
+import io.valuesfeng.picker.utils.DesUtil;
+import io.valuesfeng.picker.utils.LogUtils;
 import io.valuesfeng.picker.utils.MediaStoreCompat;
+import io.valuesfeng.picker.utils.OkHttpUtil;
 import io.valuesfeng.picker.utils.StatusBarUtils;
+import io.valuesfeng.picker.widget.DownloadDialogCopy;
 
 
-public class ImageSelectActivity extends FragmentActivity implements AlbumCollection.OnDirectorySelectListener, View.OnClickListener {
+public class ImageSelectActivity extends FragmentActivity implements AlbumCollection.OnDirectorySelectListener, View.OnClickListener, OkHttpUtil.OnDataListener, OkHttpUtil.OnProgressMultiListener {
 
     public static final String EXTRA_RESULT_SELECTION = BundleUtils.buildKey(ImageSelectActivity.class, "EXTRA_RESULT_SELECTION");
     public static final String EXTRA_SELECTION_SPEC = BundleUtils.buildKey(ImageSelectActivity.class, "EXTRA_SELECTION_SPEC");
@@ -61,6 +73,7 @@ public class ImageSelectActivity extends FragmentActivity implements AlbumCollec
     private TextView tvCommit;
     private TextView tvPreview;
     private String enCode;
+    private DownloadDialogCopy downloadDialog1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,7 +132,7 @@ public class ImageSelectActivity extends FragmentActivity implements AlbumCollec
                 if (mCollection.isEmpty()) {
                     Toast.makeText(getApplicationContext(), "未选择图片", Toast.LENGTH_LONG).show();
                 } else {
-                    setResult();
+                    setResult("");
                 }
             }
         });
@@ -133,10 +146,11 @@ public class ImageSelectActivity extends FragmentActivity implements AlbumCollec
         if (selectionSpec.willStartCamera()) showCameraAction();
     }
 
-    public void setResult() {
+    public void setResult(String photoUrl) {
         Intent intent = new Intent();
         intent.putParcelableArrayListExtra(ImageSelectActivity.EXTRA_RESULT_SELECTION,
                 (ArrayList<? extends Parcelable>) mCollection.asList());
+        intent.putExtra("photoUrl",photoUrl);
         setResult(Activity.RESULT_OK, intent);
         finish();
     }
@@ -175,7 +189,7 @@ public class ImageSelectActivity extends FragmentActivity implements AlbumCollec
                 mCollection.add(captured);
                 mMediaStoreCompat.cleanUp(mCapturePhotoUriHolder);
                 if (mCollection.isSingleChoose()) {   //选择一张返回
-                     setResult();
+                    setResult("");
                 }
             }
         }
@@ -268,13 +282,77 @@ public class ImageSelectActivity extends FragmentActivity implements AlbumCollec
             } else {
 
 
-             /*   mCollection.asList().get(0).getEncodedPath()
+                downloadDialog1 = DownloadDialogCopy.newInstance("上传中...", false, this);
+                downloadDialog1.show(getFragmentManager());
+                Bitmap bitmap = BitMapUtil.Uri2Bitmap(this, mCollection.asList().get(0));
+                OkHttpUtil.postStream(Constant.URL.UploadImg, enCode, 0, bitmap, this, this);
+
+             /*
                 OkHttpUtil.postStream(Constant.URL.UploadImg, SH, 0, bitmap, this, this,"1");*/
 
                /* OkHttpUtil.postStream(Constant.URL.UploadImg, enCode, 0, bitmapVideo, this, this);
-                setResult();*/
+               */
             }
         } else if (i == R.id.tv_preview) { //预览
         }
     }
+
+    @Override
+    public void onResponse(String url, String json) {
+        if (!TextUtils.isEmpty(json)) {
+            String decrypt = DesUtil.decrypt(json);
+
+            switch (url) {
+                case Constant.URL.UploadImg: {
+                    dismissLoading();
+                    LogUtils.e("UploadImg", decrypt);
+                    UploadImgEntity img = new Gson().fromJson(decrypt, UploadImgEntity.class);
+                    Toast.makeText(this, img.getMessage(), Toast.LENGTH_LONG).show();
+                    if (img.getCode() == Constant.Integers.SUC) {
+
+                        setResult(img.getData());
+
+                    } else {
+                    }
+
+                }
+                break;
+            }
+        }
+    }
+
+    @Override
+    public void onFailure(String url, String error) {
+
+    }
+
+    @Override
+    public void onProgressMulti(int index, final int rate) {
+        ProgressBar progressBar = downloadDialog1.getProgressBar();
+        final TextView btnInstall = downloadDialog1.getBtnInstall();
+        if (progressBar != null) {
+            progressBar.setProgress(rate);
+        }
+        if (btnInstall != null) {
+
+
+            this.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    btnInstall.setVisibility(View.VISIBLE);
+                    btnInstall.setText(rate + "%");
+
+                }
+            });
+        }
+    }
+    private void dismissLoading() {
+
+        if (downloadDialog1 != null) {
+            downloadDialog1.dismiss();
+
+        }
+
+    }
+
 }

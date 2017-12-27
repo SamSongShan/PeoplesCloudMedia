@@ -94,7 +94,7 @@ public class RichEditorAdapter extends RecyclerView.Adapter<RichEditorAdapter.My
                             .diskCacheStrategy(DiskCacheStrategy.ALL);
 
                     Glide.with(context)
-                            .load(eContent.getFilePath())
+                            .load(Constant.URL.BaseImg+eContent.getFilePath())
                             .transition(DrawableTransitionOptions.withCrossFade())
                             .apply(options)
                             .into(holder.ivPic);

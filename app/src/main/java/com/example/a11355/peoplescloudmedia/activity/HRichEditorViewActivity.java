@@ -124,6 +124,12 @@ public class HRichEditorViewActivity extends BaseActivity implements OkHttpUtil.
     private List<EContent> datas;
     private Uri bgUri;//背景图片的uri
     private String enCode="";
+    private String GraphicEditorId="default";//:图文编辑实体主键（默认传default）
+    private String ImageUrl="default";//:封面（默认传default）
+    private String IsUseMusic="0";//:是否使用音乐（默认传0,不使用）
+    private String MusicUrl="default";//:音乐路径（默认传default）
+    private String MusicName="default";//:音乐名称（默认传default）
+    private String Title="";//:标题
 
   /*  */
 
@@ -152,7 +158,8 @@ public class HRichEditorViewActivity extends BaseActivity implements OkHttpUtil.
         }, "完成", new View.OnClickListener() {   //完成
             @Override
             public void onClick(View v) {
-
+                //更新网络数据
+                  upData();
             }
         });
         GetEntityUserEntity.DataBean userInfo = PreferencesUtil.getUserInfo(this);
@@ -170,6 +177,12 @@ public class HRichEditorViewActivity extends BaseActivity implements OkHttpUtil.
 
         initView();
         //defaultChoiceIMG();
+    }
+
+    //更新网络数据
+    private void upData() {
+                 //   new UpdateGraphicEditor(PreferencesUtil.getToken(this),PreferencesUtil.getUserId(this),GraphicEditorId);
+
     }
 
     public void onSubmit(View view) {
@@ -473,7 +486,7 @@ public class HRichEditorViewActivity extends BaseActivity implements OkHttpUtil.
                     .into(sdv);*/
 
         } else if (requestCode == REQUEST_CODE_CHOOSE_ITEM_IMG && resultCode == RESULT_OK) {//选择item的图片
-            datas.get(adapter.getCurClickItemIndex()).setFilePath(PicturePickerUtils.obtainResult(data).get(0).toString());
+            datas.get(adapter.getCurClickItemIndex()).setFilePath(data.getStringExtra("photoUrl"));
             adapter.notifyDataSetChanged();
         } else if (requestCode == REQUEST_CODE_EDIT_TXT && resultCode == REQUEST_CODE_EDIT_TXT) {//编辑文字
             EContent eContent = (EContent) data.getSerializableExtra("eContent");

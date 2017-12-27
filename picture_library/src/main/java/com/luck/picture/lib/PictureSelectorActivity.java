@@ -127,6 +127,7 @@ public class PictureSelectorActivity extends PictureBaseActivity implements View
     private TextView btnInstall;
     private UploadImgEntity Video;
     private String videoUrl;
+    private List<LocalMedia> images1;
 
     //EventBus 3.0 回调
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -423,7 +424,7 @@ public class PictureSelectorActivity extends PictureBaseActivity implements View
             Uri imageUri = parUri(cameraFile);
             DebugUtil.i(TAG, "video second:" + config.recordVideoSecond);
             cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
-            cameraIntent.putExtra(MediaStore.EXTRA_DURATION_LIMIT, config.recordVideoSecond);
+           // cameraIntent.putExtra(MediaStore.EXTRA_DURATION_LIMIT, config.recordVideoSecond);
             cameraIntent.putExtra(MediaStore.EXTRA_VIDEO_QUALITY, config.videoQuality);
             startActivityForResult(cameraIntent, PictureConfig.REQUEST_CAMERA);
         }
@@ -523,10 +524,10 @@ public class PictureSelectorActivity extends PictureBaseActivity implements View
         }
 
         if (id == R.id.id_ll_ok) {
-            List<LocalMedia> images = adapter.getSelectedImages();
-            String pictureType = images.size() > 0 ? images.get(0).getPictureType() : "";
+            images1 = adapter.getSelectedImages();
+            String pictureType = images1.size() > 0 ? images1.get(0).getPictureType() : "";
             // 如果设置了图片最小选择数量，则判断是否满足条件
-            int size = images.size();
+            int size = images1.size();
             boolean eqImg = pictureType.startsWith(PictureConfig.IMAGE);
             if (config.minSelectNum > 0 && config.selectionMode == PictureConfig.MULTIPLE) {
                 if (size < config.minSelectNum) {
@@ -539,20 +540,20 @@ public class PictureSelectorActivity extends PictureBaseActivity implements View
             if (config.enableCrop && eqImg) {
                 // 是图片和选择压缩并且是多张，调用批量压缩
                 ArrayList<String> medias = new ArrayList<>();
-                for (LocalMedia media : images) {
+                for (LocalMedia media : images1) {
                     medias.add(media.getPath());
                 }
                 startCrop(medias);
             } else if (config.isCompress && eqImg) {
                 // 图片才压缩，视频不管
-                compressImage(images);
+                compressImage(images1);
             } else {
 
                 downloadDialog1 = DownloadDialogCopy.newInstance("视频上传中...", false, this);
                 downloadDialog1.show(getFragmentManager());
 
 
-                File file = new File(images.get(0).getPath());
+                File file = new File(images1.get(0).getPath());
                 OkHttpUtil.postStream(Constant.URL.UploadVideo, enCode, 1, file, this, this, "file");
 
 
@@ -702,7 +703,7 @@ public class PictureSelectorActivity extends PictureBaseActivity implements View
                         downloadDialog1 = DownloadDialogCopy.newInstance("缩略图上传中...", false, this);
                         downloadDialog1.show(getFragmentManager());
                         videoUrl = Video.getData();
-                        Bitmap bitmapVideo = VideoUtils.getVideoThumbnail(images.get(0).getPath());
+                        Bitmap bitmapVideo = VideoUtils.getVideoThumbnail(images1.get(0).getPath());
                         OkHttpUtil.postStream(Constant.URL.UploadImg, enCode, 0, bitmapVideo, this, this);
                     } else {
                         Toast.makeText(this, Video.getMessage(), Toast.LENGTH_LONG).show();

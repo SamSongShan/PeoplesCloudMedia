@@ -19,6 +19,18 @@ public class UpdateGraphicEditor {
     private String Title;
     private List<EContent> MediaBlockList;
 
+    public UpdateGraphicEditor(String token, String userId, String graphicEditorId, String imageUrl, String isUseMusic, String musicUrl, String musicName, String title, List<EContent> mediaBlockList) {
+        Token = token;
+        UserId = userId;
+        GraphicEditorId = graphicEditorId;
+        ImageUrl = imageUrl;
+        IsUseMusic = isUseMusic;
+        MusicUrl = musicUrl;
+        MusicName = musicName;
+        Title = title;
+        MediaBlockList = mediaBlockList;
+    }
+
     public String getToken() {
         return Token;
     }

@@ -76,7 +76,7 @@ public class GridViewItemRelativeLayout extends RelativeLayout {
                     return;
                 } else if (GridViewItemRelativeLayout.this.mCollection.isSingleChoose()) {
                     GridViewItemRelativeLayout.this.mCollection.add(item.buildContentUri());
-                    ((ImageSelectActivity) getContext()).setResult();
+                    ((ImageSelectActivity) getContext()).setResult("");
                     return;
                 }
                 if (GridViewItemRelativeLayout.this.mCollection.isSelected(item.buildContentUri())) {
