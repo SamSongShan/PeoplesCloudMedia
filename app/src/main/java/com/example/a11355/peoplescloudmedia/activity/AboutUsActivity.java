@@ -28,7 +28,7 @@ public class AboutUsActivity extends BaseActivity {
     @Override
     protected void init() {
 
-        ToolBarUtil.initToolBar(toolbarText, "关于我们V", new View.OnClickListener() {
+        ToolBarUtil.initToolBar(toolbarText, "关于我们", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onBackPressed();

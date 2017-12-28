@@ -158,6 +158,10 @@ public interface Constant {
         String UploadVideo = BaseUrl + "UploadVideo";
 
 
+        //【70】新增/修改图文编辑文章（名片和产品）(输入参数string Json)
+        String UpdateGraphicEditor = BaseUrl + "UpdateGraphicEditor";
+
+
 
 
 

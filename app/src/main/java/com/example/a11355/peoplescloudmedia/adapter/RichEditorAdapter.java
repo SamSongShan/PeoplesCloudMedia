@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -73,7 +72,7 @@ public class RichEditorAdapter extends RecyclerView.Adapter<RichEditorAdapter.My
             holder.ivDown.setVisibility(View.GONE);
         }
         //设置内容
-        if (TextUtils.isEmpty(eContent.getTexts())){
+        if ("default".equals(eContent.getTexts())){
             holder.tvDesc.setText(context.getString(R.string.rich_click_add_txt));
         }else {
             holder.tvDesc.setText(Html.fromHtml(eContent.getTexts()));
@@ -84,7 +83,7 @@ public class RichEditorAdapter extends RecyclerView.Adapter<RichEditorAdapter.My
          */
         switch (eContent.getMediaType()) {
             case ItemType.IMG:
-                if (TextUtils.isEmpty(eContent.getFilePath())) {
+                if ("default".equals(eContent.getFilePath())) {
                     holder.ivPic.setImageResource(R.drawable.img);
                 } else {
 
@@ -113,7 +112,11 @@ public class RichEditorAdapter extends RecyclerView.Adapter<RichEditorAdapter.My
                 break;
             case ItemType.VIDEO:
 
-                if (!TextUtils.isEmpty(eContent.getVideoImg())){
+                if ("default".equals(eContent.getVideoImg())){
+                    holder.ivPic.setImageResource(R.drawable.video_item);
+
+
+                }else {
                     RequestOptions options = new RequestOptions()
                             .placeholder(R.color.ucrop_color_grey)
                             .centerCrop()
@@ -125,9 +128,6 @@ public class RichEditorAdapter extends RecyclerView.Adapter<RichEditorAdapter.My
                             .into(holder.ivPic);
 
                     holder.iv_item_video.setVisibility(View.VISIBLE);
-                }else {
-                    holder.ivPic.setImageResource(R.drawable.video_item);
-
                 }
                 break;
         }

@@ -15,17 +15,20 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.a11355.peoplescloudmedia.R;
 import com.example.a11355.peoplescloudmedia.adapter.RichEditorAdapter;
 import com.example.a11355.peoplescloudmedia.adapter.SimpleItemTouchHelperCallback;
 import com.example.a11355.peoplescloudmedia.base.BaseActivity;
 import com.example.a11355.peoplescloudmedia.base.EditorResultBean;
+import com.example.a11355.peoplescloudmedia.custom.LoadingDialog;
 import com.example.a11355.peoplescloudmedia.custom.SectorProgressBar;
 import com.example.a11355.peoplescloudmedia.model.EContent;
 import com.example.a11355.peoplescloudmedia.model.GetEntityUser;
 import com.example.a11355.peoplescloudmedia.model.GetEntityUserEntity;
 import com.example.a11355.peoplescloudmedia.model.ItemType;
+import com.example.a11355.peoplescloudmedia.model.UpdateGraphicEditor;
 import com.example.a11355.peoplescloudmedia.util.Constant;
 import com.example.a11355.peoplescloudmedia.util.DesUtil;
 import com.example.a11355.peoplescloudmedia.util.LogUtils;
@@ -48,6 +51,7 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import io.valuesfeng.picker.Picker;
 import io.valuesfeng.picker.engine.GlideEngine;
+import io.valuesfeng.picker.model.UploadImgEntity;
 import io.valuesfeng.picker.utils.PicturePickerUtils;
 
 import static com.mob.MobSDK.getContext;
@@ -121,15 +125,17 @@ public class HRichEditorViewActivity extends BaseActivity implements OkHttpUtil.
     /**
      * 数据区
      */
-    private List<EContent> datas;
+    private List<EContent> datas = new ArrayList<>();
+    ;
     private Uri bgUri;//背景图片的uri
     private String enCode="";
     private String GraphicEditorId="default";//:图文编辑实体主键（默认传default）
-    private String ImageUrl="default";//:封面（默认传default）
+    private String ImageUrl = "";//:封面（默认传default）
     private String IsUseMusic="0";//:是否使用音乐（默认传0,不使用）
     private String MusicUrl="default";//:音乐路径（默认传default）
     private String MusicName="default";//:音乐名称（默认传default）
     private String Title="";//:标题
+    private LoadingDialog loadingDialog;
 
   /*  */
 
@@ -158,8 +164,20 @@ public class HRichEditorViewActivity extends BaseActivity implements OkHttpUtil.
         }, "完成", new View.OnClickListener() {   //完成
             @Override
             public void onClick(View v) {
-                //更新网络数据
-                  upData();
+
+                if (TextUtils.isEmpty(ImageUrl)) {
+                    ToastUtil.initToast(HRichEditorViewActivity.this, "请选择封面图");
+                } else if (TextUtils.isEmpty(Title)) {
+                    ToastUtil.initToast(HRichEditorViewActivity.this, "请填写标题");
+
+                } else if (datas.size() == 0) {
+                    ToastUtil.initToast(HRichEditorViewActivity.this, "请编辑正文");
+
+                } else {
+                    //更新网络数据
+                    upData();
+                }
+
             }
         });
         GetEntityUserEntity.DataBean userInfo = PreferencesUtil.getUserInfo(this);
@@ -181,7 +199,10 @@ public class HRichEditorViewActivity extends BaseActivity implements OkHttpUtil.
 
     //更新网络数据
     private void upData() {
-                 //   new UpdateGraphicEditor(PreferencesUtil.getToken(this),PreferencesUtil.getUserId(this),GraphicEditorId);
+        loadingDialog = LoadingDialog.newInstance("提交中...");
+        loadingDialog.show(getFragmentManager());
+        UpdateGraphicEditor updateGraphicEditor = new UpdateGraphicEditor(PreferencesUtil.getToken(this), PreferencesUtil.getUserId(this), GraphicEditorId, ImageUrl, IsUseMusic, MusicUrl, MusicName, Title, datas);
+        OkHttpUtil.postJson(Constant.URL.UpdateGraphicEditor, DesUtil.encrypt(gson.toJson(updateGraphicEditor)), this);
 
     }
 
@@ -226,7 +247,7 @@ public class HRichEditorViewActivity extends BaseActivity implements OkHttpUtil.
         rvItemList.setLayoutManager(linearLayoutManager);
 
         rvItemList.setItemAnimator(new DefaultItemAnimator());
-        datas = new ArrayList<>();
+
 
 //        rvItemList.setHasFixedSize(true);//最重要的这句，不然recycleview不显示
         adapter = new RichEditorAdapter(this, datas,enCode);
@@ -258,6 +279,12 @@ public class HRichEditorViewActivity extends BaseActivity implements OkHttpUtil.
             @Override
             public void onClick(String itemType, int index) {
                 EContent eContent = new EContent();
+                eContent.setMediaBlockId("default");
+                eContent.setFilePath("default");
+                eContent.setTexts("default");
+                eContent.setVideoImg("default");
+                eContent.setSortCode("1");
+                eContent.setIsDelete("0");
                 switch (itemType) {
                     case ItemType.IMG:
                         eContent.setMediaType(ItemType.IMG);
@@ -471,13 +498,14 @@ public class HRichEditorViewActivity extends BaseActivity implements OkHttpUtil.
         if (requestCode == REQUEST_CODE_SET_TITLE && resultCode == REQUEST_CODE_SET_TITLE) {//设置标题回调
             articleTitle = data.getStringExtra("title");//记录文章标题
             tvArtTitle.setText(articleTitle);
+            Title = articleTitle;//文章记录赋值
         } else if (requestCode == REQUEST_CODE_CHOOSE_BG && resultCode == RESULT_OK) {//选择背景
             bgUri = PicturePickerUtils.obtainResult(data).get(0);
             tvAddImg.setVisibility(View.GONE);
             sdv.setVisibility(View.VISIBLE);
             imgChange.setVisibility(View.VISIBLE);
             sdv.setImageURI(bgUri);
-
+            ImageUrl = data.getStringExtra("photoUrl");
 
             /*Glide.with(this)
                     .load(bgUri)
@@ -510,10 +538,16 @@ public class HRichEditorViewActivity extends BaseActivity implements OkHttpUtil.
 
         } else if (requestCode == REQUEST_CODE_SET_TITLE_MY && resultCode == RESULT_OK) { //设置标题
             tvTitle.setText(data.getStringExtra("title"));
-        } else if (requestCode == REQUEST_CODE_SET_TITLE_MY && resultCode == RESULT_OK) {  //音乐
+            Title = data.getStringExtra("title");//文章记录赋值
+        } else if (requestCode == REQUEST_CODE_SET_Music && resultCode == RESULT_OK) {  //音乐
             tvAddedMusic.setVisibility(View.VISIBLE);
             tvAddMusic.setVisibility(View.GONE);
-            tvAddedMusic.setText("");
+            MusicUrl = data.getStringExtra("path");
+            MusicName = data.getStringExtra("singer");
+
+
+
+            tvAddedMusic.setText(MusicName);
         } else if (requestCode == PictureConfig.CHOOSE_REQUEST && resultCode == RESULT_OK) {//视频
 
 
@@ -577,7 +611,12 @@ public class HRichEditorViewActivity extends BaseActivity implements OkHttpUtil.
     //新建一个IMG类型的东西
     private void addImgType() {
         EContent eContent = new EContent();
-
+        eContent.setMediaBlockId("default");
+        eContent.setFilePath("default");
+        eContent.setTexts("default");
+        eContent.setVideoImg("default");
+        eContent.setSortCode("1");
+        eContent.setIsDelete("0");
         eContent.setMediaType(ItemType.IMG);
         datas.add(0, eContent);
         adapter.notifyDataSetChanged();
@@ -586,7 +625,12 @@ public class HRichEditorViewActivity extends BaseActivity implements OkHttpUtil.
     //新建一个VIDEO类型的东西
     private void addVideoType() {
         EContent eContent = new EContent();
-
+        eContent.setMediaBlockId("default");
+        eContent.setFilePath("default");
+        eContent.setTexts("default");
+        eContent.setVideoImg("default");
+        eContent.setSortCode("1");
+        eContent.setIsDelete("0");
         eContent.setMediaType(ItemType.VIDEO);
         datas.add(0, eContent);
         adapter.notifyDataSetChanged();
@@ -594,6 +638,12 @@ public class HRichEditorViewActivity extends BaseActivity implements OkHttpUtil.
     //新建一个text类型的东西
     private void addTextType() {
         EContent eContent = new EContent();
+        eContent.setMediaBlockId("default");
+        eContent.setFilePath("default");
+        eContent.setTexts("default");
+        eContent.setVideoImg("default");
+        eContent.setSortCode("1");
+        eContent.setIsDelete("0");
 
         eContent.setMediaType(ItemType.TXT);
         datas.add(0, eContent);
@@ -625,12 +675,35 @@ public class HRichEditorViewActivity extends BaseActivity implements OkHttpUtil.
 
                 }
                 break;
+                case Constant.URL.UpdateGraphicEditor: {//提交
+                    LogUtils.e("loge", "UpdateGraphicEditor: " + decrypt);
+                    dismissLoading();
+                    LogUtils.e("UploadImg", decrypt);
+                    UploadImgEntity img = new Gson().fromJson(decrypt, UploadImgEntity.class);
+                    Toast.makeText(this, img.getMessage(), Toast.LENGTH_LONG).show();
+                    if (img.getCode() == Constant.Integers.SUC) {
+                        onBackPressed();
+
+                    } else {
+                    }
+
+
+                }
+                break;
             }
         }
     }
 
     @Override
     public void onFailure(String url, String error) {
+
+    }
+
+    private void dismissLoading() {
+        if (loadingDialog != null) {
+            loadingDialog.dismiss();
+        }
+
 
     }
 }

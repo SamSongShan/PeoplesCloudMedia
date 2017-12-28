@@ -1,5 +1,6 @@
 package com.example.a11355.peoplescloudmedia.activity;
 
+import android.content.Intent;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.support.v7.widget.LinearLayoutManager;
@@ -129,6 +130,12 @@ public class GetMusicListActivity extends BaseActivity implements TextView.OnEdi
 
     @Override
     public void onItemClick(View v, int position) {
+
+        Intent intent = new Intent();
+        intent.putExtra("path",newsData.get(position).getFilePath());
+        intent.putExtra("singer",newsData.get(position).getFileName());
+        setResult(RESULT_OK,intent);
+        onBackPressed();
     /*    Intent intent = new Intent(this, H5ActivityForNewsDetical.class);
         intent.putExtra("url", String.format(Constant.URL.NewsDetailsLink,newsData.get(position).getId()+"", SharedPreferencesUtil.getUserId(this)));
 
