@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
+    android:background="@color/primaryBg"
+    android:orientation="vertical"
+    tools:context="com.example.a11355.peoplescloudmedia.activity.UpdateBusinessCardActivity">
+
+    <include layout="@layout/toolbar_right_text" />
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="1dp"
+                android:background="@color/white"
+                android:orientation="vertical">
+
+                <com.facebook.drawee.view.SimpleDraweeView
+                    android:id="@+id/sdv_userHead"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_margin="15dp"
+                    fresco:actualImageScaleType="fitCenter"
+                    fresco:failureImage="@drawable/head"
+                    fresco:failureImageScaleType="fitCenter"
+                    fresco:placeholderImage="@drawable/head"
+                    fresco:placeholderImageScaleType="fitCenter"
+                    fresco:roundAsCircle="true"
+                    fresco:viewAspectRatio="1" />
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:paddingBottom="10dp"
+                    android:text="点击更换头像"
+                    android:textColor="@color/colorDeepGray" />
+            </LinearLayout>
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:background="@color/white"
+                android:hint="姓名"
+                android:padding="10dp"
+                android:textColor="@color/colorDeepBlack" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="1dp"
+                android:background="@color/white"
+                android:hint="职位"
+                android:padding="10dp"
+                android:textColor="@color/colorDeepBlack" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="1dp"
+                android:background="@color/white"
+                android:hint="电话"
+                android:padding="10dp"
+                android:textColor="@color/colorDeepBlack" />
+
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="1dp"
+                android:background="@color/white"
+                android:hint="微信"
+                android:padding="10dp"
+                android:textColor="@color/colorDeepBlack" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="1dp"
+                android:background="@color/white"
+                android:hint="QQ"
+                android:padding="10dp"
+                android:textColor="@color/colorDeepBlack" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:background="@color/white"
+                android:gravity="left"
+                android:hint="个性签名"
+                android:lines="5"
+                android:padding="10dp"
+                android:textColor="@color/colorDeepBlack" />
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

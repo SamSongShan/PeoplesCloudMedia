@@ -162,6 +162,12 @@ public interface Constant {
         String UpdateGraphicEditor = BaseUrl + "UpdateGraphicEditor";
 
 
+      //【21】用户名片基本信息修改(输入参数string Json)
+      String UpdateBusinessCardEntity = BaseUrl + "UpdateBusinessCardEntity";
+
+
+        //【22】用户名片公司信息修改(输入参数string Json)
+        String UpdateCardCompanyInfo = BaseUrl + "UpdateCardCompanyInfo";
 
 
 

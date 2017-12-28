@@ -187,7 +187,9 @@
         <activity android:name=".activity.FindSearchActivity" />
         <activity android:name=".activity.ZMTZZActivity" />
         <activity android:name=".activity.EditTitleActivity" />
-        <activity android:name=".activity.GetMusicListActivity"></activity>
+        <activity android:name=".activity.GetMusicListActivity" />
+        <activity android:name=".activity.UpdateBusinessCardActivity" />
+        <activity android:name=".activity.UpdateCardCompanyInfoActivity"></activity>
     </application>
 
 </manifest>
