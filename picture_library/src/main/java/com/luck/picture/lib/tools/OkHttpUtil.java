@@ -6,6 +6,7 @@ import android.os.Handler;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 
 import java.io.ByteArrayInputStream;
@@ -328,7 +329,7 @@ public class OkHttpUtil {
             @Override
             public void writeTo(BufferedSink sink) throws IOException {
                 Source source = Okio.source(file);
-                int readCount = 0;//一共上传了多少字节
+                double readCount = 0;//一共上传了多少字节
                 int readSize;//当前上传了多少字节
                 Buffer buffer = new Buffer();
                 while (true) {
@@ -339,8 +340,11 @@ public class OkHttpUtil {
                         sink.write(buffer, readSize);
                         readCount += readSize;
                         if (progressListener != null) {
-                            int rate = (int) (readCount * 100 / contentLength());
-                            progressListener.onProgressMulti(index, rate);
+                            double rate = (double) (readCount * 100 / contentLength());
+
+                            if (rate>=1){
+                                progressListener.onProgressMulti(index, (int)rate);
+                            }
                         }
                     }
                 }

@@ -30,8 +30,6 @@ import java.util.List;
 
 import butterknife.BindView;
 
-import static com.example.a11355.peoplescloudmedia.custom.GridDividerItemDecoration.ATTRS_B;
-
 /**
  * 消息
  */
@@ -66,7 +64,7 @@ public class MessageFragment extends BaseFragment implements OnAdapterCallbackLi
     protected void init(View v) {
         rvStore.setLayoutManager(new LinearLayoutManager(getContext()));
         getMessageListAdapter = new GetMessageListAdapter(getActivity(), this, this);
-        rvStore.addItemDecoration(new DividerGridItem(getContext(), ATTRS_B));
+        rvStore.addItemDecoration(new DividerGridItem(getContext()));
         rvStore.setAdapter(getMessageListAdapter);
         srlStore.setOnRefreshListener(this);
         getMessageListAdapter.setOnItemClickListener(this);

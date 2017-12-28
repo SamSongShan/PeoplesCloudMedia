@@ -20,6 +20,8 @@ public abstract class BaseDialog extends DialogFragment {
         this.onItemClickListener = onItemClickListener;
     }
 
+
+
     public interface OnItemClickListener {
         void onItemClick(View v);
     }

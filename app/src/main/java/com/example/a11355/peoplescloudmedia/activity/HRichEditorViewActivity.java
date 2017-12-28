@@ -54,8 +54,6 @@ import io.valuesfeng.picker.engine.GlideEngine;
 import io.valuesfeng.picker.model.UploadImgEntity;
 import io.valuesfeng.picker.utils.PicturePickerUtils;
 
-import static com.mob.MobSDK.getContext;
-
 
 public class HRichEditorViewActivity extends BaseActivity implements OkHttpUtil.OnDataListener {
 
@@ -666,11 +664,11 @@ public class HRichEditorViewActivity extends BaseActivity implements OkHttpUtil.
                         enCode = getEntityUserEntity.getData().getEnCode();
 
                     } else if (getEntityUserEntity.getCode() == Constant.Integers.TOKEN_OUT_OF) { //token过期
-                        ToastUtil.initToast(getContext(), getEntityUserEntity.getMessage());
-                        startActivityForResult(new Intent(getContext(), LoginActivity.class), Constant.Code.LoginCode);
+                        ToastUtil.initToast(this, getEntityUserEntity.getMessage());
+                        startActivityForResult(new Intent(this, LoginActivity.class), Constant.Code.LoginCode);
 
                     } else {//其他
-                        ToastUtil.initToast(getContext(), getEntityUserEntity.getMessage());
+                        ToastUtil.initToast(this, getEntityUserEntity.getMessage());
                     }
 
                 }

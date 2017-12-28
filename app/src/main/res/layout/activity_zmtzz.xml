@@ -41,6 +41,16 @@
 
         </android.support.design.widget.TabLayout>
 
+        <TextView
+            android:textColor="@color/colorDeepBlack"
+            android:textSize="16sp"
+            android:layout_marginRight="10dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:text="预览"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
 
         <View
             android:id="@+id/toolbar_iconLine"

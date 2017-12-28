@@ -695,7 +695,7 @@ public class PictureSelectorActivity extends PictureBaseActivity implements View
             switch (url) {
                 case Constant.URL.UploadVideo: {
                     dismissLoading();
-                    LogUtils.e("UploadVideo", decrypt);
+                    LogUtils.e("UploadVideo", decrypt+"");
                     Video = new Gson().fromJson(decrypt, UploadImgEntity.class);
                     Toast.makeText(this, Video.getMessage(), Toast.LENGTH_LONG).show();
 
