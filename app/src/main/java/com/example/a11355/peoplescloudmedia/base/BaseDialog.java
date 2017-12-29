@@ -22,6 +22,7 @@ public abstract class BaseDialog extends DialogFragment {
 
 
 
+
     public interface OnItemClickListener {
         void onItemClick(View v);
     }

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -19,7 +18,7 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <LinearLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="1dp"
@@ -27,6 +26,7 @@
                 android:orientation="vertical">
 
                 <com.facebook.drawee.view.SimpleDraweeView
+                    android:layout_centerHorizontal="true"
                     android:id="@+id/sdv_userHead"
                     android:layout_width="100dp"
                     android:layout_height="100dp"
@@ -40,69 +40,89 @@
                     fresco:roundAsCircle="true"
                     fresco:viewAspectRatio="1" />
 
+                <com.example.a11355.peoplescloudmedia.custom.SectorProgressBar
+                    android:id="@+id/spb_head"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_margin="15dp"
+                    android:visibility="gone" />
 
                 <TextView
+                    android:layout_below="@+id/sdv_userHead"
+                    android:layout_centerHorizontal="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:paddingBottom="10dp"
                     android:text="点击更换头像"
                     android:textColor="@color/colorDeepGray" />
-            </LinearLayout>
+            </RelativeLayout>
 
             <EditText
+                android:id="@+id/et_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:background="@color/white"
-                android:hint="姓名"
+                android:hint="输入姓名"
                 android:padding="10dp"
                 android:textColor="@color/colorDeepBlack" />
 
             <EditText
+                android:id="@+id/et_zw"
+
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="1dp"
                 android:background="@color/white"
-                android:hint="职位"
+                android:hint="输入职位"
                 android:padding="10dp"
                 android:textColor="@color/colorDeepBlack" />
 
             <EditText
+                android:id="@+id/et_phone"
+                android:hint="输入手机号码"
+                android:inputType="number"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="1dp"
                 android:background="@color/white"
-                android:hint="电话"
+                android:maxLength="11"
                 android:padding="10dp"
                 android:textColor="@color/colorDeepBlack" />
 
 
             <EditText
+                android:id="@+id/et_wechat"
+
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="1dp"
                 android:background="@color/white"
-                android:hint="微信"
+                android:hint="输入微信号码"
                 android:padding="10dp"
                 android:textColor="@color/colorDeepBlack" />
 
             <EditText
+                android:id="@+id/et_qq"
+
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="1dp"
                 android:background="@color/white"
-                android:hint="QQ"
+                android:hint="输入QQ号码"
                 android:padding="10dp"
                 android:textColor="@color/colorDeepBlack" />
 
             <EditText
+                android:id="@+id/et_Signature"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:background="@color/white"
                 android:gravity="left"
-                android:hint="个性签名"
+                android:hint="输入个性签名"
                 android:lines="5"
                 android:padding="10dp"
                 android:textColor="@color/colorDeepBlack" />

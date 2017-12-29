@@ -176,7 +176,7 @@ public class PersonalDataActivity extends BaseActivity implements BaseDialog.OnI
                     intent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
                     startActivityForResult(intent, Constant.Code.CameraCode);
                 } catch (SecurityException e) {
-                    TipsAuthDialog tipsDialog = TipsAuthDialog.newInstance(Constant.Strings.PermissionCameraTips);
+                    tipsDialog = TipsAuthDialog.newInstance(Constant.Strings.PermissionCameraTips);
                     tipsDialog.show(getFragmentManager(), "tips");
                 }
                 break;
@@ -278,6 +278,7 @@ public class PersonalDataActivity extends BaseActivity implements BaseDialog.OnI
                         loadingDialog = LoadingDialog.newInstance("设置中...");
                         loadingDialog.show(getFragmentManager());
                         headUrl = img.getData();
+
                         PreferencesUtil.submitUserInfo(this, "HeadIcon", img.getData(), this);
                     } else {
                         ToastUtil.initToast(this, img.getMessage());

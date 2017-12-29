@@ -165,11 +165,17 @@ public interface Constant {
       //【21】用户名片基本信息修改(输入参数string Json)
       String UpdateBusinessCardEntity = BaseUrl + "UpdateBusinessCardEntity";
 
+        //【20】用户编号获取用户名片信息(输入参数string Json)
+        String GetBusinessCardInfo = BaseUrl + "GetBusinessCardInfo";
+
+
+
 
         //【22】用户名片公司信息修改(输入参数string Json)
         String UpdateCardCompanyInfo = BaseUrl + "UpdateCardCompanyInfo";
 
-
+        //【41】行政区域
+        String GetAreaList=BaseUrl + "GetAreaList";
 
 
 
@@ -308,6 +314,10 @@ Uid 传文章ID
         int CollectCode = 0x2006;
 
         int PickUp=0x2007;
+        //自媒体制作个人
+        int ZMTZZ_Personal = 0x2008;
+        //自媒体制作公司
+        int ZMTZZ_Company = 0x2009;
     }
 
     interface IdString {

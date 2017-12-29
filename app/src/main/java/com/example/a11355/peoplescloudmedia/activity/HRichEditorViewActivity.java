@@ -184,14 +184,14 @@ public class HRichEditorViewActivity extends BaseActivity implements OkHttpUtil.
             OkHttpUtil.postJson(Constant.URL.GetEntityUser, DesUtil.encrypt(jsonUser), this);
         } else {
             enCode = userInfo.getEnCode();
-
+            initView();
         }
 
 
 
 
 
-        initView();
+
         //defaultChoiceIMG();
     }
 
@@ -662,6 +662,7 @@ public class HRichEditorViewActivity extends BaseActivity implements OkHttpUtil.
                     if (getEntityUserEntity.getCode() == Constant.Integers.SUC) { //成功
                         PreferencesUtil.saveUserInfo(this, DesUtil.encrypt(decrypt, DesUtil.LOCAL_KEY));
                         enCode = getEntityUserEntity.getData().getEnCode();
+                        initView();
 
                     } else if (getEntityUserEntity.getCode() == Constant.Integers.TOKEN_OUT_OF) { //token过期
                         ToastUtil.initToast(this, getEntityUserEntity.getMessage());
