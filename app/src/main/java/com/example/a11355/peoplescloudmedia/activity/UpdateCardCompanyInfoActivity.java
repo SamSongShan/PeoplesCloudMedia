@@ -1,6 +1,8 @@
 package com.example.a11355.peoplescloudmedia.activity;
 
 import android.content.Context;
+import android.location.Address;
+import android.location.Geocoder;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.View;
@@ -18,16 +20,25 @@ import com.example.a11355.peoplescloudmedia.base.BaseDialog;
 import com.example.a11355.peoplescloudmedia.custom.ChooseAddressDialog;
 import com.example.a11355.peoplescloudmedia.custom.LoadingDialog;
 import com.example.a11355.peoplescloudmedia.model.AreaListEntity;
+import com.example.a11355.peoplescloudmedia.model.GetBusinessCardInfoEntity;
+import com.example.a11355.peoplescloudmedia.model.UpdateCardCompanyInfo;
+import com.example.a11355.peoplescloudmedia.model.UploadImgEntity;
 import com.example.a11355.peoplescloudmedia.util.CacheUtil;
 import com.example.a11355.peoplescloudmedia.util.Constant;
+import com.example.a11355.peoplescloudmedia.util.LogUtils;
 import com.example.a11355.peoplescloudmedia.util.OkHttpUtil;
 import com.example.a11355.peoplescloudmedia.util.PhoneUtil;
+import com.example.a11355.peoplescloudmedia.util.PreferencesUtil;
 import com.example.a11355.peoplescloudmedia.util.ToastUtil;
 import com.example.a11355.peoplescloudmedia.util.ToolBarUtil;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.luck.picture.lib.tools.DesUtil;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -47,6 +58,11 @@ public class UpdateCardCompanyInfoActivity extends BaseActivity implements OkHtt
     WebView webView;
     private LoadingDialog loadingDialog;
     private List<AreaListEntity.DataEntity> dataList;
+    private String placeId;
+    private String placeName;
+
+    private Gson gson = new GsonBuilder().create();
+    private GetBusinessCardInfoEntity.DataEntity data;
 
   /*
   * 自媒体制作  公司信息
@@ -59,7 +75,9 @@ public class UpdateCardCompanyInfoActivity extends BaseActivity implements OkHtt
 
     @Override
     protected void init() {
+        data = getIntent().getParcelableExtra("data");
 
+        ititview();
         ToolBarUtil.initToolBar(toolbarText, "编辑", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -68,11 +86,67 @@ public class UpdateCardCompanyInfoActivity extends BaseActivity implements OkHtt
         }, "完成", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (TextUtils.isEmpty(tvCompanyName.getText().toString().trim())) {
+                    ToastUtil.initToast(UpdateCardCompanyInfoActivity.this, "请输入公司名称");
+                } else if (TextUtils.isEmpty(tvCompanyNet.getText().toString().trim())) {
+                    ToastUtil.initToast(UpdateCardCompanyInfoActivity.this, "请输入公司网址");
 
+                } else if (TextUtils.isEmpty(placeId)) {
+                    ToastUtil.initToast(UpdateCardCompanyInfoActivity.this, "请输入公司地址");
+
+                } else if (TextUtils.isEmpty(etAddr.getText().toString().trim())) {
+                    ToastUtil.initToast(UpdateCardCompanyInfoActivity.this, "请输入公司详细地址");
+
+                } else {
+
+
+                    PhoneUtil.hideKeyboard(v);
+                    loadingDialog = LoadingDialog.newInstance("提交中...");
+                    loadingDialog.show(getFragmentManager());
+                    List<Address> locationList;
+                    try {
+                        Geocoder geocoder = new Geocoder(UpdateCardCompanyInfoActivity.this, Locale.CHINA);
+                        String s = placeName;
+                        String replace = s.replace("|", "");
+
+                        locationList = geocoder.getFromLocationName(replace + etAddr.getText().toString().trim(), 1);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        locationList = new ArrayList<>();
+                    }
+
+                    StringBuffer addressDetail = new StringBuffer(etAddr.getText().toString().trim() + "|");
+                    if (locationList.size() > 0) {
+                        addressDetail.append(locationList.get(0).getLongitude() + "|" + locationList.get(0).getLatitude());
+                    } else {
+                        //return;
+                        addressDetail.append("default|default");
+                    }
+
+                    UpdateCardCompanyInfo updateCardCompanyInfo = new UpdateCardCompanyInfo(PreferencesUtil.getUserId(UpdateCardCompanyInfoActivity.this),
+                            PreferencesUtil.getToken(UpdateCardCompanyInfoActivity.this),
+                            "1", tvCompanyName.getText().toString().trim(), tvCompanyNet.getText().toString().trim(),
+                            placeId, addressDetail.toString());
+                    String encrypt = DesUtil.encrypt(gson.toJson(updateCardCompanyInfo));
+                    OkHttpUtil.postJson(Constant.URL.UpdateCardCompanyInfo, DesUtil.encrypt(gson.toJson(updateCardCompanyInfo)), UpdateCardCompanyInfoActivity.this);
+                }
             }
         });
 
         initWebView();
+    }
+
+    private void ititview() {
+        if (data != null) {
+            placeId = data.getProvinceId() + "|" + data.getCityId() + "|" + data.getCountyId();
+            placeName = data.getProvinceName() + "|" + data.getCountyName() + "|" + data.getCountyName();
+            tvCompanyName.setText(data.getCountyName());
+            tvCompanyNet.setText(data.getCompanyNet());
+            tvAddr.setText(data.getProvinceName() + " " + data.getCountyName() + " " + data.getCountyName());
+            etAddr.setText(data.getAddress());
+            webView.loadUrl("http://m.amap.com/navi/?dest="+data.getLatitude()+","+data.getPrecision()+"&destName="+data.getProvinceName()+data.getCityName()+data.getCountyName()+data.getAddress()+"&key=2a2e47461740f64d5eca896aaa41cc42");//百度地图地址
+
+        }
     }
 
     private void initWebView() {
@@ -108,7 +182,7 @@ public class UpdateCardCompanyInfoActivity extends BaseActivity implements OkHtt
 
         webView.setWebViewClient(myWebViewClient);//调用
 
-        webView.loadUrl("http://m.amap.com/navi/?dest=116.470098,39.992838&destName=%E9%98%9C%E9%80%9A%E8%A5%BF&hideRouteIcon=1&key=%E6%82%A8%E7%94%B3%E8%AF%B7%E7%9A%84Key");//百度地图地址
+        webView.loadUrl("http://m.amap.com/navi");//百度地图地址
 
         webView.setWebChromeClient(new WebChromeClient() {
 
@@ -141,41 +215,60 @@ public class UpdateCardCompanyInfoActivity extends BaseActivity implements OkHtt
         }
 //                }
     }
+
     private void chooseAddress() {
         dismissLoading();
         ChooseAddressDialog addressDialog = ChooseAddressDialog.newInstance();
         addressDialog.setOnItemClickListener(this);
+
         addressDialog.show(getFragmentManager());
     }
+
     private void dismissLoading() {
         if (loadingDialog != null) {
             loadingDialog.dismiss();
         }
 
     }
+
     @Override
     public void onResponse(String url, String json) {
 
-if (!TextUtils.isEmpty(json)){
+        if (!TextUtils.isEmpty(json)) {
 
-    String decrypt = DesUtil.decrypt(json);
-    switch (url){
-        case Constant.URL.GetAreaList: {//获取地址数据
-            dismissLoading();
-            AreaListEntity area = new Gson().fromJson(json, AreaListEntity.class);
-            if (area.getCode() == Constant.Integers.SUC) {
-                dataList = area.getData();
+            String decrypt = DesUtil.decrypt(json);
+            switch (url) {
+                case Constant.URL.GetAreaList: {//获取地址数据
+                    dismissLoading();
+                    AreaListEntity area = new Gson().fromJson(json, AreaListEntity.class);
+                    if (area.getCode() == Constant.Integers.SUC) {
+                        dataList = area.getData();
 
-                CacheUtil.setUrlCache(this, Constant.URL.GetAreaList, json);
-                chooseAddress();
-            } else {
-                ToastUtil.initToast(this, area.getMessage());
+                        CacheUtil.setUrlCache(this, Constant.URL.GetAreaList, json);
+                        chooseAddress();
+                    } else {
+                        ToastUtil.initToast(this, area.getMessage());
+                    }
+                }
+                break;
+                case Constant.URL.UpdateCardCompanyInfo: {
+                    dismissLoading();
+                    LogUtils.e("UpdateCardCompanyInfo", decrypt);
+
+                    UploadImgEntity img = new Gson().fromJson(decrypt, UploadImgEntity.class);
+                    if (img.getCode() == Constant.Integers.SUC) {
+
+                        setResult(RESULT_OK);
+                        finish();
+                    } else {
+                        ToastUtil.initToast(this, img.getMessage());
+
+                    }
+                }
+                break;
             }
-        }
-        break;
-    }
 
-}
+        }
     }
 
     @Override
@@ -187,10 +280,10 @@ if (!TextUtils.isEmpty(json)){
     public void onItemClick(View v) {
         switch (v.getId()) {
             case R.id.tv_addressItem://选中地址
-               /* String placeId = (String) v.getTag();
-                String placeName = (String) v.getTag(R.id.tag_relation);
+                placeId = (String) v.getTag();
+                placeName = (String) v.getTag(R.id.tag_relation);
                 tvAddr.setText(placeName);
-                checkNum--;*/
+
                 break;
         }
     }

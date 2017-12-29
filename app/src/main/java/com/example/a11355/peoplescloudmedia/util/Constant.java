@@ -177,6 +177,11 @@ public interface Constant {
         //【41】行政区域
         String GetAreaList=BaseUrl + "GetAreaList";
 
+        //【25】用户名片其他信息修改(标题，音乐)(输入参数string Json)
+        String UpdateCardOther=BaseUrl + "UpdateCardOther";
+
+
+
 
 
 
@@ -318,6 +323,7 @@ Uid 传文章ID
         int ZMTZZ_Personal = 0x2008;
         //自媒体制作公司
         int ZMTZZ_Company = 0x2009;
+        int ZMTZZ_Music = 0x2010;
     }
 
     interface IdString {

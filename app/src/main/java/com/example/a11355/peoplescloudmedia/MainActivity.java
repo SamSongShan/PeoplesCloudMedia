@@ -120,6 +120,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void init() {
+
+        LogUtils.sHA1(this) ;
         //权限检查
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             checkPermissions();
@@ -355,9 +357,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             permissionsNeeded.add("相机");
         if (!addPermission(permissionsList, Manifest.permission.RECORD_AUDIO))//麦克风
             permissionsNeeded.add("麦克风");
-        /*if (!addPermission(permissionsList, Manifest.permission.ACCESS_FINE_LOCATION))//位置
+        if (!addPermission(permissionsList, Manifest.permission.ACCESS_FINE_LOCATION))//位置
             permissionsNeeded.add("位置");
-        if (!addPermission(permissionsList, Manifest.permission.READ_CONTACTS))//联系人
+        /*if (!addPermission(permissionsList, Manifest.permission.READ_CONTACTS))//联系人
             permissionsNeeded.add("联系人");
         if (!addPermission(permissionsList, Manifest.permission.CALL_PHONE))//手机
             permissionsNeeded.add("手机");
@@ -418,8 +420,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 perms.put(Manifest.permission.WRITE_EXTERNAL_STORAGE, PackageManager.PERMISSION_GRANTED);//存储
                 perms.put(Manifest.permission.CAMERA, PackageManager.PERMISSION_GRANTED);//相机
                 perms.put(Manifest.permission.RECORD_AUDIO, PackageManager.PERMISSION_GRANTED);//麦克风
-                /*perms.put(Manifest.permission.ACCESS_FINE_LOCATION, PackageManager.PERMISSION_GRANTED);//位置
-                perms.put(Manifest.permission.READ_CONTACTS, PackageManager.PERMISSION_GRANTED);//联系人
+                perms.put(Manifest.permission.ACCESS_FINE_LOCATION, PackageManager.PERMISSION_GRANTED);//位置
+                /*perms.put(Manifest.permission.READ_CONTACTS, PackageManager.PERMISSION_GRANTED);//联系人
                 perms.put(Manifest.permission.CALL_PHONE, PackageManager.PERMISSION_GRANTED);//手机
                 perms.put(Manifest.permission.SEND_SMS, PackageManager.PERMISSION_GRANTED);//短信
                 perms.put(Manifest.permission.READ_CALENDAR, PackageManager.PERMISSION_GRANTED);//日历
@@ -431,8 +433,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 if (perms.get(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
                         && perms.get(Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED
                         && perms.get(Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED
-                        /*&& perms.get(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
-                        && perms.get(Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED
+                        &&perms.get(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+                       /* && perms.get(Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED
                         && perms.get(Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED
                         && perms.get(Manifest.permission.SEND_SMS) == PackageManager.PERMISSION_GRANTED
                         && perms.get(Manifest.permission.READ_CALENDAR) == PackageManager.PERMISSION_GRANTED

@@ -25,4 +25,8 @@
     <string name="title_dont_null">标题不能为空</string>
     <string name="title_activity_video">VideoActivity</string>
 
+    <item name="tag_relation" type="id" />
+    <item name="tag_relation2" type="id" />
+    <item name="tag_url" type="id" />
+
 </resources>

@@ -137,6 +137,7 @@
                 android:background="@drawable/shape_radius_white_15">
 
                 <ImageView
+                    android:id="@+id/img_colseCompany"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_alignParentRight="true"
@@ -159,7 +160,7 @@
                 <LinearLayout
                     android:id="@+id/ll_company_d"
                     android:layout_width="match_parent"
-                    android:layout_height="200dp"
+                    android:layout_height="380dp"
                     android:orientation="vertical"
                     >
 
@@ -169,7 +170,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_margin="10dp"
-                        android:text="公司名" />
+                        tools:text="公司名" />
 
                     <TextView
                         android:id="@+id/tv_companyNet"
@@ -178,12 +179,12 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_marginBottom="10dp"
-                        android:text="www.badi.com" />
+                        tools:text="www.badi.com" />
 
                     <WebView
                         android:id="@+id/wv_h5"
                         android:layout_width="match_parent"
-                        android:layout_height="150dp"
+                        android:layout_height="300dp"
                         android:layout_marginTop="1dp"
                         android:background="@color/white" />
 

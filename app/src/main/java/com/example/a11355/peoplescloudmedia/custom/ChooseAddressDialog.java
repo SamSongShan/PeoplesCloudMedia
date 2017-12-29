@@ -2,10 +2,12 @@ package com.example.a11355.peoplescloudmedia.custom;
 
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -26,11 +28,11 @@ import com.example.a11355.peoplescloudmedia.model.AreaListEntity;
 import com.example.a11355.peoplescloudmedia.util.CacheUtil;
 import com.example.a11355.peoplescloudmedia.util.Constant;
 import com.example.a11355.peoplescloudmedia.util.PhoneUtil;
+import com.example.a11355.peoplescloudmedia.util.ToastUtil;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.List;
-
 
 
 public class ChooseAddressDialog extends BaseDialog implements AbsRecyclerViewAdapter.OnItemClickListener,
@@ -45,6 +47,8 @@ public class ChooseAddressDialog extends BaseDialog implements AbsRecyclerViewAd
     private List<AreaListEntity.DataEntity> dataList = new ArrayList<>();
     private ChooseAddressRVAdapter recyclerViewAdapter;
     private LoadingDialog loadingDialog;
+    private TextView tZvCommit;
+    private int layerIndex3;
 
     public static ChooseAddressDialog newInstance() {
         return new ChooseAddressDialog();
@@ -70,14 +74,17 @@ public class ChooseAddressDialog extends BaseDialog implements AbsRecyclerViewAd
         tvTitle = (TextView) view.findViewById(R.id.tv_chooseAddressTitle);
         ibBack = (ImageButton) view.findViewById(R.id.ib_chooseAddressBack);
         recyclerView = (RecyclerView) view.findViewById(R.id.rv_chooseAddress);
+        tZvCommit = (TextView) view.findViewById(R.id.tv_commit);
         ibBack.setOnClickListener(this);
+        tZvCommit.setOnClickListener(this);
         loadingDialog = LoadingDialog.newInstance("加载中...");
         loadingDialog.show(getActivity().getFragmentManager());
-        final Handler handler=new Handler(){
+        final Handler handler = new Handler() {
             @Override
             public void handleMessage(Message msg) {
                 recyclerViewAdapter.setData(dataList);
-                dismissLoading();            }
+                dismissLoading();
+            }
         };
         new Thread(new Runnable() {
             @Override
@@ -87,7 +94,7 @@ public class ChooseAddressDialog extends BaseDialog implements AbsRecyclerViewAd
                     AreaListEntity area = new Gson().fromJson(areaString, AreaListEntity.class);
                     dataList.addAll(area.getData());
                     Message message = new Message();
-                    message.what=1;
+                    message.what = 1;
                     handler.sendMessage(message);
                 }
             }
@@ -118,6 +125,7 @@ public class ChooseAddressDialog extends BaseDialog implements AbsRecyclerViewAd
                 recyclerView.scrollToPosition(0);
                 break;
             case 3://选中返回
+                layerIndex3 = position;
                 StringBuffer placeId = new StringBuffer();
                 StringBuffer placeName = new StringBuffer();
                 placeId.append(dataList.get(layerIndex1).getAreaId());
@@ -133,46 +141,66 @@ public class ChooseAddressDialog extends BaseDialog implements AbsRecyclerViewAd
                 placeName.append(city.getChirldData().get(position).getAreaName());
 
                 v.setTag(placeId.toString());
-                //v.setTag(R.id.tag_relation, placeName.toString());
+                v.setTag(R.id.tag_relation, placeName.toString());
                 onItemClickListener.onItemClick(v);
-                dismiss();
                 break;
         }
         layer++;
         updateTitle();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void onClick(View view) {
-        switch (layer) {
-            case 2://更新省数据
-                recyclerViewAdapter.setData(dataList);
-                recyclerView.scrollToPosition(layerIndex1);
-                layerIndex1 = -1;
-                ibBack.setVisibility(View.GONE);
-                break;
-            case 3://更新市数据
-                recyclerViewAdapter.setData(dataList.get(layerIndex1).getChirldData());
-                recyclerView.scrollToPosition(layerIndex1);
-                layerIndex2 = -1;
-                break;
+        if (view.getId() == R.id.ib_chooseAddressBack) {
+            switch (layer) {
+                case 2://更新省数据
+                    recyclerViewAdapter.setData(dataList);
+                    recyclerView.scrollToPosition(layerIndex1);
+                    layerIndex1 = -1;
+                    ibBack.setVisibility(View.GONE);
+                    break;
+                case 3://更新市数据
+                    recyclerViewAdapter.setData(dataList.get(layerIndex1).getChirldData());
+                    recyclerView.scrollToPosition(layerIndex1);
+                    layerIndex2 = -1;
+                    break;
+            }
+            layer--;
+            updateTitle();
+        } else if (view.getId() == R.id.tv_commit) {
+            if (layer < 4) {
+                ToastUtil.initToast(getContext(), "请选择完整地址");
+            } else {
+                dismissLoading();
+                dismissAllowingStateLoss();
+
+            }
+
         }
-        layer--;
-        updateTitle();
     }
+
 
     private void updateTitle() {
         switch (layer) {
-            case 1:
+            case 1: {
                 tvTitle.setText("选择城市");
-                break;
-            case 2:
+            }
+            break;
+            case 2: {
                 tvTitle.setText(dataList.get(layerIndex1).getAreaName());
-                break;
-            case 3:
+            }
+            break;
+            case 3: {
                 AreaListEntity.DataEntity province = dataList.get(layerIndex1);
                 tvTitle.setText(province.getAreaName() + " " + province.getChirldData().get(layerIndex2).getAreaName());
-                break;
+            }
+            break;
+            case 4: {
+                AreaListEntity.DataEntity province = dataList.get(layerIndex1);
+                tvTitle.setText(province.getAreaName() + " " + province.getChirldData().get(layerIndex2).getAreaName() + " " + province.getChirldData().get(layerIndex2).getChirldData().get(layerIndex3).getAreaName());
+            }
+            break;
         }
     }
 

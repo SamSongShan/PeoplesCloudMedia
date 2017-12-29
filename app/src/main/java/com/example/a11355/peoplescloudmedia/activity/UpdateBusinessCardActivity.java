@@ -142,6 +142,7 @@ public class UpdateBusinessCardActivity extends BaseActivity implements BaseDial
 
     private void initView() {
         if (data != null) {
+            headUrl = data.getHeadIcon();
             sdvUserHead.setImageURI(Constant.URL.BaseImg + data.getHeadIcon());
             etName.setText(data.getRealName());
             etZw.setText(data.getPostName());
@@ -284,8 +285,7 @@ public class UpdateBusinessCardActivity extends BaseActivity implements BaseDial
                     UploadImgEntity UpdateBusinessCardEntity = new Gson().fromJson(decrypt, UploadImgEntity.class);
                     if (UpdateBusinessCardEntity.getCode() == Constant.Integers.SUC) {
                         headUrl = UpdateBusinessCardEntity.getData();
-                        sdvUserHead.setImageURI(Constant.URL.BaseImg + headUrl);
-
+                        setResult(RESULT_OK);
                         finish();
                     } else {
                         ToastUtil.initToast(this, UpdateBusinessCardEntity.getMessage());
