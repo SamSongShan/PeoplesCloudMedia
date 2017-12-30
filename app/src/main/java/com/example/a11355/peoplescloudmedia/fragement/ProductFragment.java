@@ -20,6 +20,7 @@ import com.example.a11355.peoplescloudmedia.R;
 import com.example.a11355.peoplescloudmedia.activity.EditTitleActivity;
 import com.example.a11355.peoplescloudmedia.activity.GetMusicListActivity;
 import com.example.a11355.peoplescloudmedia.activity.LoginActivity;
+import com.example.a11355.peoplescloudmedia.activity.ProdectEditActivity;
 import com.example.a11355.peoplescloudmedia.activity.TitleEidtorActivity;
 import com.example.a11355.peoplescloudmedia.adapter.RichEditorAdapter;
 import com.example.a11355.peoplescloudmedia.adapter.SimpleItemTouchHelperCallback;
@@ -42,6 +43,7 @@ import com.google.gson.GsonBuilder;
 import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.config.PictureConfig;
 import com.luck.picture.lib.config.PictureMimeType;
+import com.zhy.view.flowlayout.TagFlowLayout;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -59,7 +61,7 @@ import static android.app.Activity.RESULT_OK;
 /**
  * 自媒体制作   产品
  */
-public class ProductFragment extends BaseFragment implements OkHttpUtil.OnDataListener{
+public class ProductFragment extends BaseFragment implements OkHttpUtil.OnDataListener {
     private static final int ANIMATION_DURATION = 300;//移动时间
     private static final int REQUEST_CODE_CHOOSE_BG = 1001;//选择背景
     private static final int REQUEST_CODE_CHOOSE_ITEM_IMG = 1002;//更改item图片
@@ -95,6 +97,11 @@ public class ProductFragment extends BaseFragment implements OkHttpUtil.OnDataLi
     ImageView ivAdditemInsert;
     @BindView(R.id.rv_itemlist)
     RecyclerView rvItemlist;
+
+    @BindView(R.id.id_flowlayout)
+    TagFlowLayout mFlowLayout;
+
+
     private float translateDistance = 0;//移动的距离
     /**
      * 字符区
@@ -126,6 +133,11 @@ public class ProductFragment extends BaseFragment implements OkHttpUtil.OnDataLi
     private String MusicName = "default";//:音乐名称（默认传default）
     private String Title = "";//:标题
     private LoadingDialog loadingDialog;
+    private String ProductImg;
+    private String ProductName;
+    private String ProductPrice;
+    private String Description;
+    private String MusicPath;
 
   /*  */
 
@@ -139,7 +151,6 @@ public class ProductFragment extends BaseFragment implements OkHttpUtil.OnDataLi
             adapter.notifyDataSetChanged();
         }
     };*/
-
     public ProductFragment() {
         // Required empty public constructor
     }
@@ -533,7 +544,7 @@ public class ProductFragment extends BaseFragment implements OkHttpUtil.OnDataLi
             tvTitle.setText(data.getStringExtra("title"));
             Title = data.getStringExtra("title");//文章记录赋值
         } else if (requestCode == REQUEST_CODE_SET_Music && resultCode == RESULT_OK) {  //音乐
-            MusicUrl = data.getStringExtra("path");
+            MusicPath = data.getStringExtra("path");
             MusicName = data.getStringExtra("singer");
 
 
@@ -544,11 +555,18 @@ public class ProductFragment extends BaseFragment implements OkHttpUtil.OnDataLi
             datas.get(adapter.getCurClickItemIndex()).setVideoImg(data.getStringExtra("photoUrl"));
             adapter.notifyDataSetChanged();
 
+        } else if (requestCode == Constant.Code.ZMTZZ_prodect && resultCode == RESULT_OK) {  //产品信息
+
+
+            ProductImg = data.getStringExtra("imgUrl");
+            ProductName = data.getStringExtra("name");
+            ProductPrice = data.getStringExtra("price");
+            Description = data.getStringExtra("description");
         }
     }
 
 
-    @OnClick({R.id.tv_addmsg, R.id.tv_addMusic,  R.id.tv_title, R.id.tv_content, R.id.iv_additem_txt, R.id.iv_additem_img, R.id.iv_additem_video, R.id.iv_additem_insert})
+    @OnClick({R.id.tv_addLink, R.id.rl, R.id.tv_addmsg, R.id.tv_addMusic, R.id.tv_title, R.id.tv_content, R.id.iv_additem_txt, R.id.iv_additem_img, R.id.iv_additem_video, R.id.iv_additem_insert})
     public void onViewClicked(View view) {
         if (TextUtils.isEmpty(enCode)) {
             ToastUtil.initToast(getContext(), "数据加载中");
@@ -556,7 +574,9 @@ public class ProductFragment extends BaseFragment implements OkHttpUtil.OnDataLi
         }
         switch (view.getId()) {
             case R.id.tv_addmsg:
-                onChangeBG(view);
+            case R.id.rl:
+                startActivityForResult(new Intent(getContext(), ProdectEditActivity.class), Constant.Code.ZMTZZ_prodect);
+                //onChangeBG(view);
                 break;
 
             case R.id.tv_addMusic:
@@ -588,6 +608,20 @@ public class ProductFragment extends BaseFragment implements OkHttpUtil.OnDataLi
                 break;
             case R.id.iv_additem_insert:
                 break;
+            case R.id.tv_addLink: {
+               /* mFlowLayout.setAdapter(new TagAdapter<String>(mVals)
+                {
+                    @Override
+                    public View getView(FlowLayout parent, int position, String s)
+                    {
+                        TextView tv = (TextView) LayoutInflater.inflate(R.layout.tv,
+                                mFlowLayout, false);
+                        tv.setText(s);
+                        return tv;
+                    }
+                });*/
+            }
+            break;
         }
     }
 

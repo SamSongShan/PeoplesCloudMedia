@@ -132,8 +132,8 @@ public class GetMusicListActivity extends BaseActivity implements TextView.OnEdi
     public void onItemClick(View v, int position) {
 
         Intent intent = new Intent();
-        intent.putExtra("path",newsData.get(position).getFilePath());
-        intent.putExtra("singer",newsData.get(position).getFileName());
+        intent.putExtra("path",newsData.get(position).getAudio());
+        intent.putExtra("singer",newsData.get(position).getName());
         setResult(RESULT_OK,intent);
         onBackPressed();
     /*    Intent intent = new Intent(this, H5ActivityForNewsDetical.class);
@@ -182,7 +182,7 @@ public class GetMusicListActivity extends BaseActivity implements TextView.OnEdi
         //然后指定需要播放文件的路径，初始化MediaPlayer
         try {
             player.setAudioStreamType(AudioManager.STREAM_MUSIC);
-            player.setDataSource(Constant.URL.BaseH5+newsData.get(lastPosition).getFilePath());
+            player.setDataSource("http://cdn.y.baidu.com/7e4f4df3971200f2d1cd5a2364375c7d.mp3");
              player.prepareAsync();
             player.setOnPreparedListener(new MediaPlayer.OnPreparedListener(){
                 @Override

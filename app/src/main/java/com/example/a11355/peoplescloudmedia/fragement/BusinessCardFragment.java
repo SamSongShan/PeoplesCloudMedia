@@ -16,8 +16,10 @@ import android.widget.TextView;
 
 import com.example.a11355.peoplescloudmedia.R;
 import com.example.a11355.peoplescloudmedia.activity.GetMusicListActivity;
+import com.example.a11355.peoplescloudmedia.activity.H5ActivityForZMTZZPreview;
 import com.example.a11355.peoplescloudmedia.activity.UpdateBusinessCardActivity;
 import com.example.a11355.peoplescloudmedia.activity.UpdateCardCompanyInfoActivity;
+import com.example.a11355.peoplescloudmedia.activity.ZMTZZActivity;
 import com.example.a11355.peoplescloudmedia.base.BaseFragment;
 import com.example.a11355.peoplescloudmedia.custom.LoadingDialog;
 import com.example.a11355.peoplescloudmedia.custom.UpdateCardOther;
@@ -45,7 +47,7 @@ import static android.app.Activity.RESULT_OK;
 /**
  * 自媒体制作  名片
  */
-public class BusinessCardFragment extends BaseFragment implements OkHttpUtil.OnDataListener {
+public class BusinessCardFragment extends BaseFragment implements OkHttpUtil.OnDataListener,ZMTZZActivity.SetPreview {
 
 
     @BindView(R.id.sdv_userHead)
@@ -311,8 +313,7 @@ public class BusinessCardFragment extends BaseFragment implements OkHttpUtil.OnD
         if (resultCode == RESULT_OK) {
             if (requestCode == Constant.Code.ZMTZZ_Music) {
 
-                data.getStringExtra("singer");
-                UpdateCardOther updateCardOther = new UpdateCardOther(PreferencesUtil.getUserId(getContext()), PreferencesUtil.getToken(getContext()), "MusicPath", "1111");
+                UpdateCardOther updateCardOther = new UpdateCardOther(PreferencesUtil.getUserId(getContext()), PreferencesUtil.getToken(getContext()), "MusicPath",  data.getStringExtra("path"));
                 OkHttpUtil.postJson(Constant.URL.UpdateCardOther, DesUtil.encrypt(gson.toJson(updateCardOther)), this);
 
             } else {
@@ -321,6 +322,20 @@ public class BusinessCardFragment extends BaseFragment implements OkHttpUtil.OnD
 
         }
 
+    }
+
+    @Override
+    public void setPreview() {
+        if (getBusinessCardInfoEntity==null||getBusinessCardInfoEntity.getData()==null){
+            ToastUtil.initToast(getContext(),"暂无名片信息");
+        } else {
+            Intent intent = new Intent(getContext(), H5ActivityForZMTZZPreview.class);
+
+            intent.putExtra("url",Constant.URL.BusinessCardPreview+getBusinessCardInfoEntity.getData().getBusinessCardInfo());
+
+            intent.putExtra("title", "我的名片");
+            startActivity(intent);
+        }
     }
 }
 

@@ -12,7 +12,7 @@ public class GetMusicListEntity {
     /**
      * Code : 200
      * Message : 获取成功
-     * Data : [{"FileLength":null,"FileSource":null,"AuditMark":null,"AuditDescription":null,"FileId":"5f481737-a21e-4df7-b9dc-a0f90f76916e","FolderId":"0","FileName":"白日梦 - 雨中漫步.mp3","FilePath":"/Resource/DocumentFile/System/20171121/a8677cc7-470a-4a94-a97c-275044f7ef4d.mp3","FileSize":"1633210","FileExtensions":".mp3","FileType":"mp3","IsShare":null,"ShareLink":null,"ShareCode":null,"ShareTime":null,"DownloadCount":null,"IsTop":null,"SortCode":null,"DeleteMark":0,"EnabledMark":1,"Description":null,"CreateDate":"2017-11-21 16:41:03","CreateUserId":"System","CreateUserName":"超级管理员","ModifyDate":"2017-11-21 16:41:03","ModifyUserId":"System","ModifyUserName":"超级管理员"},{"FileLength":null,"FileSource":null,"AuditMark":null,"AuditDescription":null,"FileId":"1ad85c2b-c3ef-499e-b8c5-623631b256a3","FolderId":"0","FileName":"可米小子-青春纪念册.mp3","FilePath":"/Resource/DocumentFile/System/20171121/fea6eb75-bb64-475b-9d1d-8b41444c1504.mp3","FileSize":"4994594","FileExtensions":".mp3","FileType":"mp3","IsShare":null,"ShareLink":null,"ShareCode":null,"ShareTime":null,"DownloadCount":null,"IsTop":null,"SortCode":null,"DeleteMark":0,"EnabledMark":1,"Description":null,"CreateDate":"2017-11-21 16:38:42","CreateUserId":"System","CreateUserName":"超级管理员","ModifyDate":"2017-11-21 16:38:42","ModifyUserId":"System","ModifyUserName":"超级管理员"}]
+     * Data : [{"name":"超级飞侠","artists":"群星","album":"热门华语241","picUrl":"http://p1.music.126.net/kyLChMWjs_fDjMnnk2RJhw==/3428277256617884.jpg","audio":"http://m2.music.126.net/hmZoNQaqzZALvVp0rE7faA==/0.mp3"},{"name":"西安西安","artists":"群星","album":"我为西安唱首歌","picUrl":"http://p1.music.126.net/A8HgOIfDxp17rxKp2A0w_Q==/109951163093824637.jpg","audio":"http://m2.music.126.net/hmZoNQaqzZALvVp0rE7faA==/0.mp3"},{"name":"追光者","artists":"岑宁儿","album":"夏至未至 影视原声带","picUrl":"http://p1.music.126.net/ZZAQGWl9mR7g5xCyWWH3Pw==/19149094509535913.jpg","audio":"http://m2.music.126.net/hmZoNQaqzZALvVp0rE7faA==/0.mp3"},{"name":"全民颈椎舞之摇起来","artists":"群星","album":"全民脊椎舞","picUrl":"http://p1.music.126.net/b5VaVkYfB2p2W9DRHq42YQ==/109951163095208877.jpg","audio":"http://m2.music.126.net/hmZoNQaqzZALvVp0rE7faA==/0.mp3"},{"name":"为梦鼓掌","artists":"群星","album":"为梦鼓掌","picUrl":"http://p1.music.126.net/AWwgpg6n8OImcl0UmWuqyw==/109951163095136669.jpg","audio":"http://m2.music.126.net/hmZoNQaqzZALvVp0rE7faA==/0.mp3"},{"name":"我所有的思念","artists":"大壮","album":"MOMO音乐计划","picUrl":"http://p1.music.126.net/_OUFA3dr6FkiswwVMTlHDA==/18852226369889909.jpg","audio":"http://m2.music.126.net/hmZoNQaqzZALvVp0rE7faA==/0.mp3"},{"name":"醉赤壁","artists":"林俊杰","album":"JJ陆","picUrl":"http://p1.music.126.net/s6zFxvXe5kOxub4_x4rZhQ==/109951163052847567.jpg","audio":"http://m2.music.126.net/qNDziQZOoUM-PjGGjILrJQ==/7973658326183112.mp3"},{"name":"我多喜欢你，你会知道","artists":"王俊琪","album":"致我们单纯的小美好 电视原声带","picUrl":"http://p1.music.126.net/Z--3NoFqowsVF3L4a7yE_A==/109951163063300063.jpg","audio":"http://m2.music.126.net/hmZoNQaqzZALvVp0rE7faA==/0.mp3"},{"name":"Real Friends (Leowi & NGO Remix)","artists":"Camila Cabello","album":"Real Friends (Leowi & NGO Remix)","picUrl":"http://p1.music.126.net/tcGjbWU7l00NgT0SDVPi0Q==/109951163094320928.jpg","audio":"http://m2.music.126.net/hmZoNQaqzZALvVp0rE7faA==/0.mp3"},{"name":"男孩","artists":"高誉容","album":"我想和你唱 第二季 第7期","picUrl":"http://p1.music.126.net/QFXbRb-OOk-ThxtDyg8fjQ==/18618030395080088.jpg","audio":"http://m2.music.126.net/hmZoNQaqzZALvVp0rE7faA==/0.mp3"},{"name":"In The Garden (Reunion Album Version)","artists":"Various Artists","album":"Reunion","picUrl":"http://p1.music.126.net/D7dY6hTnIX-w9oB1hBxcZg==/901599534798888.jpg","audio":"http://m2.music.126.net/xraevg655DPoeyGqphI4kw==/1221557418464405.mp3"},{"name":"Hold To God's Unchanging Hand (Reunion Album Version)","artists":"Various Artists","album":"Reunion","picUrl":"http://p1.music.126.net/D7dY6hTnIX-w9oB1hBxcZg==/901599534798888.jpg","audio":"http://m2.music.126.net/kPi9kiAXD5N7KBWWqX0Syw==/1161084278936940.mp3"},{"name":"凉凉","artists":"唐倩","album":"我想和你唱 第二季 第4期","picUrl":"http://p1.music.126.net/9FhJLS1BrJdXAUJ2qjyJSg==/19212866183896782.jpg","audio":"http://m2.music.126.net/3bfpqfEfQ-mwLtOS9o5bag==/18898405858352638.mp3"},{"name":"So Far Away (Brandon Langella Remix)","artists":"David Guetta","album":"So Far Away (Brandon Langella Remix)","picUrl":"http://p1.music.126.net/CmYy6miVyOSx7GKC8BSZEw==/109951163093890237.jpg","audio":"http://m2.music.126.net/hmZoNQaqzZALvVp0rE7faA==/0.mp3"}]
      * Number : 26
      */
 
@@ -55,291 +55,67 @@ public class GetMusicListEntity {
 
     public static class DataBean {
         /**
-         * FileLength : null
-         * FileSource : null
-         * AuditMark : null
-         * AuditDescription : null
-         * FileId : 5f481737-a21e-4df7-b9dc-a0f90f76916e
-         * FolderId : 0
-         * FileName : 白日梦 - 雨中漫步.mp3
-         * FilePath : /Resource/DocumentFile/System/20171121/a8677cc7-470a-4a94-a97c-275044f7ef4d.mp3
-         * FileSize : 1633210
-         * FileExtensions : .mp3
-         * FileType : mp3
-         * IsShare : null
-         * ShareLink : null
-         * ShareCode : null
-         * ShareTime : null
-         * DownloadCount : null
-         * IsTop : null
-         * SortCode : null
-         * DeleteMark : 0
-         * EnabledMark : 1
-         * Description : null
-         * CreateDate : 2017-11-21 16:41:03
-         * CreateUserId : System
-         * CreateUserName : 超级管理员
-         * ModifyDate : 2017-11-21 16:41:03
-         * ModifyUserId : System
-         * ModifyUserName : 超级管理员
+         * name : 超级飞侠
+         * artists : 群星
+         * album : 热门华语241
+         * picUrl : http://p1.music.126.net/kyLChMWjs_fDjMnnk2RJhw==/3428277256617884.jpg
+         * audio : http://m2.music.126.net/hmZoNQaqzZALvVp0rE7faA==/0.mp3
          */
 
-        private String FileLength;
-        private String FileSource;
-        private String AuditMark;
-        private String AuditDescription;
-        private String FileId;
-        private String FolderId;
-        private String FileName;
-        private String FilePath;
-        private String FileSize;
-        private String FileExtensions;
-        private String FileType;
-        private String IsShare;
-        private String ShareLink;
-        private String ShareCode;
-        private String ShareTime;
-        private String DownloadCount;
-        private String IsTop;
-        private String SortCode;
-        private int DeleteMark;
-        private int EnabledMark;
-        private String Description;
-        private String CreateDate;
-        private String CreateUserId;
-        private String CreateUserName;
-        private String ModifyDate;
-        private String ModifyUserId;
-        private String ModifyUserName;
+        private String name;
+        private String artists;
+        private String album;
+        private String picUrl;
+        private String audio;
 
-        private int isplay;
-
-        public DataBean(int isplay) {
-            this.isplay = isplay;
-        }
+        private int Isplay;
 
         public int getIsplay() {
-            return isplay;
+            return Isplay;
         }
 
         public void setIsplay(int isplay) {
-            this.isplay = isplay;
+            Isplay = isplay;
         }
 
-        public String getFileLength() {
-            return FileLength;
+        public String getName() {
+            return name;
         }
 
-        public void setFileLength(String FileLength) {
-            this.FileLength = FileLength;
+        public void setName(String name) {
+            this.name = name;
         }
 
-        public String getFileSource() {
-            return FileSource;
+        public String getArtists() {
+            return artists;
         }
 
-        public void setFileSource(String FileSource) {
-            this.FileSource = FileSource;
+        public void setArtists(String artists) {
+            this.artists = artists;
         }
 
-        public String getAuditMark() {
-            return AuditMark;
+        public String getAlbum() {
+            return album;
         }
 
-        public void setAuditMark(String AuditMark) {
-            this.AuditMark = AuditMark;
+        public void setAlbum(String album) {
+            this.album = album;
         }
 
-        public String getAuditDescription() {
-            return AuditDescription;
+        public String getPicUrl() {
+            return picUrl;
         }
 
-        public void setAuditDescription(String AuditDescription) {
-            this.AuditDescription = AuditDescription;
+        public void setPicUrl(String picUrl) {
+            this.picUrl = picUrl;
         }
 
-        public String getFileId() {
-            return FileId;
+        public String getAudio() {
+            return audio;
         }
 
-        public void setFileId(String FileId) {
-            this.FileId = FileId;
-        }
-
-        public String getFolderId() {
-            return FolderId;
-        }
-
-        public void setFolderId(String FolderId) {
-            this.FolderId = FolderId;
-        }
-
-        public String getFileName() {
-            return FileName;
-        }
-
-        public void setFileName(String FileName) {
-            this.FileName = FileName;
-        }
-
-        public String getFilePath() {
-            return FilePath;
-        }
-
-        public void setFilePath(String FilePath) {
-            this.FilePath = FilePath;
-        }
-
-        public String getFileSize() {
-            return FileSize;
-        }
-
-        public void setFileSize(String FileSize) {
-            this.FileSize = FileSize;
-        }
-
-        public String getFileExtensions() {
-            return FileExtensions;
-        }
-
-        public void setFileExtensions(String FileExtensions) {
-            this.FileExtensions = FileExtensions;
-        }
-
-        public String getFileType() {
-            return FileType;
-        }
-
-        public void setFileType(String FileType) {
-            this.FileType = FileType;
-        }
-
-        public String getIsShare() {
-            return IsShare;
-        }
-
-        public void setIsShare(String IsShare) {
-            this.IsShare = IsShare;
-        }
-
-        public String getShareLink() {
-            return ShareLink;
-        }
-
-        public void setShareLink(String ShareLink) {
-            this.ShareLink = ShareLink;
-        }
-
-        public String getShareCode() {
-            return ShareCode;
-        }
-
-        public void setShareCode(String ShareCode) {
-            this.ShareCode = ShareCode;
-        }
-
-        public String getShareTime() {
-            return ShareTime;
-        }
-
-        public void setShareTime(String ShareTime) {
-            this.ShareTime = ShareTime;
-        }
-
-        public String getDownloadCount() {
-            return DownloadCount;
-        }
-
-        public void setDownloadCount(String DownloadCount) {
-            this.DownloadCount = DownloadCount;
-        }
-
-        public String getIsTop() {
-            return IsTop;
-        }
-
-        public void setIsTop(String IsTop) {
-            this.IsTop = IsTop;
-        }
-
-        public String getSortCode() {
-            return SortCode;
-        }
-
-        public void setSortCode(String SortCode) {
-            this.SortCode = SortCode;
-        }
-
-        public int getDeleteMark() {
-            return DeleteMark;
-        }
-
-        public void setDeleteMark(int DeleteMark) {
-            this.DeleteMark = DeleteMark;
-        }
-
-        public int getEnabledMark() {
-            return EnabledMark;
-        }
-
-        public void setEnabledMark(int EnabledMark) {
-            this.EnabledMark = EnabledMark;
-        }
-
-        public String getDescription() {
-            return Description;
-        }
-
-        public void setDescription(String Description) {
-            this.Description = Description;
-        }
-
-        public String getCreateDate() {
-            return CreateDate;
-        }
-
-        public void setCreateDate(String CreateDate) {
-            this.CreateDate = CreateDate;
-        }
-
-        public String getCreateUserId() {
-            return CreateUserId;
-        }
-
-        public void setCreateUserId(String CreateUserId) {
-            this.CreateUserId = CreateUserId;
-        }
-
-        public String getCreateUserName() {
-            return CreateUserName;
-        }
-
-        public void setCreateUserName(String CreateUserName) {
-            this.CreateUserName = CreateUserName;
-        }
-
-        public String getModifyDate() {
-            return ModifyDate;
-        }
-
-        public void setModifyDate(String ModifyDate) {
-            this.ModifyDate = ModifyDate;
-        }
-
-        public String getModifyUserId() {
-            return ModifyUserId;
-        }
-
-        public void setModifyUserId(String ModifyUserId) {
-            this.ModifyUserId = ModifyUserId;
-        }
-
-        public String getModifyUserName() {
-            return ModifyUserName;
-        }
-
-        public void setModifyUserName(String ModifyUserName) {
-            this.ModifyUserName = ModifyUserName;
+        public void setAudio(String audio) {
+            this.audio = audio;
         }
     }
 }

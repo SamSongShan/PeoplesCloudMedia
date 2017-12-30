@@ -42,6 +42,7 @@
         </android.support.design.widget.TabLayout>
 
         <TextView
+            android:id="@+id/tv_preview"
             android:textColor="@color/colorDeepBlack"
             android:textSize="16sp"
             android:layout_marginRight="10dp"

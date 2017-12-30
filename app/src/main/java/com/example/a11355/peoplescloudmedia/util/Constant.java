@@ -192,6 +192,8 @@ public interface Constant {
 
 
 
+
+
         //注册分享链接   RecommendMobile  传推荐人手机号
         String ShearLink = BaseH5 + "/Webuser/Registered?RecommendMobile=";
         // 消息 详情  http://localhost:1548/News/Detail?MessageId=1e7c8e24-7308-441a-a710-4db44a3dd57f
@@ -237,6 +239,22 @@ http://net.lml9.com/News/FindOutSharing?Uid=395
 Uid 传文章ID
         * */
         String ShearArticle = BaseH5 + "/News/FindOutSharing?Uid=";
+
+        /*
+        *
+我的名片查看页面
+http://net.lml9.com/WebUser/MyBusinessCardInfo?BusinessCardInfo=9817eb05-1cae-45f4-a900-31137d502a27
+BusinessCardInfo 传名片ID
+        * */
+        String MyBusinessCard = BaseH5 + "/WebUser/MyBusinessCardInfo?BusinessCardInfo=";
+        /*
+        * 7、自媒体
+名片预览页面（注：和前面我的名片查看页面不一样）
+http://net.lml9.com/News/UserBusinessCardInfo?BusinessCardInfo=9817eb05-1cae-45f4-a900-31137d502a27
+BusinessCardInfo 传名片ID
+        *
+        * */
+        String BusinessCardPreview = BaseH5 + "/News/UserBusinessCardInfo?BusinessCardInfo=";
 
     }
 
@@ -324,6 +342,7 @@ Uid 传文章ID
         //自媒体制作公司
         int ZMTZZ_Company = 0x2009;
         int ZMTZZ_Music = 0x2010;
+        int ZMTZZ_prodect = 0x2011;
     }
 
     interface IdString {

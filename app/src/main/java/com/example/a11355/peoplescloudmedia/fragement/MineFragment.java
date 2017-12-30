@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.example.a11355.peoplescloudmedia.R;
 import com.example.a11355.peoplescloudmedia.activity.AboutUsActivity;
+import com.example.a11355.peoplescloudmedia.activity.H5ActivityForZMTZZPreview;
 import com.example.a11355.peoplescloudmedia.activity.LoginActivity;
 import com.example.a11355.peoplescloudmedia.activity.MyCollectActivity;
 import com.example.a11355.peoplescloudmedia.activity.MyFocusActivity;
@@ -28,6 +29,8 @@ import com.example.a11355.peoplescloudmedia.base.AbsRecyclerViewAdapter;
 import com.example.a11355.peoplescloudmedia.base.BaseFragment;
 import com.example.a11355.peoplescloudmedia.custom.GridDividerItemDecoration;
 import com.example.a11355.peoplescloudmedia.custom.LoadingDialog;
+import com.example.a11355.peoplescloudmedia.model.GetBusinessCardInfo;
+import com.example.a11355.peoplescloudmedia.model.GetBusinessCardInfoEntity;
 import com.example.a11355.peoplescloudmedia.model.GetEntityUser;
 import com.example.a11355.peoplescloudmedia.model.GetEntityUserEntity;
 import com.example.a11355.peoplescloudmedia.util.BitMapUtil;
@@ -83,6 +86,8 @@ public class MineFragment extends BaseFragment implements View.OnClickListener, 
     private String ShearLink;
 
     private boolean isloading=true;
+    private GetEntityUserEntity getEntityUserEntity;
+    private GetBusinessCardInfoEntity getBusinessCardInfoEntity;
 
     public MineFragment() {
         // Required empty public constructor
@@ -119,6 +124,8 @@ public class MineFragment extends BaseFragment implements View.OnClickListener, 
         loadingDialog.show(getActivity().getFragmentManager());
         userId = PreferencesUtil.getUserId(getActivity());
         token = PreferencesUtil.getToken(getActivity());
+        GetBusinessCardInfo getBusinessCardInfo = new GetBusinessCardInfo(PreferencesUtil.getToken(getContext()), PreferencesUtil.getUserId(getContext()));
+        OkHttpUtil.postJson(Constant.URL.GetBusinessCardInfo, DesUtil.encrypt(gson.toJson(getBusinessCardInfo)), this);
         String jsonUser = gson.toJson(new GetEntityUser(token, userId));
         OkHttpUtil.postJson(Constant.URL.GetEntityUser, DesUtil.encrypt(jsonUser), this);
     }
@@ -230,6 +237,19 @@ public class MineFragment extends BaseFragment implements View.OnClickListener, 
             }
             break;
             case "我的名片": {
+
+                if (getBusinessCardInfoEntity==null||getBusinessCardInfoEntity.getData()==null){
+                    ToastUtil.initToast(getContext(),"暂无名片信息");
+                } else {
+                    Intent intent = new Intent(getContext(), H5ActivityForZMTZZPreview.class);
+
+                    intent.putExtra("url",Constant.URL.MyBusinessCard+getBusinessCardInfoEntity.getData().getBusinessCardInfo());
+
+                    intent.putExtra("title", "我的名片");
+                    startActivity(intent);
+                }
+
+
             }
             break;
             case "关于我们": {
@@ -250,7 +270,7 @@ public class MineFragment extends BaseFragment implements View.OnClickListener, 
                 case Constant.URL.GetEntityUser: { //个人信息
                     isloading=false;
                     LogUtils.e("loge", "GetEntityUser: " + decrypt);
-                    GetEntityUserEntity getEntityUserEntity = gson.fromJson(decrypt, GetEntityUserEntity.class);
+                    getEntityUserEntity = gson.fromJson(decrypt, GetEntityUserEntity.class);
 
                     if (getEntityUserEntity.getCode() == Constant.Integers.SUC) { //成功
                         PreferencesUtil.saveUserInfo(getActivity(), DesUtil.encrypt(decrypt, DesUtil.LOCAL_KEY));
@@ -269,6 +289,15 @@ public class MineFragment extends BaseFragment implements View.OnClickListener, 
 
                 }
                 break;
+                case Constant.URL.GetBusinessCardInfo://用户编号获取用户名片信息
+                    LogUtils.e("GetBusinessCardInfo", decrypt);
+                    getBusinessCardInfoEntity = gson.fromJson(decrypt, GetBusinessCardInfoEntity.class);
+                    if (getBusinessCardInfoEntity.getCode() == Constant.Integers.SUC) {
+
+
+
+                    }
+                    break;
             }
         }
     }

@@ -28,9 +28,9 @@ public class GetMusicListAdapter extends AbsRecyclerViewAdapter<GetMusicListEnti
     @Override
     public void onBindHolder(AbsRecyclerViewAdapter.RecyclerViewHolder holder, GetMusicListEntity.DataBean d, int position) {
 
-        holder.bindSimpleDraweeViewBase(R.id.sdv_Head, d.getFileSource())
-                .bindTextView(R.id.tv_name, d.getCreateUserName() + "")
-                .bindTextView(R.id.tv_singer, d.getFileName() + "")
+        holder.bindSimpleDraweeView(R.id.sdv_Head, d.getPicUrl())
+                .bindTextView(R.id.tv_name, d.getName() + "")
+                .bindTextView(R.id.tv_singer, d.getArtists() + "")
                 .setViewSelected(R.id.img_play, d.getIsplay() == 1)
                 .setClickListenerAndTag(R.id.img_play, onClickListener,position);
 
