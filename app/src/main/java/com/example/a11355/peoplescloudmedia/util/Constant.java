@@ -180,6 +180,13 @@ public interface Constant {
         //【25】用户名片其他信息修改(标题，音乐)(输入参数string Json)
         String UpdateCardOther=BaseUrl + "UpdateCardOther";
 
+        //【27】用户产品信息修改(输入参数string Json)
+        String UpdateUserProductEntity=BaseUrl + "UpdateUserProductEntity";
+
+        //【29】用户编号获取产品完整信息(输入参数string Json)
+
+        String GetUserProductInfo=BaseUrl + "GetUserProductInfo";
+
 
 
 
@@ -255,6 +262,12 @@ BusinessCardInfo 传名片ID
         *
         * */
         String BusinessCardPreview = BaseH5 + "/News/UserBusinessCardInfo?BusinessCardInfo=";
+
+
+       /* 产品预览页面
+        http://net.lml9.com/News/UserProductInfo?UserProductInfoId=a3f8ec26-6b7c-4505-a9dd-6e0bcf7a35e6
+        UserProductInfoId 传产品ID*/
+       String ProdectPreview = BaseH5 + "/News/UserProductInfo?UserProductInfoId=";
 
     }
 
@@ -343,6 +356,7 @@ BusinessCardInfo 传名片ID
         int ZMTZZ_Company = 0x2009;
         int ZMTZZ_Music = 0x2010;
         int ZMTZZ_prodect = 0x2011;
+        int Link= 0x2012;
     }
 
     interface IdString {

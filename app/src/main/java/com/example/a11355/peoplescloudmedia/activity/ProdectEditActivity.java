@@ -239,8 +239,6 @@ public class ProdectEditActivity extends BaseActivity implements BaseDialog.OnIt
                         ImgUrl = img.getData();
 
                         progressBar.setVisibility(View.GONE);
-
-                        PreferencesUtil.submitUserInfo(this, "HeadIcon", img.getData(), this);
                     } else {
                         ToastUtil.initToast(this, img.getMessage());
 

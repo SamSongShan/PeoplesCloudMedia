@@ -542,7 +542,7 @@ public class HRichEditorViewActivity extends BaseActivity implements OkHttpUtil.
             tvAddMusic.setVisibility(View.GONE);
             MusicUrl = data.getStringExtra("path");
             MusicName = data.getStringExtra("singer");
-
+            IsUseMusic="0";
 
 
             tvAddedMusic.setText(MusicName);

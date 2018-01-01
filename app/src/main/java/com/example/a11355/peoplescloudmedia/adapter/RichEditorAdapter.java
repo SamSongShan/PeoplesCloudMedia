@@ -24,7 +24,6 @@ import com.example.a11355.peoplescloudmedia.model.EContent;
 import com.example.a11355.peoplescloudmedia.model.ItemType;
 import com.example.a11355.peoplescloudmedia.util.Constant;
 
-import java.util.Collections;
 import java.util.List;
 
 import io.valuesfeng.picker.Picker;
@@ -40,6 +39,7 @@ public class RichEditorAdapter extends RecyclerView.Adapter<RichEditorAdapter.My
     private List<EContent> datas;
     private Activity context;
     private String enCode;
+    private int type;
     private static final int REQUEST_CODE_CHOOSE_ITEM_IMG = 1002;//更改item图片
     private static final int REQUEST_CODE_EDIT_TXT = 1005;//编辑文本
     private int curClickItemIndex = 0;//当前点击的item
@@ -48,10 +48,17 @@ public class RichEditorAdapter extends RecyclerView.Adapter<RichEditorAdapter.My
     private OnItemClickListener onItemClickListener;
 
 
-    public RichEditorAdapter(Activity context, List<EContent> datas,String enCode) {
+    public RichEditorAdapter(Activity context, List<EContent> datas, String enCode) {
         this.datas = datas;
         this.context = context;
         this.enCode = enCode;
+    }
+
+    public RichEditorAdapter(Activity context, List<EContent> datas, String enCode, int type) {
+        this.datas = datas;
+        this.context = context;
+        this.enCode = enCode;
+        this.type = type;
     }
 
     @Override
@@ -61,20 +68,20 @@ public class RichEditorAdapter extends RecyclerView.Adapter<RichEditorAdapter.My
 
     @Override
     public void onBindViewHolder(final MyViewHolder holder, final int position) {
+
+        if (type == 1) {
+            holder.iv_additem_insert.setVisibility(View.GONE);
+        } else {
+            holder.iv_additem_insert.setVisibility(View.VISIBLE);
+
+        }
         final EContent eContent = datas.get(position);
         holder.iv_item_video.setVisibility(View.GONE);
-        /**
-         * 隐藏第一个item的上箭头和最后一个item的下箭头
-         */
-        if (position == 0) {
-            holder.ivUp.setVisibility(View.GONE);
-        } else if (position == datas.size() - 1) {
-            holder.ivDown.setVisibility(View.GONE);
-        }
+
         //设置内容
-        if ("default".equals(eContent.getTexts())){
+        if ("default".equals(eContent.getTexts())) {
             holder.tvDesc.setText(context.getString(R.string.rich_click_add_txt));
-        }else {
+        } else {
             holder.tvDesc.setText(Html.fromHtml(eContent.getTexts()));
         }
         //holder.tvDesc.setText(TextUtils.isEmpty(eContent.getContent()) ? context.getString(R.string.rich_click_add_txt): eContent.getContent());
@@ -93,7 +100,7 @@ public class RichEditorAdapter extends RecyclerView.Adapter<RichEditorAdapter.My
                             .diskCacheStrategy(DiskCacheStrategy.ALL);
 
                     Glide.with(context)
-                            .load(Constant.URL.BaseImg+eContent.getFilePath())
+                            .load(Constant.URL.BaseImg + eContent.getFilePath())
                             .transition(DrawableTransitionOptions.withCrossFade())
                             .apply(options)
                             .into(holder.ivPic);
@@ -112,17 +119,17 @@ public class RichEditorAdapter extends RecyclerView.Adapter<RichEditorAdapter.My
                 break;
             case ItemType.VIDEO:
 
-                if ("default".equals(eContent.getVideoImg())){
+                if ("default".equals(eContent.getVideoImg())) {
                     holder.ivPic.setImageResource(R.drawable.video_item);
 
 
-                }else {
+                } else {
                     RequestOptions options = new RequestOptions()
                             .placeholder(R.color.ucrop_color_grey)
                             .centerCrop()
                             .diskCacheStrategy(DiskCacheStrategy.ALL);
                     Glide.with(context)
-                            .load(Constant.URL.BaseImg+eContent.getVideoImg())
+                            .load(Constant.URL.BaseImg + eContent.getVideoImg())
                             .transition(DrawableTransitionOptions.withCrossFade())
                             .apply(options)
                             .into(holder.ivPic);
@@ -198,18 +205,33 @@ public class RichEditorAdapter extends RecyclerView.Adapter<RichEditorAdapter.My
         });
         /**
          * 设置向下向上箭头、删除的单击事件监听
+         *
          */
+
+        /**
+         * 隐藏第一个item的上箭头和最后一个item的下箭头
+         */
+
         holder.ivDown.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
-                onDownUpChangeListener.onDown(v, position);
+                if (position == datas.size() - 1) {
+                }else {
+                    onDownUpChangeListener.onDown(v, position);
+
+                }
 
             }
         });
         holder.ivUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onDownUpChangeListener.onUp(v, position);
+
+                if (position == 0) {
+                }  else {
+                    onDownUpChangeListener.onUp(v, position);
+
+                }
             }
         });
         holder.ivDrop.setOnClickListener(new View.OnClickListener() {
@@ -261,7 +283,7 @@ public class RichEditorAdapter extends RecyclerView.Adapter<RichEditorAdapter.My
                 .count(1)
                 .enableCamera(true)
                 .setEngine(new GlideEngine())
-                .forResult(REQUEST_CODE_CHOOSE_ITEM_IMG,enCode);
+                .forResult(REQUEST_CODE_CHOOSE_ITEM_IMG, enCode);
     }
 
     /**
@@ -310,7 +332,7 @@ public class RichEditorAdapter extends RecyclerView.Adapter<RichEditorAdapter.My
 
     @Override
     public void onItemMove(RecyclerView.ViewHolder source, RecyclerView.ViewHolder target) {
-        int fromPosition = source.getAdapterPosition();
+       /* int fromPosition = source.getAdapterPosition();
         int toPosition = target.getAdapterPosition();
         if (fromPosition < datas.size() && toPosition < datas.size()) {
             //交换数据位置
@@ -319,7 +341,7 @@ public class RichEditorAdapter extends RecyclerView.Adapter<RichEditorAdapter.My
             notifyItemMoved(fromPosition, toPosition);
         }
         //移动过程中移除view的放大效果
-        onItemClear(source);
+        onItemClear(source);*/
     }
 
     @Override
@@ -381,7 +403,7 @@ public class RichEditorAdapter extends RecyclerView.Adapter<RichEditorAdapter.My
      * 创建viewholder类
      */
     class MyViewHolder extends RecyclerView.ViewHolder {
-        ImageView ivPic, ivUp, ivDown, ivDrop, ivAddItem, ivAddTxt, ivAddImg, ivAddVideo,iv_item_video;
+        ImageView ivPic, ivUp, ivDown, ivDrop, ivAddItem, ivAddTxt, ivAddImg, ivAddVideo, iv_item_video,iv_additem_insert;
         TextView tvDesc;
         RelativeLayout rvItem;
         LinearLayout rvAddItemArea;
@@ -391,6 +413,7 @@ public class RichEditorAdapter extends RecyclerView.Adapter<RichEditorAdapter.My
             ivPic = (ImageView) itemView.findViewById(R.id.iv_item_pic);
             rvItem = (RelativeLayout) itemView.findViewById(R.id.rl_item);
             ivAddItem = (ImageView) itemView.findViewById(R.id.iv_additem_add);
+
             ivAddTxt = (ImageView) itemView.findViewById(R.id.iv_additem_txt);
             ivAddImg = (ImageView) itemView.findViewById(R.id.iv_additem_img);
             ivAddVideo = (ImageView) itemView.findViewById(R.id.iv_additem_video);
@@ -400,6 +423,8 @@ public class RichEditorAdapter extends RecyclerView.Adapter<RichEditorAdapter.My
             tvDesc = (TextView) itemView.findViewById(R.id.tv_item_desc);
             rvAddItemArea = (LinearLayout) itemView.findViewById(R.id.ll_additem_addarea);
             iv_item_video = (ImageView) itemView.findViewById(R.id.iv_item_video);
+             iv_additem_insert = (ImageView) itemView.findViewById(R.id.iv_additem_insert);
+
         }
     }
 }

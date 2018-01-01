@@ -31,6 +31,18 @@ public class EContent implements Serializable {
     public EContent() {
     }
 
+    public EContent(GetUserProductInfoEntity.DataEntity.MediaBlockListEntity data) {
+
+
+        MediaBlockId=data.getMediaBlockId();
+        FilePath =data.getFilePath();
+        Texts =data.getTexts()  ;
+        MediaType =data.getMediaType()+"";
+        VideoImg =data.getVideoImg();
+        SortCode=data.getSortCode()+"";
+        isDelete ="0" ;
+    }
+
     public String getMediaBlockId() {
         return MediaBlockId;
     }

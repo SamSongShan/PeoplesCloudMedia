@@ -1,10 +1,13 @@
 package com.example.a11355.peoplescloudmedia.activity;
 
+import android.content.Intent;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.view.View;
+import android.widget.TextView;
 
 import com.example.a11355.peoplescloudmedia.R;
 import com.example.a11355.peoplescloudmedia.base.BaseActivity;
@@ -15,16 +18,22 @@ import com.example.a11355.peoplescloudmedia.util.TabLayoutUtils;
 import butterknife.BindView;
 import butterknife.OnClick;
 
+
 /*
 *自媒体制作
 *
 * */
-public class ZMTZZActivity extends BaseActivity implements ViewPager.OnPageChangeListener {
+public class ZMTZZActivity extends BaseActivity implements OnPageChangeListener,ProductFragment.ShowSave {
 
     @BindView(R.id.tab)
     TabLayout tab;
     @BindView(R.id.vp)
     ViewPager vp;
+
+    @BindView(R.id.tv_preview)
+    TextView tvPreview;
+
+
 
     private String[] titles = {"名片", "产品"};
     private BusinessCardFragment businessCardFragment;
@@ -40,11 +49,12 @@ public class ZMTZZActivity extends BaseActivity implements ViewPager.OnPageChang
     protected void init() {
         businessCardFragment = new BusinessCardFragment();
         productFragment = new ProductFragment();
+        productFragment.setActivity(this);
 
         vp.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager()) {
             @Override
             public Fragment getItem(int position) {
-                return position == 0 ? businessCardFragment :productFragment ;
+                return position == 0 ? businessCardFragment : productFragment;
             }
 
             @Override
@@ -63,7 +73,6 @@ public class ZMTZZActivity extends BaseActivity implements ViewPager.OnPageChang
     }
 
 
-
     @OnClick({R.id.toolbar_iconBack, R.id.tv_preview})
     public void onViewClicked(View view) {
         switch (view.getId()) {
@@ -72,8 +81,17 @@ public class ZMTZZActivity extends BaseActivity implements ViewPager.OnPageChang
                 break;
             case R.id.tv_preview:
 
-                if (position==0){
+                if (position == 0) { //名片
+
+
                     businessCardFragment.setPreview();
+                } else {  //产品
+                    if ("保存".equals(tvPreview.getText().toString())) {
+                        productFragment.upData();
+                    } else {
+                        productFragment.setPreview();
+
+                    }
                 }
                 break;
         }
@@ -88,6 +106,12 @@ public class ZMTZZActivity extends BaseActivity implements ViewPager.OnPageChang
     public void onPageSelected(int position) {
 
         this.position = position;
+        if (position==1){
+            productFragment.reFlesh();
+        }  else {
+            tvPreview.setText("预览");
+
+        }
     }
 
     @Override
@@ -95,11 +119,31 @@ public class ZMTZZActivity extends BaseActivity implements ViewPager.OnPageChang
 
     }
 
+    @Override
+    public void showSave(boolean isShowSave) {
+                    if (isShowSave){
+                        tvPreview.setText("保存");
+                    }  else {
+                        tvPreview.setText("预览");
 
-    public interface SetPreview{
+                    }
+    }
 
 
-        void setPreview();
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (position==0){
+            businessCardFragment.onActivityResult(requestCode, resultCode, data);
+
+        }  else {
+            productFragment.onActivityResult(requestCode, resultCode, data);
+        }
     }
 
 }
+
+
+
+

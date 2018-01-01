@@ -1,10 +1,10 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:zhy="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     android:background="@color/primaryBg"
+    android:orientation="vertical"
     tools:context="com.example.a11355.peoplescloudmedia.fragement.ProductFragment">
 
 
@@ -20,9 +20,10 @@
             android:orientation="vertical">
 
             <RelativeLayout
+
                 android:id="@+id/rl"
                 android:layout_width="match_parent"
-                android:layout_height="180dp"
+                android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
@@ -34,12 +35,66 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
+                    android:layout_marginBottom="90dp"
+                    android:layout_marginTop="90dp"
                     android:drawableLeft="@drawable/add_message"
                     android:drawablePadding="10dp"
                     android:gravity="center"
                     android:text="添加产品信息"
                     android:textSize="20sp" />
 
+                <RelativeLayout
+                    android:visibility="gone"
+                    android:id="@+id/rl_show"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <com.facebook.drawee.view.SimpleDraweeView
+                        android:id="@+id/sdv"
+                        android:layout_width="match_parent"
+                        android:layout_height="150dp"
+                        android:layout_gravity="center_horizontal"
+                        fresco:actualImageScaleType="fitCenter"
+                        fresco:failureImage="@drawable/img_fail"
+                        fresco:failureImageScaleType="fitCenter"
+                        fresco:placeholderImage="@drawable/img_loading"
+                        fresco:placeholderImageScaleType="fitCenter" />
+
+                    <TextView
+                        android:textColor="@color/white"
+                        android:lines="1"
+                        android:ellipsize="end"
+                        android:id="@+id/tv_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginTop="70dp"
+                        android:textSize="20sp"
+                        tools:text="中兴手机" />
+
+                    <TextView
+                        android:textColor="@color/white"
+                        android:lines="1"
+                        android:ellipsize="end"
+                        android:id="@+id/tv_price"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/tv_name"
+
+                        android:layout_marginLeft="20dp"
+                        android:textSize="18sp"
+                        tools:text="￥100" />
+
+                    <TextView
+                        android:id="@+id/tv_description"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/sdv"
+                        android:layout_margin="20dp"
+                        android:layout_marginLeft="10dp"
+                        android:textColor="@color/colorDeepBlack"
+                        tools:text="ajsd按揭房回家啊好的发计划fa" />
+                </RelativeLayout>
 
             </RelativeLayout>
 
@@ -113,13 +168,13 @@
                     android:src="@drawable/video" />
 
                 <ImageView
+                    android:visibility="gone"
                     android:id="@+id/iv_additem_insert"
                     style="@style/additem"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
                     android:src="@drawable/insert" />
             </LinearLayout>
-
 
 
             <!--这里需要嵌套一层相对布局，在android6.0的手机上面的item才会全部显示出来-->
@@ -160,12 +215,14 @@
                     android:src="@drawable/close_g" />
             </RelativeLayout>
 
-            <com.zhy.view.flowlayout.TagFlowLayout
-                android:id="@+id/id_flowlayout"
-                zhy:max_select="-1"
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_link"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-            </com.zhy.view.flowlayout.TagFlowLayout>
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp">
+
+            </android.support.v7.widget.RecyclerView>
+
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -173,7 +230,8 @@
                 android:layout_marginBottom="10dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
-                android:background="@drawable/shape_radius_white_15">
+                android:background="@drawable/shape_radius_white_15"
+                android:visibility="gone">
 
                 <TextView
                     android:id="@+id/tv_addLink"

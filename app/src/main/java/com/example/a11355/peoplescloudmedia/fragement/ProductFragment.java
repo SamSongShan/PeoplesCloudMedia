@@ -6,6 +6,7 @@ import android.animation.ValueAnimator;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
@@ -13,37 +14,46 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.a11355.peoplescloudmedia.R;
 import com.example.a11355.peoplescloudmedia.activity.EditTitleActivity;
 import com.example.a11355.peoplescloudmedia.activity.GetMusicListActivity;
+import com.example.a11355.peoplescloudmedia.activity.H5ActivityForZMTZZPreview;
 import com.example.a11355.peoplescloudmedia.activity.LoginActivity;
 import com.example.a11355.peoplescloudmedia.activity.ProdectEditActivity;
 import com.example.a11355.peoplescloudmedia.activity.TitleEidtorActivity;
+import com.example.a11355.peoplescloudmedia.activity.ZMTZZAddLinkActivity;
 import com.example.a11355.peoplescloudmedia.adapter.RichEditorAdapter;
 import com.example.a11355.peoplescloudmedia.adapter.SimpleItemTouchHelperCallback;
+import com.example.a11355.peoplescloudmedia.adapter.ZMTZZLinkAdapter;
+import com.example.a11355.peoplescloudmedia.base.AbsRecyclerViewAdapter;
 import com.example.a11355.peoplescloudmedia.base.BaseFragment;
 import com.example.a11355.peoplescloudmedia.base.EditorResultBean;
+import com.example.a11355.peoplescloudmedia.custom.GridDividerItemDecoration;
 import com.example.a11355.peoplescloudmedia.custom.LoadingDialog;
 import com.example.a11355.peoplescloudmedia.model.EContent;
 import com.example.a11355.peoplescloudmedia.model.GetEntityUser;
 import com.example.a11355.peoplescloudmedia.model.GetEntityUserEntity;
+import com.example.a11355.peoplescloudmedia.model.GetUserProductInfo;
+import com.example.a11355.peoplescloudmedia.model.GetUserProductInfoEntity;
 import com.example.a11355.peoplescloudmedia.model.ItemType;
-import com.example.a11355.peoplescloudmedia.model.UpdateGraphicEditor;
+import com.example.a11355.peoplescloudmedia.model.UpdateUserProductEntity;
+import com.example.a11355.peoplescloudmedia.model.ZMTZZLink;
 import com.example.a11355.peoplescloudmedia.util.Constant;
 import com.example.a11355.peoplescloudmedia.util.DesUtil;
 import com.example.a11355.peoplescloudmedia.util.LogUtils;
 import com.example.a11355.peoplescloudmedia.util.OkHttpUtil;
 import com.example.a11355.peoplescloudmedia.util.PreferencesUtil;
 import com.example.a11355.peoplescloudmedia.util.ToastUtil;
+import com.facebook.drawee.view.SimpleDraweeView;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.config.PictureConfig;
 import com.luck.picture.lib.config.PictureMimeType;
-import com.zhy.view.flowlayout.TagFlowLayout;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -51,17 +61,19 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import butterknife.Unbinder;
 import io.valuesfeng.picker.Picker;
 import io.valuesfeng.picker.engine.GlideEngine;
 import io.valuesfeng.picker.model.UploadImgEntity;
 import io.valuesfeng.picker.utils.PicturePickerUtils;
 
 import static android.app.Activity.RESULT_OK;
+import static com.example.a11355.peoplescloudmedia.custom.GridDividerItemDecoration.ATTRS_B;
 
 /**
  * 自媒体制作   产品
  */
-public class ProductFragment extends BaseFragment implements OkHttpUtil.OnDataListener {
+public class ProductFragment extends BaseFragment implements OkHttpUtil.OnDataListener, View.OnClickListener, AbsRecyclerViewAdapter.OnItemClickListener {
     private static final int ANIMATION_DURATION = 300;//移动时间
     private static final int REQUEST_CODE_CHOOSE_BG = 1001;//选择背景
     private static final int REQUEST_CODE_CHOOSE_ITEM_IMG = 1002;//更改item图片
@@ -97,9 +109,19 @@ public class ProductFragment extends BaseFragment implements OkHttpUtil.OnDataLi
     ImageView ivAdditemInsert;
     @BindView(R.id.rv_itemlist)
     RecyclerView rvItemlist;
-
-    @BindView(R.id.id_flowlayout)
-    TagFlowLayout mFlowLayout;
+    @BindView(R.id.rv_link)
+    RecyclerView rvLink;
+    @BindView(R.id.sdv)
+    SimpleDraweeView sdv;
+    @BindView(R.id.tv_name)
+    TextView tvName;
+    @BindView(R.id.tv_price)
+    TextView tvPrice;
+    @BindView(R.id.tv_description)
+    TextView tvDescription;
+    @BindView(R.id.rl_show)
+    RelativeLayout rlShow;
+    Unbinder unbinder;
 
 
     private float translateDistance = 0;//移动的距离
@@ -138,6 +160,15 @@ public class ProductFragment extends BaseFragment implements OkHttpUtil.OnDataLi
     private String ProductPrice;
     private String Description;
     private String MusicPath;
+    private ZMTZZLinkAdapter zmtzzLinkAdapter;
+    private List<ZMTZZLink> zmtzzLinks = new ArrayList<>();
+
+    private List<EContent> datasCopy = new ArrayList<>();
+    private List<ZMTZZLink> zmtzzLinksCopy = new ArrayList<>();
+
+    private boolean isShowSave = true;
+    private ShowSave showSave;
+    private GetUserProductInfoEntity getUserProductInfoEntity;
 
   /*  */
 
@@ -187,6 +218,7 @@ public class ProductFragment extends BaseFragment implements OkHttpUtil.OnDataLi
 
             }
         });*/
+
         GetEntityUserEntity.DataBean userInfo = PreferencesUtil.getUserInfo(getContext());
         if (userInfo == null) {
             String jsonUser = gson.toJson(new GetEntityUser(PreferencesUtil.getToken(getContext()), PreferencesUtil.getUserId(getContext())));
@@ -195,18 +227,46 @@ public class ProductFragment extends BaseFragment implements OkHttpUtil.OnDataLi
             enCode = userInfo.getEnCode();
 
         }
+        rvLink.setLayoutManager(new GridLayoutManager(getContext(), 3));
+        rvLink.addItemDecoration(new GridDividerItemDecoration(getContext(), ATTRS_B));
+
+        zmtzzLinkAdapter = new ZMTZZLinkAdapter(getContext(), this);
+        rvLink.setAdapter(zmtzzLinkAdapter);
 
 
+        zmtzzLinkAdapter.setData(zmtzzLinks);
+        zmtzzLinkAdapter.setOnItemClickListener(this);
         initView(v);
         //defaultChoiceIMG();
     }
 
     //更新网络数据
-    private void upData() {
-        loadingDialog = LoadingDialog.newInstance("提交中...");
-        loadingDialog.show(getActivity().getFragmentManager());
-        UpdateGraphicEditor updateGraphicEditor = new UpdateGraphicEditor(PreferencesUtil.getToken(getContext()), PreferencesUtil.getUserId(getContext()), GraphicEditorId, ImageUrl, IsUseMusic, MusicUrl, MusicName, Title, datas);
-        OkHttpUtil.postJson(Constant.URL.UpdateGraphicEditor, DesUtil.encrypt(gson.toJson(updateGraphicEditor)), this);
+    public void upData() {
+
+
+        if (TextUtils.isEmpty(ProductImg)) {
+            ToastUtil.initToast(getContext(), "请添加产品图片");
+        } else if (TextUtils.isEmpty(ProductName)) {
+            ToastUtil.initToast(getContext(), "请添加产品名称");
+        } else if (TextUtils.isEmpty(ProductPrice)) {
+            ToastUtil.initToast(getContext(), "请添加产品价格");
+        } else if (TextUtils.isEmpty(Description)) {
+            ToastUtil.initToast(getContext(), "请添加产品描述");
+        } else if (TextUtils.isEmpty(Title)) {
+            ToastUtil.initToast(getContext(), "请添加产品标题");
+        } else if (datas.size() == 0) {
+            ToastUtil.initToast(getContext(), "请编辑正文");
+        } else if (zmtzzLinks.size() == 0) {
+            ToastUtil.initToast(getContext(), "请编辑链接");
+        } else {
+            loadingDialog = LoadingDialog.newInstance("提交中...");
+            loadingDialog.show(getActivity().getFragmentManager());
+            datasCopy = datas;
+            zmtzzLinksCopy = zmtzzLinks;
+            UpdateUserProductEntity updateGraphicEditor = new UpdateUserProductEntity(PreferencesUtil.getUserId(getContext()), PreferencesUtil.getToken(getContext()), ProductImg, ProductName, ProductPrice, Description, IsUseMusic, MusicPath, MusicName, Title, datasCopy, zmtzzLinksCopy);
+            OkHttpUtil.postJson(Constant.URL.UpdateUserProductEntity, DesUtil.encrypt(gson.toJson(updateGraphicEditor)), this);
+        }
+
 
     }
 
@@ -254,7 +314,7 @@ public class ProductFragment extends BaseFragment implements OkHttpUtil.OnDataLi
 
 
 //        rvItemList.setHasFixedSize(true);//最重要的这句，不然recycleview不显示
-        adapter = new RichEditorAdapter(getActivity(), datas, enCode);
+        adapter = new RichEditorAdapter(getActivity(), datas, enCode, 1);
         rvItemList.setAdapter(adapter);
 
         adapter.setOnDownUpChangeListener(new RichEditorAdapter.OnDownUpChangeListener() {
@@ -334,6 +394,9 @@ public class ProductFragment extends BaseFragment implements OkHttpUtil.OnDataLi
         datas.remove(postion);
         adapter.notifyDataSetChanged();
 
+        isShowSave = true;
+
+        isShowSave();
         if (datas.size() == 0) {
             llAdditemAddarea.setVisibility(View.VISIBLE);
             llContent.setVisibility(View.VISIBLE);
@@ -371,6 +434,18 @@ public class ProductFragment extends BaseFragment implements OkHttpUtil.OnDataLi
         ObjectAnimator animatorUp = ObjectAnimator.ofFloat(linearLayoutManager.getChildAt(postion + 1), "TranslationY", 0, -translateDistance);
         animatorUp.setDuration(ANIMATION_DURATION);
         animatorUp.start();
+        for (int i = 0; i < datas.size(); i++) {
+            if (!datasCopy.get(i).getMediaBlockId().equals(datas.get(i).getMediaBlockId())) {
+                isShowSave = false;
+                isShowSave();
+                return;
+
+            } else {
+                isShowSave = true;
+                isShowSave();
+            }
+        }
+
     }
 
     /**
@@ -399,6 +474,17 @@ public class ProductFragment extends BaseFragment implements OkHttpUtil.OnDataLi
         ObjectAnimator animatorDown = ObjectAnimator.ofFloat(linearLayoutManager.getChildAt(postion - 1), "TranslationY", 0, translateDistance);
         animatorDown.setDuration(ANIMATION_DURATION);
         animatorDown.start();
+        for (int i = 0; i < datas.size(); i++) {
+            if (!datasCopy.get(i).getMediaBlockId().equals(datas.get(i).getMediaBlockId())) {
+                isShowSave = false;
+                isShowSave();
+                return;
+
+            } else {
+                isShowSave = true;
+                isShowSave();
+            }
+        }
     }
 
     /**
@@ -505,6 +591,8 @@ public class ProductFragment extends BaseFragment implements OkHttpUtil.OnDataLi
             articleTitle = data.getStringExtra("title");//记录文章标题
             tvArtTitle.setText(articleTitle);
             Title = articleTitle;//文章记录赋值
+            isShowSave = true;
+            isShowSave();
         } else if (requestCode == REQUEST_CODE_CHOOSE_BG && resultCode == RESULT_OK) {//选择背景
             bgUri = PicturePickerUtils.obtainResult(data).get(0);
             tvAddMsg.setVisibility(View.GONE);
@@ -516,14 +604,19 @@ public class ProductFragment extends BaseFragment implements OkHttpUtil.OnDataLi
                     .placeholder(R.drawable.default_adv)
                     .error(R.drawable.default_adv)
                     .into(sdv);*/
-
+            isShowSave = true;
+            isShowSave();
         } else if (requestCode == REQUEST_CODE_CHOOSE_ITEM_IMG && resultCode == RESULT_OK) {//选择item的图片
             datas.get(adapter.getCurClickItemIndex()).setFilePath(data.getStringExtra("photoUrl"));
             adapter.notifyDataSetChanged();
+            isShowSave = true;
+            isShowSave();
         } else if (requestCode == REQUEST_CODE_EDIT_TXT && resultCode == REQUEST_CODE_EDIT_TXT) {//编辑文字
             EContent eContent = (EContent) data.getSerializableExtra("eContent");
             datas.get(adapter.getCurClickItemIndex()).setTexts(eContent.getTexts());
             adapter.notifyDataSetChanged();
+            isShowSave = true;
+            isShowSave();
         } else if (requestCode == REQUEST_CODE_CHOOSE_IMGS && resultCode == RESULT_OK) {//第一次进入页面需要选择图片
             llAdditemAddarea.setVisibility(View.GONE);
             llContent.setVisibility(View.GONE);
@@ -537,16 +630,23 @@ public class ProductFragment extends BaseFragment implements OkHttpUtil.OnDataLi
                     eContent.setMediaBlockId(ItemType.IMG);
                     datas.add(eContent);
                 }
+                isShowSave = true;
+                isShowSave();
                 adapter.notifyDataSetChanged();
             }
 
         } else if (requestCode == REQUEST_CODE_SET_TITLE_MY && resultCode == RESULT_OK) { //设置标题
             tvTitle.setText(data.getStringExtra("title"));
             Title = data.getStringExtra("title");//文章记录赋值
+            isShowSave = true;
+            isShowSave();
         } else if (requestCode == REQUEST_CODE_SET_Music && resultCode == RESULT_OK) {  //音乐
             MusicPath = data.getStringExtra("path");
             MusicName = data.getStringExtra("singer");
-
+            IsUseMusic = "0";
+            tvAddMusic.setText(MusicName);
+            isShowSave = true;
+            isShowSave();
 
         } else if (requestCode == PictureConfig.CHOOSE_REQUEST && resultCode == RESULT_OK) {//视频
 
@@ -554,7 +654,8 @@ public class ProductFragment extends BaseFragment implements OkHttpUtil.OnDataLi
             datas.get(adapter.getCurClickItemIndex()).setFilePath(data.getStringExtra("VideoUrl"));
             datas.get(adapter.getCurClickItemIndex()).setVideoImg(data.getStringExtra("photoUrl"));
             adapter.notifyDataSetChanged();
-
+            isShowSave = true;
+            isShowSave();
         } else if (requestCode == Constant.Code.ZMTZZ_prodect && resultCode == RESULT_OK) {  //产品信息
 
 
@@ -562,7 +663,26 @@ public class ProductFragment extends BaseFragment implements OkHttpUtil.OnDataLi
             ProductName = data.getStringExtra("name");
             ProductPrice = data.getStringExtra("price");
             Description = data.getStringExtra("description");
+
+            tvAddMsg.setVisibility(View.GONE);
+            rlShow.setVisibility(View.VISIBLE);
+
+            sdv.setImageURI(Constant.URL.BaseImg + ProductImg);
+            tvName.setText(ProductName);
+            tvPrice.setText(ProductPrice);
+            tvDescription.setText(Description);
+            isShowSave = true;
+            isShowSave();
+        } else if (requestCode == Constant.Code.Link && resultCode == RESULT_OK) {  //网址信息
+
+
+            zmtzzLinks.add(0, new ZMTZZLink(data.getStringExtra("linkName"), data.getStringExtra("link")));
+            zmtzzLinkAdapter.setData(zmtzzLinks);
+            isShowSave = true;
+            isShowSave();
         }
+
+
     }
 
 
@@ -609,17 +729,7 @@ public class ProductFragment extends BaseFragment implements OkHttpUtil.OnDataLi
             case R.id.iv_additem_insert:
                 break;
             case R.id.tv_addLink: {
-               /* mFlowLayout.setAdapter(new TagAdapter<String>(mVals)
-                {
-                    @Override
-                    public View getView(FlowLayout parent, int position, String s)
-                    {
-                        TextView tv = (TextView) LayoutInflater.inflate(R.layout.tv,
-                                mFlowLayout, false);
-                        tv.setText(s);
-                        return tv;
-                    }
-                });*/
+
             }
             break;
         }
@@ -693,7 +803,7 @@ public class ProductFragment extends BaseFragment implements OkHttpUtil.OnDataLi
 
                 }
                 break;
-                case Constant.URL.UpdateGraphicEditor: {//提交
+                case Constant.URL.UpdateUserProductEntity: {//提交
                     LogUtils.e("loge", "UpdateGraphicEditor: " + decrypt);
                     dismissLoading();
                     LogUtils.e("UploadImg", decrypt);
@@ -708,6 +818,64 @@ public class ProductFragment extends BaseFragment implements OkHttpUtil.OnDataLi
 
                 }
                 break;
+                case Constant.URL.GetUserProductInfo://获取产品信息
+                    dismissLoading();
+                    LogUtils.e("GetUserProductInfo", decrypt);
+                    getUserProductInfoEntity = gson.fromJson(decrypt, GetUserProductInfoEntity.class);
+                    if (getUserProductInfoEntity.getCode() == Constant.Integers.SUC) {
+                        datasCopy.clear();
+                        datas.clear();
+                        zmtzzLinksCopy.clear();
+                        zmtzzLinks.clear();
+                        ;
+
+                        isShowSave = false;
+                        showSave.showSave(isShowSave);
+
+                        tvAddMsg.setVisibility(View.GONE);
+                        rlShow.setVisibility(View.VISIBLE);
+                        GetUserProductInfoEntity.DataEntity data = getUserProductInfoEntity.getData();
+                        sdv.setImageURI(Constant.URL.BaseImg + data.getProductImg());
+                        tvName.setText(data.getProductName());
+                        tvPrice.setText(data.getProductPrice());
+                        tvDescription.setText(data.getDescription());
+                        tvTitle.setText(data.getTitle());
+                        llContent.setVisibility(View.GONE);
+                        llAdditemAddarea.setVisibility(View.GONE);
+
+                        for (int i = 0; i < data.getAttachLinkList().size(); i++) {
+                            zmtzzLinks.add(new ZMTZZLink(data.getAttachLinkList().get(i)));
+                        }
+                        zmtzzLinkAdapter.setData(zmtzzLinks);
+                        for (int i = 0; i < data.getMediaBlockList().size(); i++) {
+                            datas.add(new EContent(data.getMediaBlockList().get(i)));
+
+                        }
+                        adapter.notifyDataSetChanged();
+                        datasCopy.addAll(datas) ;
+                        zmtzzLinksCopy.addAll(zmtzzLinks);
+                        if ("0".equals(data.getIsUseMusic())) {
+                            tvAddMusic.setText(data.getMusicName());
+
+                        }
+
+                        ProductImg=data.getProductImg();
+                                ProductName=data.getProductName();
+                                ProductPrice=data.getProductPrice();
+                                Description=data.getDescription();
+                                IsUseMusic=data.getIsUseMusic();
+                                MusicPath=data.getMusicPath();
+                                MusicName=data.getMusicName();
+                                Title=data.getTitle();
+                    } else {
+                        isShowSave = true;
+                        showSave.showSave(isShowSave);
+                        ZMTZZLink zmtzzLink = new ZMTZZLink("添加链接", "def12354555568852225333");
+
+                        zmtzzLinks.add(zmtzzLink);
+                    }
+
+                    break;
             }
         }
     }
@@ -724,4 +892,83 @@ public class ProductFragment extends BaseFragment implements OkHttpUtil.OnDataLi
 
 
     }
+
+    @Override
+    public void onClick(View v) {
+
+        switch (v.getId()) {
+            case R.id.img_close_item:
+                zmtzzLinks.remove((int) v.getTag());
+                zmtzzLinkAdapter.notifyDataSetChanged();
+
+                if (zmtzzLinksCopy.size() == zmtzzLinks.size() && zmtzzLinks.contains(zmtzzLinksCopy)) {
+                    isShowSave = false;
+
+                } else {
+                    isShowSave = true;
+
+                }
+                isShowSave();
+                break;
+
+
+        }
+
+    }
+
+    @Override
+    public void onItemClick(View v, int position) {
+        if (position == zmtzzLinks.size() - 1) {
+            startActivityForResult(new Intent(getContext(), ZMTZZAddLinkActivity.class), Constant.Code.Link);
+        }
+    }
+
+
+    @OnClick(R.id.rl_show)
+    public void onViewClicked() {
+        startActivityForResult(new Intent(getContext(), ProdectEditActivity.class), Constant.Code.ZMTZZ_prodect);
+
+    }
+
+    //是否显示确定
+    public void isShowSave() {
+
+        showSave.showSave(isShowSave);
+
+
+    }
+
+
+    public interface ShowSave {
+        void showSave(boolean isShowSave);
+    }
+
+    public void setActivity(ShowSave showSave) {
+
+
+        this.showSave = showSave;
+    }
+
+    public void reFlesh() {
+
+        loadingDialog = LoadingDialog.newInstance("加载...");
+        loadingDialog.show(getActivity().getFragmentManager());
+        GetUserProductInfo getUserProductInfo = new GetUserProductInfo(PreferencesUtil.getToken(getContext()), PreferencesUtil.getUserId(getContext()));
+        OkHttpUtil.postJson(Constant.URL.GetUserProductInfo, DesUtil.encrypt(gson.toJson(getUserProductInfo)), this);
+    }
+
+    public void setPreview() {
+
+        if (getUserProductInfoEntity == null || getUserProductInfoEntity.getData() == null) {
+            ToastUtil.initToast(getContext(), "暂无名片信息");
+        } else {
+            Intent intent = new Intent(getContext(), H5ActivityForZMTZZPreview.class);
+
+            intent.putExtra("url", Constant.URL.ProdectPreview + getUserProductInfoEntity.getData().getUserProductInfoId());
+
+            intent.putExtra("title", "我的产品");
+            startActivity(intent);
+        }
+    }
+
 }

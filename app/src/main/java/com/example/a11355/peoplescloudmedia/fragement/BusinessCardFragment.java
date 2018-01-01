@@ -19,7 +19,6 @@ import com.example.a11355.peoplescloudmedia.activity.GetMusicListActivity;
 import com.example.a11355.peoplescloudmedia.activity.H5ActivityForZMTZZPreview;
 import com.example.a11355.peoplescloudmedia.activity.UpdateBusinessCardActivity;
 import com.example.a11355.peoplescloudmedia.activity.UpdateCardCompanyInfoActivity;
-import com.example.a11355.peoplescloudmedia.activity.ZMTZZActivity;
 import com.example.a11355.peoplescloudmedia.base.BaseFragment;
 import com.example.a11355.peoplescloudmedia.custom.LoadingDialog;
 import com.example.a11355.peoplescloudmedia.custom.UpdateCardOther;
@@ -47,7 +46,7 @@ import static android.app.Activity.RESULT_OK;
 /**
  * 自媒体制作  名片
  */
-public class BusinessCardFragment extends BaseFragment implements OkHttpUtil.OnDataListener,ZMTZZActivity.SetPreview {
+public class BusinessCardFragment extends BaseFragment implements OkHttpUtil.OnDataListener{
 
 
     @BindView(R.id.sdv_userHead)
@@ -96,8 +95,8 @@ public class BusinessCardFragment extends BaseFragment implements OkHttpUtil.OnD
 
     @Override
     protected void loadData() {
-        loadingDialog = LoadingDialog.newInstance("内容加载中...");
-        loadingDialog.show(getActivity().getFragmentManager());
+       /* loadingDialog = LoadingDialog.newInstance("内容加载中...");
+        loadingDialog.show(getActivity().getFragmentManager());*/
         GetBusinessCardInfo getBusinessCardInfo = new GetBusinessCardInfo(PreferencesUtil.getToken(getContext()), PreferencesUtil.getUserId(getContext()));
         OkHttpUtil.postJson(Constant.URL.GetBusinessCardInfo, DesUtil.encrypt(gson.toJson(getBusinessCardInfo)), this);
     }
@@ -232,10 +231,11 @@ public class BusinessCardFragment extends BaseFragment implements OkHttpUtil.OnD
         if (!TextUtils.isEmpty(json)) {
             switch (url) {
                 case Constant.URL.GetBusinessCardInfo://用户编号获取用户名片信息
+                    dismissLoading();
                     LogUtils.e("GetBusinessCardInfo", decrypt);
                     getBusinessCardInfoEntity = gson.fromJson(decrypt, GetBusinessCardInfoEntity.class);
                     if (getBusinessCardInfoEntity.getCode() == Constant.Integers.SUC) {
-                        dismissLoading();
+
                         rlPersonalShow.setVisibility(View.VISIBLE);
                         tvAddmsg.setVisibility(View.GONE);
                         sdvUserHead.setImageURI(Constant.URL.BaseImg + getBusinessCardInfoEntity.getData().getHeadIcon());
@@ -324,7 +324,6 @@ public class BusinessCardFragment extends BaseFragment implements OkHttpUtil.OnD
 
     }
 
-    @Override
     public void setPreview() {
         if (getBusinessCardInfoEntity==null||getBusinessCardInfoEntity.getData()==null){
             ToastUtil.initToast(getContext(),"暂无名片信息");

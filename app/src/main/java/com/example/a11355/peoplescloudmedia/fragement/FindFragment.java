@@ -57,17 +57,10 @@ public class FindFragment extends BaseFragment implements OkHttpUtil.OnDataListe
     NavView navView;
 
 
-
-
-
-
-
-
-
     private Gson gson = new GsonBuilder().create();
     private LoadingDialog loadingDialog;
     private HomeAdAdapter viewPagerAdapter;
-    private List<GetHomeRotateListEntity.DataEntity> imageList=new ArrayList<>();//轮播图数据
+    private List<GetHomeRotateListEntity.DataEntity> imageList = new ArrayList<>();//轮播图数据
 
     public FindFragment() {
         // Required empty public constructor
@@ -82,7 +75,7 @@ public class FindFragment extends BaseFragment implements OkHttpUtil.OnDataListe
 
     private void initViewPager() {
         viewPager.setLayoutParams(new RelativeLayout.LayoutParams(PhoneUtil.getPhoneWidth(getActivity()),
-                DisplayUtil.dip2px(getContext(),100)));
+                DisplayUtil.dip2px(getContext(), 100)));
         viewPagerAdapter = new HomeAdAdapter();
         viewPager.setAdapter(viewPagerAdapter);
         viewPager.setSlideBorderMode(AutoScrollViewPager.SLIDE_BORDER_MODE_CYCLE);
@@ -102,7 +95,6 @@ public class FindFragment extends BaseFragment implements OkHttpUtil.OnDataListe
                 return false;
             }
         });
-
 
 
     }
@@ -135,7 +127,9 @@ public class FindFragment extends BaseFragment implements OkHttpUtil.OnDataListe
             } else if (Constant.URL.GetHomeRotateList.equals(url)) {
                 LogUtils.e("GetHomeRotateList", decrypt);
                 GetHomeRotateListEntity getHomeRotateListEntity = gson.fromJson(decrypt, GetHomeRotateListEntity.class);
-                viewPagerAdapter.setData(getHomeRotateListEntity.getData());
+                imageList.addAll(getHomeRotateListEntity.getData());
+
+                viewPagerAdapter.setData(imageList);
                 viewPager.setCurrentItem(1);
                 viewPager.startAutoScroll();
             }

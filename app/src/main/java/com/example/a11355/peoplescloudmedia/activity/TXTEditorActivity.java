@@ -265,7 +265,7 @@ public class TXTEditorActivity extends BaseActivity {
 
 
             linkContent = (LinkContent) data.getSerializableExtra("linkContent");
-            tvAddLinked.setText(linkContent.getTitle());
+            //tvAddLinked.setText(linkContent.getTitle());
             LogUtils.e(TAG, "startActivityForResult: " + linkContent);
 
 
