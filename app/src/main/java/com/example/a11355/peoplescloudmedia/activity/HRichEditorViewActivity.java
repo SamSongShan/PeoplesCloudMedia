@@ -31,6 +31,7 @@ import com.example.a11355.peoplescloudmedia.model.ItemType;
 import com.example.a11355.peoplescloudmedia.model.UpdateGraphicEditor;
 import com.example.a11355.peoplescloudmedia.util.Constant;
 import com.example.a11355.peoplescloudmedia.util.DesUtil;
+import com.example.a11355.peoplescloudmedia.util.GetVideo;
 import com.example.a11355.peoplescloudmedia.util.LogUtils;
 import com.example.a11355.peoplescloudmedia.util.OkHttpUtil;
 import com.example.a11355.peoplescloudmedia.util.PreferencesUtil;
@@ -126,13 +127,13 @@ public class HRichEditorViewActivity extends BaseActivity implements OkHttpUtil.
     private List<EContent> datas = new ArrayList<>();
     ;
     private Uri bgUri;//背景图片的uri
-    private String enCode="";
-    private String GraphicEditorId="default";//:图文编辑实体主键（默认传default）
+    private String enCode = "";
+    private String GraphicEditorId = "default";//:图文编辑实体主键（默认传default）
     private String ImageUrl = "";//:封面（默认传default）
-    private String IsUseMusic="0";//:是否使用音乐（默认传0,不使用）
-    private String MusicUrl="default";//:音乐路径（默认传default）
-    private String MusicName="default";//:音乐名称（默认传default）
-    private String Title="";//:标题
+    private String IsUseMusic = "0";//:是否使用音乐（默认传0,不使用）
+    private String MusicUrl = "default";//:音乐路径（默认传default）
+    private String MusicName = "default";//:音乐名称（默认传default）
+    private String Title = "";//:标题
     private LoadingDialog loadingDialog;
 
   /*  */
@@ -154,6 +155,7 @@ public class HRichEditorViewActivity extends BaseActivity implements OkHttpUtil.
 
     @Override
     protected void init() {
+        GetVideo.getVideos(this);
         ToolBarUtil.initToolBar(toolbarText, "图文编辑", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -188,10 +190,6 @@ public class HRichEditorViewActivity extends BaseActivity implements OkHttpUtil.
         }
 
 
-
-
-
-
         //defaultChoiceIMG();
     }
 
@@ -223,7 +221,7 @@ public class HRichEditorViewActivity extends BaseActivity implements OkHttpUtil.
                 .count(1)
                 .enableCamera(true)
                 .setEngine(new GlideEngine())
-                .forResult(REQUEST_CODE_CHOOSE_IMGS,enCode);
+                .forResult(REQUEST_CODE_CHOOSE_IMGS, enCode);
     }
 
 
@@ -248,7 +246,7 @@ public class HRichEditorViewActivity extends BaseActivity implements OkHttpUtil.
 
 
 //        rvItemList.setHasFixedSize(true);//最重要的这句，不然recycleview不显示
-        adapter = new RichEditorAdapter(this, datas,enCode);
+        adapter = new RichEditorAdapter(this, datas, enCode);
         rvItemList.setAdapter(adapter);
 
         adapter.setOnDownUpChangeListener(new RichEditorAdapter.OnDownUpChangeListener() {
@@ -405,7 +403,7 @@ public class HRichEditorViewActivity extends BaseActivity implements OkHttpUtil.
                 .count(1)
                 .enableCamera(true)
                 .setEngine(new GlideEngine())
-                .forResult(REQUEST_CODE_CHOOSE_BG,enCode);
+                .forResult(REQUEST_CODE_CHOOSE_BG, enCode);
     }
 
     /**
@@ -542,7 +540,7 @@ public class HRichEditorViewActivity extends BaseActivity implements OkHttpUtil.
             tvAddMusic.setVisibility(View.GONE);
             MusicUrl = data.getStringExtra("path");
             MusicName = data.getStringExtra("singer");
-            IsUseMusic="0";
+            IsUseMusic = "0";
 
 
             tvAddedMusic.setText(MusicName);
@@ -571,10 +569,10 @@ public class HRichEditorViewActivity extends BaseActivity implements OkHttpUtil.
                 break;
             case R.id.tv_addMusic:
 
-                startActivityForResult(new Intent(this,GetMusicListActivity.class),REQUEST_CODE_SET_Music);
+                startActivityForResult(new Intent(this, GetMusicListActivity.class), REQUEST_CODE_SET_Music);
                 break;
             case R.id.tv_addedMusic:
-                startActivityForResult(new Intent(this,GetMusicListActivity.class),REQUEST_CODE_SET_Music);
+                startActivityForResult(new Intent(this, GetMusicListActivity.class), REQUEST_CODE_SET_Music);
                 break;
             case R.id.img_change:
                 onChangeBG(view);
@@ -633,6 +631,7 @@ public class HRichEditorViewActivity extends BaseActivity implements OkHttpUtil.
         datas.add(0, eContent);
         adapter.notifyDataSetChanged();
     }
+
     //新建一个text类型的东西
     private void addTextType() {
         EContent eContent = new EContent();

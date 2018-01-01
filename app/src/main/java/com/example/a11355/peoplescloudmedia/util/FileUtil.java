@@ -17,6 +17,16 @@ import java.io.InputStreamReader;
 public class FileUtil {
 
     /**
+     * 判断文件是否存在
+     * @param path 文件的路径
+     * @return
+     */
+    public static boolean isExists(String path) {
+        File file = new File(path);
+        return file.exists();
+    }
+
+    /**
      * 读取文件
      */
     public static String readTextFile(File file) throws IOException {
