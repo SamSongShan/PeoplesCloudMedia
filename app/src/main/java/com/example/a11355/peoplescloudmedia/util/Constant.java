@@ -268,6 +268,12 @@ BusinessCardInfo 传名片ID
         http://net.lml9.com/News/UserProductInfo?UserProductInfoId=a3f8ec26-6b7c-4505-a9dd-6e0bcf7a35e6
         UserProductInfoId 传产品ID*/
        String ProdectPreview = BaseH5 + "/News/UserProductInfo?UserProductInfoId=";
+        //微信新闻官网
+        String Wechat_GW = "http://weixin.sogou.com";
+        //今日头条官网
+        String JRTT_GW = "https://m.toutiao.com";
+        //今日头条官网
+        String QQ_GW = "https://xw.qq.com";
 
     }
 

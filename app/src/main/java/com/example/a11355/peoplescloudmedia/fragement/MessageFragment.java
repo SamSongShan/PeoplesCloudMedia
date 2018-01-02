@@ -158,7 +158,10 @@ public class MessageFragment extends BaseFragment implements OnAdapterCallbackLi
 
     @Override
     public void onItemClick(View v, int position) {
-
+        Intent intent = new Intent(getContext(), H5Activity.class);
+        intent.putExtra("title", messageData.get(position).getFullHead());
+        intent.putExtra("url", Constant.URL.MessageDetailsLink + messageData.get(position).getMessageId());
+        startActivity(intent);
     }
 
     @Override

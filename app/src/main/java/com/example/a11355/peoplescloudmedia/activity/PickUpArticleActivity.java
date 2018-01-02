@@ -55,7 +55,7 @@ public class PickUpArticleActivity extends BaseActivity implements OkHttpUtil.On
     }
 
 
-    @OnClick({R.id.tv_commit, R.id.tv_clean})
+    @OnClick({R.id.tv_commit, R.id.tv_clean, R.id.img_wechat, R.id.tv_JRTT, R.id.img_QQ})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tv_commit: {
@@ -72,6 +72,29 @@ public class PickUpArticleActivity extends BaseActivity implements OkHttpUtil.On
             case R.id.tv_clean:
                 etUrl.setText("");
                 break;
+
+            case R.id.img_wechat: {//跳到微信
+                Intent intent = new Intent(this, H5ActivityForCopy.class);
+                intent.putExtra("title","文章抓取");
+                intent.putExtra("url",Constant.URL.Wechat_GW);
+                startActivity(intent);
+
+            }
+            break;
+            case R.id.tv_JRTT: {//跳到今日头条
+                Intent intent = new Intent(this, H5ActivityForCopy.class);
+                intent.putExtra("title","文章抓取");
+                intent.putExtra("url",Constant.URL.JRTT_GW);
+                startActivity(intent);
+            }
+            break;
+            case R.id.img_QQ: {//跳到QQ
+                Intent intent = new Intent(this, H5ActivityForCopy.class);
+                intent.putExtra("title","文章抓取");
+                intent.putExtra("url",Constant.URL.QQ_GW);
+                startActivity(intent);
+            }
+            break;
         }
     }
 
@@ -80,7 +103,7 @@ public class PickUpArticleActivity extends BaseActivity implements OkHttpUtil.On
         dismissLoading();
         if (!TextUtils.isEmpty(json)) {
             String decrypt = DesUtil.decrypt(json);
-            LogUtils.e("AddRZTArticle",decrypt);
+            LogUtils.e("AddRZTArticle", decrypt);
 
             ModelEntity modelEntity = gson.fromJson(decrypt, ModelEntity.class);
             ToastUtil.initToast(this, modelEntity.getMessage());
@@ -109,4 +132,5 @@ public class PickUpArticleActivity extends BaseActivity implements OkHttpUtil.On
 
 
     }
+
 }

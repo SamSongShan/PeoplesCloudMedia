@@ -755,6 +755,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
         dismissLoading();
         handler.removeCallbacksAndMessages(null);
+        radioGroup.getChildAt(4).performClick();
 
 
     }

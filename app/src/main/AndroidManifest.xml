@@ -194,6 +194,7 @@
         <activity android:name=".activity.UpdateCardCompanyInfoActivity" />
         <activity android:name=".activity.ProdectEditActivity" />
         <activity android:name=".activity.ZMTZZAddLinkActivity"></activity>
+        <activity android:name=".activity.H5ActivityForCopy" />
     </application>
 
 </manifest>
