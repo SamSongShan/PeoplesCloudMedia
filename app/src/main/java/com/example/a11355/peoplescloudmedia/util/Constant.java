@@ -188,6 +188,11 @@ public interface Constant {
         String GetUserProductInfo=BaseUrl + "GetUserProductInfo";
 
 
+        //【71】我的文章列表-图文编辑添加的文章(输入参数string Json)
+
+        String GetGraphicEditorList=BaseUrl + "GetGraphicEditorList";
+
+
 
 
 
@@ -274,6 +279,23 @@ BusinessCardInfo 传名片ID
         String JRTT_GW = "https://m.toutiao.com";
         //今日头条官网
         String QQ_GW = "https://xw.qq.com";
+
+
+        /*6、图文编辑
+                文章预览页面
+        http://net.lml9.com/News/GraphicEditorDetail?GraphicEditorId=31e58c0a-7840-416e-ab26-702c721974c2
+        GraphicEditorId 传文章ID*/
+        String GraphicEditorDetail = BaseH5 +"/News/GraphicEditorDetail?GraphicEditorId=";
+
+/*
+* 文章编辑页面
+http://net.lml9.com/News/RztEditArticle?ArticleId=a659c161-79a8-4451-baf5-6c9cd1056b3b
+ArticleId 传文章ID
+*
+* */
+String RztEditArticle = BaseH5 +"/News/RztEditArticle?ArticleId=";
+
+
 
     }
 
