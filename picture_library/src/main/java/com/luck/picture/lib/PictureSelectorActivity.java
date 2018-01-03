@@ -40,6 +40,7 @@ import com.luck.picture.lib.dialog.CustomDialog;
 import com.luck.picture.lib.entity.EventEntity;
 import com.luck.picture.lib.entity.LocalMedia;
 import com.luck.picture.lib.entity.LocalMediaFolder;
+import com.luck.picture.lib.entity.Video;
 import com.luck.picture.lib.model.LocalMediaLoader;
 import com.luck.picture.lib.model.UploadImgEntity;
 import com.luck.picture.lib.observable.ImagesObservable;
@@ -52,6 +53,7 @@ import com.luck.picture.lib.tools.DateUtils;
 import com.luck.picture.lib.tools.DebugUtil;
 import com.luck.picture.lib.tools.DesUtil;
 import com.luck.picture.lib.tools.DoubleUtils;
+import com.luck.picture.lib.tools.GetVideo;
 import com.luck.picture.lib.tools.LightStatusBarUtils;
 import com.luck.picture.lib.tools.LogUtils;
 import com.luck.picture.lib.tools.OkHttpUtil;
@@ -199,6 +201,7 @@ public class PictureSelectorActivity extends PictureBaseActivity implements View
                     , WindowManager.LayoutParams.FLAG_FULLSCREEN);
             setContentView(R.layout.picture_empty);
         } else {
+            LogUtils.e("QQQQQQQQQQ","qqqqqqqqqqqqqqq");
             setContentView(R.layout.picture_selector);
             initView(savedInstanceState);
         }
@@ -330,9 +333,12 @@ public class PictureSelectorActivity extends PictureBaseActivity implements View
      * get LocalMedia s
      */
     protected void readLocalMedia() {
+        List<com.luck.picture.lib.entity.Video> videos = GetVideo.getVideos(PictureSelectorActivity.this);
+        LogUtils.e("QQQ",videos.size()+"");
         mediaLoader.loadAllMedia(new LocalMediaLoader.LocalMediaLoadListener() {
             @Override
             public void loadComplete(List<LocalMediaFolder> folders) {
+
                 DebugUtil.i("loadComplete:" + folders.size());
                 if (folders.size() > 0) {
                     foldersList = folders;
@@ -358,6 +364,7 @@ public class PictureSelectorActivity extends PictureBaseActivity implements View
                 mHandler.sendEmptyMessage(DISMISS_DIALOG);
             }
         });
+
     }
 
     /**

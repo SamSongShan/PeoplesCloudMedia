@@ -31,7 +31,6 @@ import com.example.a11355.peoplescloudmedia.model.ItemType;
 import com.example.a11355.peoplescloudmedia.model.UpdateGraphicEditor;
 import com.example.a11355.peoplescloudmedia.util.Constant;
 import com.example.a11355.peoplescloudmedia.util.DesUtil;
-import com.example.a11355.peoplescloudmedia.util.GetVideo;
 import com.example.a11355.peoplescloudmedia.util.LogUtils;
 import com.example.a11355.peoplescloudmedia.util.OkHttpUtil;
 import com.example.a11355.peoplescloudmedia.util.PreferencesUtil;
@@ -155,7 +154,6 @@ public class HRichEditorViewActivity extends BaseActivity implements OkHttpUtil.
 
     @Override
     protected void init() {
-        GetVideo.getVideos(this);
         ToolBarUtil.initToolBar(toolbarText, "图文编辑", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -274,30 +272,53 @@ public class HRichEditorViewActivity extends BaseActivity implements OkHttpUtil.
         adapter.setOnItemClickListener(new RichEditorAdapter.OnItemClickListener() {
             @Override
             public void onClick(String itemType, int index) {
-                EContent eContent = new EContent();
-                eContent.setMediaBlockId("default");
-                eContent.setFilePath("default");
-                eContent.setTexts("default");
-                eContent.setVideoImg("default");
-                eContent.setSortCode("1");
-                eContent.setIsDelete("0");
+
                 switch (itemType) {
-                    case ItemType.IMG:
+                    case ItemType.IMG: {
+                        EContent eContent = new EContent();
+                        eContent.setMediaBlockId("default");
+                        eContent.setFilePath("default");
+                        eContent.setTexts("default");
+                        eContent.setVideoImg("default");
+                        eContent.setSortCode("1");
+                        eContent.setIsDelete("0");
                         eContent.setMediaType(ItemType.IMG);
-                        break;
-                    case ItemType.VIDEO:
+                        datas.add(index, eContent);
+                        adapter.notifyDataSetChanged();
+                    }
+                    break;
+                    case ItemType.VIDEO: {
+                        EContent eContent = new EContent();
+                        eContent.setMediaBlockId("default");
+                        eContent.setFilePath("default");
+                        eContent.setTexts("default");
+                        eContent.setVideoImg("default");
+                        eContent.setSortCode("1");
+                        eContent.setIsDelete("0");
                         eContent.setMediaType(ItemType.VIDEO);
-                        break;
-                    case ItemType.TXT:
+                        datas.add(index, eContent);
+                        adapter.notifyDataSetChanged();
+                    }
+                    break;
+                    case ItemType.TXT: {
+                        EContent eContent = new EContent();
+                        eContent.setMediaBlockId("default");
+                        eContent.setFilePath("default");
+                        eContent.setTexts("default");
+                        eContent.setVideoImg("default");
+                        eContent.setSortCode("1");
+                        eContent.setIsDelete("0");
                         eContent.setMediaType(ItemType.TXT);
-                        break;
+                        datas.add(index, eContent);
+                        adapter.notifyDataSetChanged();
+                    }
+                    break;
                     case ItemType.AD:  //插入
                         startActivityForResult(new Intent(HRichEditorViewActivity.this, TWBJMyArticleActivity.class), 123);
 
                         break;
                 }
-                datas.add(index, eContent);
-                adapter.notifyDataSetChanged();
+
             }
         });
 
