@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/primaryBg"
     android:orientation="vertical"
-    tools:context="com.example.a11355.peoplescloudmedia.activity.TWBJMyArticleActivity">
-
+    android:background="@color/primaryBg"
+    tools:context="com.example.a11355.peoplescloudmedia.activity.MineMyArticleActivity">
     <include layout="@layout/toolbar_right_text" />
 
     <View

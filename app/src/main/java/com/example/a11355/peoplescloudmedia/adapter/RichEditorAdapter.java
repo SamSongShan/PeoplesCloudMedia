@@ -203,6 +203,18 @@ public class RichEditorAdapter extends RecyclerView.Adapter<RichEditorAdapter.My
                 }
             }
         });
+
+        holder.iv_additem_insert.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                hideAddArea(holder);
+                if (onItemClickListener != null) {
+                    onItemClickListener.onClick(ItemType.AD, position);
+                }
+            }
+        });
+
+
         /**
          * 设置向下向上箭头、删除的单击事件监听
          *

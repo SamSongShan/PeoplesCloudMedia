@@ -18,7 +18,7 @@ import com.example.a11355.peoplescloudmedia.R;
 import com.example.a11355.peoplescloudmedia.activity.AboutUsActivity;
 import com.example.a11355.peoplescloudmedia.activity.H5ActivityForZMTZZPreview;
 import com.example.a11355.peoplescloudmedia.activity.LoginActivity;
-import com.example.a11355.peoplescloudmedia.activity.MyArticleActivity;
+import com.example.a11355.peoplescloudmedia.activity.MineMyArticleActivity;
 import com.example.a11355.peoplescloudmedia.activity.MyCollectActivity;
 import com.example.a11355.peoplescloudmedia.activity.MyFocusActivity;
 import com.example.a11355.peoplescloudmedia.activity.MyPromotionActivity;
@@ -231,7 +231,7 @@ public class MineFragment extends BaseFragment implements View.OnClickListener, 
         }
         switch (strings.get(position)) {
             case "我的文章": {
-                startActivity(new Intent(getContext(), MyArticleActivity.class));
+                startActivity(new Intent(getContext(), MineMyArticleActivity.class));
 
 
             }

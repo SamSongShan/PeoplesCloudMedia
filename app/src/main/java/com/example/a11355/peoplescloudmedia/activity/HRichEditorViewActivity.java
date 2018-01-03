@@ -291,6 +291,10 @@ public class HRichEditorViewActivity extends BaseActivity implements OkHttpUtil.
                     case ItemType.TXT:
                         eContent.setMediaType(ItemType.TXT);
                         break;
+                    case ItemType.AD:  //插入
+                        startActivityForResult(new Intent(HRichEditorViewActivity.this, TWBJMyArticleActivity.class), 123);
+
+                        break;
                 }
                 datas.add(index, eContent);
                 adapter.notifyDataSetChanged();
@@ -551,6 +555,8 @@ public class HRichEditorViewActivity extends BaseActivity implements OkHttpUtil.
             datas.get(adapter.getCurClickItemIndex()).setVideoImg(data.getStringExtra("photoUrl"));
             adapter.notifyDataSetChanged();
 
+        } else if (requestCode == 123 && resultCode == RESULT_OK) { //插入
+
         }
     }
 
@@ -599,7 +605,9 @@ public class HRichEditorViewActivity extends BaseActivity implements OkHttpUtil.
                 llAdditemAddarea.setVisibility(View.GONE);
                 llContent.setVisibility(View.GONE);
                 break;
-            case R.id.iv_additem_insert:
+            case R.id.iv_additem_insert:   //插入箭头
+                startActivityForResult(new Intent(this, TWBJMyArticleActivity.class), 123);
+
                 break;
         }
     }

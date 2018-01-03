@@ -47,7 +47,7 @@ public class H5ActivityForGraphEdit extends BaseActivity {
             public void onClick(View v) {
                 onBackPressed();
             }
-        }, "编辑", new View.OnClickListener() {
+        }, "", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 

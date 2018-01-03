@@ -32,9 +32,7 @@ import java.util.List;
 
 import butterknife.BindView;
 
-import static com.mob.MobSDK.getContext;
-
-public class MyArticleActivity extends BaseActivity implements OkHttpUtil.OnDataListener, OnAdapterCallbackListener, SwipeRefreshLayout.OnRefreshListener, AbsRecyclerViewAdapter.OnItemClickListener, View.OnClickListener {
+public class TWBJMyArticleActivity extends BaseActivity implements OkHttpUtil.OnDataListener, OnAdapterCallbackListener, SwipeRefreshLayout.OnRefreshListener, AbsRecyclerViewAdapter.OnItemClickListener, View.OnClickListener {
 
     @BindView(R.id.rv_store)
     RecyclerView rvStore;
@@ -60,17 +58,22 @@ public class MyArticleActivity extends BaseActivity implements OkHttpUtil.OnData
     @Override
     protected void init() {
 
-        ToolBarUtil.initToolBar(toolbarText, "我的文章", new View.OnClickListener() {
+        ToolBarUtil.initToolBar(toolbarText, "广告", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onBackPressed();
             }
+        }, "完成", new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
         });
-        rvStore.setLayoutManager(new LinearLayoutManager(getContext()));
+        rvStore.setLayoutManager(new LinearLayoutManager(this));
         getVideoListAdapter = new GetGraphicEditorAdapter(this, this, this);
         rvStore.setAdapter(getVideoListAdapter);
         srlStore.setOnRefreshListener(this);
-        rvStore.addItemDecoration(new DividerGridItem(getContext()));
+        rvStore.addItemDecoration(new DividerGridItem(this));
         getVideoListAdapter.setOnItemClickListener(this);
         loadingDialog = LoadingDialog.newInstance("加载中...");
         loadingDialog.show(getFragmentManager());
@@ -80,7 +83,7 @@ public class MyArticleActivity extends BaseActivity implements OkHttpUtil.OnData
 
     @Override
     protected void loadData() {
-        String toJson = gson.toJson(new GetFindNewsCollectList(PreferencesUtil.getToken(getContext()), PreferencesUtil.getUserId(getContext()), nextPage + "", PageSize + ""));
+        String toJson = gson.toJson(new GetFindNewsCollectList(PreferencesUtil.getToken(this), PreferencesUtil.getUserId(this), nextPage + "", PageSize + ""));
         OkHttpUtil.postJson(Constant.URL.GetGraphicEditorList, DesUtil.encrypt(toJson), this);
     }
 
@@ -116,14 +119,14 @@ public class MyArticleActivity extends BaseActivity implements OkHttpUtil.OnData
                         }
                     } else if (getFindNewsCollectListEntity.getCode() == Constant.Integers.TOKEN_OUT_OF) { //token过期
                         dismissLoading();
-                        ToastUtil.initToast(getContext(), getFindNewsCollectListEntity.getMessage());
-                        startActivityForResult(new Intent(getContext(), LoginActivity.class), Constant.Code.LoginCode);
+                        ToastUtil.initToast(this, getFindNewsCollectListEntity.getMessage());
+                        startActivityForResult(new Intent(this, LoginActivity.class), Constant.Code.LoginCode);
 
                     } else if (getFindNewsCollectListEntity.getCode() == Constant.Integers.NULL) {
                         addBaseLine();
                     } else {//其他
                         dismissLoading();
-                        ToastUtil.initToast(getContext(), getFindNewsCollectListEntity.getMessage());
+                        ToastUtil.initToast(this, getFindNewsCollectListEntity.getMessage());
                     }
 
 
@@ -171,11 +174,7 @@ public class MyArticleActivity extends BaseActivity implements OkHttpUtil.OnData
 
     @Override
     public void onItemClick(View v, int position) {
-        Intent intent = new Intent(getContext(), H5ActivityForGraphEdit.class);
-        intent.putExtra("url", Constant.URL.GraphicEditorDetail+videosData.get(position).getGraphicEditorId());
 
-        intent.putExtra("title", videosData.get(position).getTitle()+"");
-        startActivityForResult(intent,Constant.Code.CollectCode);
 
 
     }
@@ -185,15 +184,7 @@ public class MyArticleActivity extends BaseActivity implements OkHttpUtil.OnData
 
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        if (requestCode == Constant.Code.CollectCode) {
-            if (resultCode == RESULT_OK) {
-                onRefresh();
-            }
-        }
-    }
 
 
 }

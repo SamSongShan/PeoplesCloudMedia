@@ -195,10 +195,10 @@
         <activity android:name=".activity.ProdectEditActivity" />
         <activity android:name=".activity.ZMTZZAddLinkActivity" />
         <activity android:name=".activity.H5ActivityForCopy" />
-        <activity android:name=".activity.MyArticleActivity"></activity>
-
-        <activity android:name=".activity.H5ActivityForGraphEdit"/>
-        <activity android:name=".activity.H5ActivityArticleEdit"/>
+        <activity android:name=".activity.TWBJMyArticleActivity" />
+        <activity android:name=".activity.H5ActivityForGraphEdit" />
+        <activity android:name=".activity.H5ActivityArticleEdit" />
+        <activity android:name=".activity.MineMyArticleActivity"></activity>
     </application>
 
 </manifest>
