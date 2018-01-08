@@ -83,6 +83,7 @@ public class PictureSelectorActivity extends PictureBaseActivity implements View
     private static final int SHOW_DIALOG = 0;
     private static final int DISMISS_DIALOG = 1;
     private static final int STATUSBAR = 2;
+    private static final int CutVideo = 0x2122;
     private ImageView picture_left_back;
     private TextView picture_title, picture_right, picture_tv_ok, tv_empty,
             picture_tv_img_num, picture_id_preview, tv_PlayPause, tv_Stop, tv_Quit,
@@ -432,7 +433,7 @@ public class PictureSelectorActivity extends PictureBaseActivity implements View
             Uri imageUri = parUri(cameraFile);
             DebugUtil.i(TAG, "video second:" + config.recordVideoSecond);
             cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
-           // cameraIntent.putExtra(MediaStore.EXTRA_DURATION_LIMIT, config.recordVideoSecond);
+            // cameraIntent.putExtra(MediaStore.EXTRA_DURATION_LIMIT, config.recordVideoSecond);
             cameraIntent.putExtra(MediaStore.EXTRA_VIDEO_QUALITY, config.videoQuality);
             startActivityForResult(cameraIntent, PictureConfig.REQUEST_CAMERA);
         }
@@ -497,7 +498,7 @@ public class PictureSelectorActivity extends PictureBaseActivity implements View
     @Override
     public void onClick(View v) {
         int id = v.getId();
-        if (id == R.id.picture_left_back || id == R.id.picture_right||id ==R.id.toolbar_back) {
+        if (id == R.id.picture_left_back || id == R.id.picture_right || id == R.id.toolbar_back) {
             if (folderWindow.isShowing()) {
                 folderWindow.dismiss();
             } else {
@@ -569,12 +570,17 @@ public class PictureSelectorActivity extends PictureBaseActivity implements View
                 OkHttpUtil.postStream(Constant.URL.UploadVideo, enCode, 1, file, this, this, "file");
 
 
-
-
             }
         }
         if (id == R.id.picture_id_cut) {//去剪切
+            images1 = adapter.getSelectedImages();
 
+            if (images1.size() > 0) {
+                Intent intent = new Intent(this, CutTimeActivity.class);
+
+                intent.putExtra("path",images1.get(0).getPath()) ;
+                startActivityForResult(intent, CutVideo);
+            }
         }
 
     }
@@ -711,7 +717,7 @@ public class PictureSelectorActivity extends PictureBaseActivity implements View
             switch (url) {
                 case Constant.URL.UploadVideo: {
                     dismissLoading();
-                    LogUtils.e("UploadVideo", decrypt+"");
+                    LogUtils.e("UploadVideo", decrypt + "");
                     Video = new Gson().fromJson(decrypt, UploadImgEntity.class);
                     Toast.makeText(this, Video.getMessage(), Toast.LENGTH_LONG).show();
 
@@ -761,6 +767,7 @@ public class PictureSelectorActivity extends PictureBaseActivity implements View
         }
 
     }
+
     /**
      * 播放音频点击事件
      */
@@ -1001,6 +1008,7 @@ public class PictureSelectorActivity extends PictureBaseActivity implements View
             picture_id_preview.setEnabled(true);
             picture_id_preview.setSelected(true);
             picture_tv_ok.setSelected(true);
+            picture_id_cut.setSelected(true);
             if (numComplete) {
                 picture_tv_ok.setText(getString
                         (R.string.picture_done_front_num, selectImages.size(), config.maxSelectNum));
@@ -1018,6 +1026,7 @@ public class PictureSelectorActivity extends PictureBaseActivity implements View
             picture_id_preview.setEnabled(false);
             picture_id_preview.setSelected(false);
             picture_tv_ok.setSelected(false);
+            picture_id_cut.setSelected(false);
             if (numComplete) {
                 picture_tv_ok.setText(getString(R.string.picture_done_front_num, 0, config.maxSelectNum));
             } else {
@@ -1146,6 +1155,10 @@ public class PictureSelectorActivity extends PictureBaseActivity implements View
                         }
                     }
                     break;
+                case CutVideo: {   //剪切返回
+
+                }
+                break;
             }
         } else if (resultCode == RESULT_CANCELED) {
             if (config.camera) {
