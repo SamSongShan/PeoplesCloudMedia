@@ -29,6 +29,7 @@ import com.luck.picture.lib.entity.LocalMedia;
 import com.luck.picture.lib.tools.DateUtils;
 import com.luck.picture.lib.tools.DebugUtil;
 import com.luck.picture.lib.tools.StringUtils;
+import com.luck.picture.lib.tools.VideoTimeUtil;
 import com.luck.picture.lib.tools.VoiceUtils;
 
 import java.io.File;
@@ -179,7 +180,7 @@ public class PictureImageGridAdapter extends RecyclerView.Adapter<RecyclerView.V
             boolean eqLongImg = PictureMimeType.isLongImg(image);
             contentHolder.tv_long_chart.setVisibility(eqLongImg ? View.VISIBLE : View.GONE);
             long duration = image.getDuration();
-            contentHolder.tv_duration.setText(DateUtils.timeParse(duration));
+            contentHolder.tv_duration.setText(VideoTimeUtil.format(duration));
             if (mimeType == PictureMimeType.ofAudio()) {
                 contentHolder.iv_picture.setImageResource(R.drawable.audio_placeholder);
             } else {

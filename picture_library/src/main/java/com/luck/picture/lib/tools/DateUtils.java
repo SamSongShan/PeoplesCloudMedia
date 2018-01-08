@@ -24,6 +24,7 @@ public class DateUtils {
         if (duration > 1000) {
             time = timeParseMinute(duration);
         } else {
+            long hour=duration % (60000*6);
             long minute = duration / 60000;
             long seconds = duration % 60000;
             long second = Math.round((float) seconds / 1000);

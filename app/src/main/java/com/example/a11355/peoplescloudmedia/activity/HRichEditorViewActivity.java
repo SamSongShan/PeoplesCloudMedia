@@ -314,7 +314,7 @@ public class HRichEditorViewActivity extends BaseActivity implements OkHttpUtil.
                     }
                     break;
                     case ItemType.AD:  //插入
-                        startActivityForResult(new Intent(HRichEditorViewActivity.this, TWBJMyArticleActivity.class), 123);
+                     //   startActivityForResult(new Intent(HRichEditorViewActivity.this, TWBJMyArticleActivity.class), 123);
 
                         break;
                 }
@@ -627,7 +627,7 @@ public class HRichEditorViewActivity extends BaseActivity implements OkHttpUtil.
                 llContent.setVisibility(View.GONE);
                 break;
             case R.id.iv_additem_insert:   //插入箭头
-                startActivityForResult(new Intent(this, TWBJMyArticleActivity.class), 123);
+                //startActivityForResult(new Intent(this, TWBJMyArticleActivity.class), 123);
 
                 break;
         }

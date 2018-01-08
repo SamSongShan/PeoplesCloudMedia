@@ -40,7 +40,6 @@ import com.luck.picture.lib.dialog.CustomDialog;
 import com.luck.picture.lib.entity.EventEntity;
 import com.luck.picture.lib.entity.LocalMedia;
 import com.luck.picture.lib.entity.LocalMediaFolder;
-import com.luck.picture.lib.entity.Video;
 import com.luck.picture.lib.model.LocalMediaLoader;
 import com.luck.picture.lib.model.UploadImgEntity;
 import com.luck.picture.lib.observable.ImagesObservable;
@@ -53,7 +52,6 @@ import com.luck.picture.lib.tools.DateUtils;
 import com.luck.picture.lib.tools.DebugUtil;
 import com.luck.picture.lib.tools.DesUtil;
 import com.luck.picture.lib.tools.DoubleUtils;
-import com.luck.picture.lib.tools.GetVideo;
 import com.luck.picture.lib.tools.LightStatusBarUtils;
 import com.luck.picture.lib.tools.LogUtils;
 import com.luck.picture.lib.tools.OkHttpUtil;
@@ -130,6 +128,7 @@ public class PictureSelectorActivity extends PictureBaseActivity implements View
     private UploadImgEntity Video;
     private String videoUrl;
     private List<LocalMedia> images1;
+    private TextView picture_id_cut;
 
     //EventBus 3.0 回调
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -201,7 +200,6 @@ public class PictureSelectorActivity extends PictureBaseActivity implements View
                     , WindowManager.LayoutParams.FLAG_FULLSCREEN);
             setContentView(R.layout.picture_empty);
         } else {
-            LogUtils.e("QQQQQQQQQQ","qqqqqqqqqqqqqqq");
             setContentView(R.layout.picture_selector);
             initView(savedInstanceState);
         }
@@ -227,6 +225,9 @@ public class PictureSelectorActivity extends PictureBaseActivity implements View
         rl_bottom = (RelativeLayout) findViewById(R.id.rl_bottom);
         id_ll_ok = (LinearLayout) findViewById(R.id.id_ll_ok);
         tv_empty = (TextView) findViewById(R.id.tv_empty);
+        picture_id_cut = (TextView) findViewById(R.id.picture_id_cut);
+
+        picture_id_cut.setOnClickListener(this);
 
 
         back = (ImageButton) findViewById(R.id.toolbar_back);
@@ -333,8 +334,8 @@ public class PictureSelectorActivity extends PictureBaseActivity implements View
      * get LocalMedia s
      */
     protected void readLocalMedia() {
-        List<com.luck.picture.lib.entity.Video> videos = GetVideo.getVideos(PictureSelectorActivity.this);
-        LogUtils.e("QQQ",videos.size()+"");
+       /* List<com.luck.picture.lib.entity.Video> videos = GetVideo.getVideos(PictureSelectorActivity.this);
+        LogUtils.e("QQQ",videos.size()+"");*/
         mediaLoader.loadAllMedia(new LocalMediaLoader.LocalMediaLoadListener() {
             @Override
             public void loadComplete(List<LocalMediaFolder> folders) {
@@ -555,7 +556,11 @@ public class PictureSelectorActivity extends PictureBaseActivity implements View
                 // 图片才压缩，视频不管
                 compressImage(images1);
             } else {
+                if (images1.get(0).getDuration() > 120 * 1000) {
+                    Toast.makeText(this, "上传视频时间不能超过2分钟", Toast.LENGTH_SHORT).show();
 
+                    return;
+                }
                 downloadDialog1 = DownloadDialogCopy.newInstance("视频上传中...", false, this);
                 downloadDialog1.show(getFragmentManager());
 
@@ -568,6 +573,10 @@ public class PictureSelectorActivity extends PictureBaseActivity implements View
 
             }
         }
+        if (id == R.id.picture_id_cut) {//去剪切
+
+        }
+
     }
 
     /**
