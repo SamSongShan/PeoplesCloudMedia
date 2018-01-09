@@ -28,6 +28,7 @@ public class ThumbnailView extends View {
     private Bitmap bitmap;
     private OnScrollBorderListener onScrollBorderListener;
     private int minPx;
+    private Bitmap bitmapr;
 
     public ThumbnailView(Context context) {
         super(context);
@@ -51,7 +52,8 @@ public class ThumbnailView extends View {
         int dp5 = (int) getResources().getDimension(R.dimen.dp5);
         mPaint.setStrokeWidth(dp5);
 
-        bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.video_thumbnail);
+        bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.video_thumbnail_l);
+        bitmapr = BitmapFactory.decodeResource(getResources(), R.drawable.video_thumbnail_r);
 
         rectWidth = (int) getResources().getDimension(R.dimen.dp10);
         minPx = rectWidth;
@@ -201,7 +203,7 @@ public class ThumbnailView extends View {
         rect2.top = (int) rectF2.top;
         rect2.right = (int) rectF2.right;
         rect2.bottom = (int) rectF2.bottom;
-        canvas.drawBitmap(bitmap, null, rectF2, mPaint);
+        canvas.drawBitmap(bitmapr, null, rectF2, mPaint);
 
 
 
