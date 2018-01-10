@@ -82,7 +82,7 @@ public class NewsCollectListFragment extends BaseFragment implements OkHttpUtil.
     @Override
     protected void loadData() {
         String toJson = gson.toJson(new GetFindNewsCollectList(PreferencesUtil.getToken(getContext()),PreferencesUtil.getUserId(getContext()),nextPage + "", PageSize + ""));
-        OkHttpUtil.postJson(Constant.URL.GetGraphicEditorList, DesUtil.encrypt(toJson), this);
+        OkHttpUtil.postJson(Constant.URL.GetFindNewsCollectList, DesUtil.encrypt(toJson), this);
     }
 
     private void dismissLoading() {
@@ -99,8 +99,8 @@ public class NewsCollectListFragment extends BaseFragment implements OkHttpUtil.
         if (!TextUtils.isEmpty(json)) {
             String decrypt = DesUtil.decrypt(json);
             switch (url) {
-                case Constant.URL.GetGraphicEditorList: {
-                    LogUtils.e("GetGraphicEditorList",  decrypt);
+                case Constant.URL.GetFindNewsCollectList: {
+                    LogUtils.e("GetFindNewsCollectList",  decrypt);
                     if (PageIndex == 1) {
                         videosData.clear();
                         dismissLoading();

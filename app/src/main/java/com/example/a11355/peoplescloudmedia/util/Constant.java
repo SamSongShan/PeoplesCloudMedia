@@ -295,6 +295,16 @@ ArticleId 传文章ID
 * */
 String RztEditArticle = BaseH5 +"/News/RztEditArticle?ArticleId=";
 
+/*
+* 人众推文章分享页面，需要修改下，改成这个
+http://net.lml9.com/News/RztShareArticle?ArticleId=a659c161-79a8-4451-baf5-6c9cd1056b3b
+
+ArticleId 传文章ID
+
+* 
+* */
+String RztEditArticleShare = BaseH5 +"/News/RztShareArticle?ArticleId=";
+
 
 
     }

@@ -74,7 +74,6 @@ public class H5ActivityForRZTPreview extends BaseActivity {
     }
 
 
-
     @OnClick({R.id.img_colse, R.id.img_shear, R.id.img_edit})
     public void onViewClicked(View view) {
         switch (view.getId()) {
@@ -83,12 +82,12 @@ public class H5ActivityForRZTPreview extends BaseActivity {
                 onBackPressed();
                 break;
             case R.id.img_shear://分享
-                PreferencesUtil.showShare(this,data.getTitle()+"",Constant.URL.RZTPreviewArticle + data.getArticleId(),data.getTitle()+"",Constant.URL.BaseImg+data.getImageUrl(),null);
+                PreferencesUtil.showShare(this, data.getTitle() + "", Constant.URL.RztEditArticleShare + data.getArticleId(), data.getTitle() + "", Constant.URL.BaseImg + data.getImageUrl(), null);
                 break;
             case R.id.img_edit://编辑
                 Intent intent = new Intent(this, H5ActivityArticleEdit.class);
-                intent.putExtra("url",Constant.URL.RztEditArticle+data.getArticleId());
-                startActivityForResult(intent,12);
+                intent.putExtra("url", Constant.URL.RztEditArticle + data.getArticleId());
+                startActivityForResult(intent, 12);
 
                 break;
         }
