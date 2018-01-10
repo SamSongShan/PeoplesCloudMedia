@@ -235,9 +235,9 @@ public class H5ActivityForNewsDetical extends BaseActivity implements View.OnCli
             if (!new File(filePath).exists()) {
                 Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher);
                 BitMapUtil.saveBitmap2File(bitmap, filePath);
-            } else {
-                filePath = data.getThumb();
             }
+        }else {
+            filePath = data.getThumb();
         }
 
 
@@ -253,9 +253,9 @@ public class H5ActivityForNewsDetical extends BaseActivity implements View.OnCli
             if (!new File(filePath).exists()) {
                 Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.img);
                 BitMapUtil.saveBitmap2File(bitmap, filePath);
-            } else {
-                filePath = data1.getThumb();
-            }
+            } 
+        }else {
+            filePath = data1.getThumb();
         }
 
 

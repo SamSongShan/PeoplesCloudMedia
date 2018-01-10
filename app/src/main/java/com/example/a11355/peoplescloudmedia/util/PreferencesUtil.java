@@ -173,7 +173,7 @@ public class PreferencesUtil {
         oks.setImagePath(imgPath);//确保SDcard下面存在此张图片
         // url仅在微信（包括好友和朋友圈）中使用
         oks.setImageUrl(imgPath);
-        oks.setInstallUrl(url);
+       // oks.setInstallUrl(url);
         oks.setUrl(url);
         // comment是我对这条分享的评论，仅在人人网和QQ空间使用
         oks.setComment("大家快来注册！");
@@ -181,7 +181,7 @@ public class PreferencesUtil {
         oks.setSite(context.getString(R.string.app_name));
         // siteUrl是分享此内容的网站地址，仅在QQ空间使用
         oks.setSiteUrl(url);
-        oks.setFilePath(url);
+        //oks.setFilePath(url);
         // 启动分享GUI
         oks.show(context);
     }
