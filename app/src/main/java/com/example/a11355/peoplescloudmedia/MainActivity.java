@@ -765,6 +765,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         if (loadingDialog != null) {
             loadingDialog.dismiss();
         }
+
+        if (builder != null) {
+            builder.dismiss();
+        }
     }
 
     @Override

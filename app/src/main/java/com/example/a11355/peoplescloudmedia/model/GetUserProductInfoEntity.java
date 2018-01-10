@@ -1,5 +1,9 @@
 package com.example.a11355.peoplescloudmedia.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -53,7 +57,7 @@ public class GetUserProductInfoEntity {
         this.Number = Number;
     }
 
-    public static class DataEntity  {
+    public static class DataEntity implements Parcelable {
         /**
          * MediaBlockList : [{"HtmlToTexts":"吃v哈哈","VideoImg":"default","MediaBlockId":"0c72628d-8fd3-43ad-83f1-d48c623be2c1","FilePath":"default","Texts":"吃v哈哈","MediaType":1,"Mark":2,"SortCode":1,"CreateDate":"2018-01-01 15:50:24","CreateUserId":"212bd12a-37f2-4eb4-ae84-6dd9e552434b","OtherId":"6ad58348-1f74-4dad-93f3-ba8413481d8a"},{"HtmlToTexts":"打广告","VideoImg":"default","MediaBlockId":"1eb607c4-571a-4406-abfd-bb4062fe00e7","FilePath":"/Resource/WebUserImage/TN006/20180101154816186.jpg","Texts":"打广告","MediaType":2,"Mark":2,"SortCode":1,"CreateDate":"2018-01-01 15:50:24","CreateUserId":"212bd12a-37f2-4eb4-ae84-6dd9e552434b","OtherId":"6ad58348-1f74-4dad-93f3-ba8413481d8a"},{"HtmlToTexts":"哥古古怪怪GVvvvv尴尬","VideoImg":"/Resource/WebUserImage/TN006/20180101154840272.jpg","MediaBlockId":"30bfa126-e372-424a-b024-6ae9498f8b7a","FilePath":"/Resource/WebUserVideo//20180101154839785.mp4","Texts":"哥古古怪怪GVvvvv尴尬","MediaType":3,"Mark":2,"SortCode":1,"CreateDate":"2018-01-01 15:50:24","CreateUserId":"212bd12a-37f2-4eb4-ae84-6dd9e552434b","OtherId":"6ad58348-1f74-4dad-93f3-ba8413481d8a"},{"HtmlToTexts":"好好","VideoImg":"default","MediaBlockId":"32588f7d-fa64-4846-b2b4-27a8f9b328d9","FilePath":"default","Texts":"<a href=\"http://www.dunian.com\">好好<\/a>","MediaType":1,"Mark":2,"SortCode":1,"CreateDate":"2018-01-01 15:56:34","CreateUserId":"212bd12a-37f2-4eb4-ae84-6dd9e552434b","OtherId":"6ad58348-1f74-4dad-93f3-ba8413481d8a"},{"HtmlToTexts":"都好喝","VideoImg":"/Resource/WebUserImage/TN006/20180101155428810.jpg","MediaBlockId":"7b0badb2-c7f1-424a-b973-e116edea0d58","FilePath":"/Resource/WebUserVideo//20180101155428183.mp4","Texts":"都好喝","MediaType":3,"Mark":2,"SortCode":1,"CreateDate":"2018-01-01 15:56:34","CreateUserId":"212bd12a-37f2-4eb4-ae84-6dd9e552434b","OtherId":"6ad58348-1f74-4dad-93f3-ba8413481d8a"},{"HtmlToTexts":"dhjjdh你好hh","VideoImg":"default","MediaBlockId":"80416909-6b21-4290-a9c9-4f1b706316bb","FilePath":"/Resource/WebUserImage/TN006/20180101155242320.jpg","Texts":"dhjjdh<a href=\"http://www.du.com\">你好<\/a>hh","MediaType":2,"Mark":2,"SortCode":1,"CreateDate":"2018-01-01 15:56:34","CreateUserId":"212bd12a-37f2-4eb4-ae84-6dd9e552434b","OtherId":"6ad58348-1f74-4dad-93f3-ba8413481d8a"}]
          * AttachLinkList : [{"OtherId":"6ad58348-1f74-4dad-93f3-ba8413481d8a","AttachLinkId":"5c9d4d7a-882e-4330-9f72-6772b669fcfd","LinkName":"点多","ToLink":"www.dfg.com","LinkType":2,"SortCode":1,"CreateDate":"2018-01-01 15:56:34","CreateUserId":"212bd12a-37f2-4eb4-ae84-6dd9e552434b"},{"OtherId":"6ad58348-1f74-4dad-93f3-ba8413481d8a","AttachLinkId":"5f0ae24a-e937-4e48-a0c6-24c7fea797f6","LinkName":"添加链接","ToLink":"def","LinkType":2,"SortCode":1,"CreateDate":"2018-01-01 15:50:24","CreateUserId":"212bd12a-37f2-4eb4-ae84-6dd9e552434b"},{"OtherId":"6ad58348-1f74-4dad-93f3-ba8413481d8a","AttachLinkId":"8d35493e-2d15-41db-b237-bd2ea61f15a8","LinkName":"添加链接","ToLink":"def","LinkType":2,"SortCode":1,"CreateDate":"2018-01-01 15:56:34","CreateUserId":"212bd12a-37f2-4eb4-ae84-6dd9e552434b"},{"OtherId":"6ad58348-1f74-4dad-93f3-ba8413481d8a","AttachLinkId":"966b0a5b-5366-4c32-9684-3545d18eacab","LinkName":"百度","ToLink":"www.baidu.com","LinkType":2,"SortCode":1,"CreateDate":"2018-01-01 15:50:24","CreateUserId":"212bd12a-37f2-4eb4-ae84-6dd9e552434b"}]
@@ -389,5 +393,60 @@ public class GetUserProductInfoEntity {
                 this.CreateUserId = CreateUserId;
             }
         }
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeString(this.UserProductInfoId);
+            dest.writeString(this.UserId);
+            dest.writeString(this.ProductImg);
+            dest.writeString(this.ProductName);
+            dest.writeString(this.ProductPrice);
+            dest.writeString(this.Description);
+            dest.writeString(this.Title);
+            dest.writeString(this.IsUseMusic);
+            dest.writeString(this.MusicPath);
+            dest.writeString(this.MusicName);
+            dest.writeString(this.CreateDate);
+            dest.writeList(this.MediaBlockList);
+            dest.writeList(this.AttachLinkList);
+        }
+
+        public DataEntity() {
+        }
+
+        protected DataEntity(Parcel in) {
+            this.UserProductInfoId = in.readString();
+            this.UserId = in.readString();
+            this.ProductImg = in.readString();
+            this.ProductName = in.readString();
+            this.ProductPrice = in.readString();
+            this.Description = in.readString();
+            this.Title = in.readString();
+            this.IsUseMusic = in.readString();
+            this.MusicPath = in.readString();
+            this.MusicName = in.readString();
+            this.CreateDate = in.readString();
+            this.MediaBlockList = new ArrayList<MediaBlockListEntity>();
+            in.readList(this.MediaBlockList, MediaBlockListEntity.class.getClassLoader());
+            this.AttachLinkList = new ArrayList<AttachLinkListEntity>();
+            in.readList(this.AttachLinkList, AttachLinkListEntity.class.getClassLoader());
+        }
+
+        public static final Parcelable.Creator<DataEntity> CREATOR = new Parcelable.Creator<DataEntity>() {
+            @Override
+            public DataEntity createFromParcel(Parcel source) {
+                return new DataEntity(source);
+            }
+
+            @Override
+            public DataEntity[] newArray(int size) {
+                return new DataEntity[size];
+            }
+        };
     }
 }

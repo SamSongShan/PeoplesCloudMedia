@@ -19,6 +19,7 @@ import com.example.a11355.peoplescloudmedia.custom.TipsAuthDialog;
 import com.example.a11355.peoplescloudmedia.custom.UploadImgDialog;
 import com.example.a11355.peoplescloudmedia.model.GetEntityUser;
 import com.example.a11355.peoplescloudmedia.model.GetEntityUserEntity;
+import com.example.a11355.peoplescloudmedia.model.GetUserProductInfoEntity;
 import com.example.a11355.peoplescloudmedia.model.UploadImgEntity;
 import com.example.a11355.peoplescloudmedia.util.BitMapUtil;
 import com.example.a11355.peoplescloudmedia.util.Constant;
@@ -65,6 +66,7 @@ public class ProdectEditActivity extends BaseActivity implements BaseDialog.OnIt
     private Gson gson = new GsonBuilder().create();
     private GetEntityUserEntity getEntityUserEntity;
     private String ImgUrl;
+    private GetUserProductInfoEntity.DataEntity data;
 
     @Override
     protected int getViewResId() {
@@ -132,6 +134,17 @@ public class ProdectEditActivity extends BaseActivity implements BaseDialog.OnIt
                 }
             }
         });
+
+        data = getIntent().getParcelableExtra("data");
+
+        if (data != null) {
+            ImgUrl = data.getProductImg();
+            sdv.setImageURI(Constant.URL.BaseImg + ImgUrl);
+            sdv.setVisibility(View.VISIBLE);
+            etName.setText(data.getProductName());
+            etPrice.setText(data.getProductPrice());
+            etDescription.setText(data.getDescription());
+        }
     }
 
     @Override

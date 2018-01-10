@@ -235,6 +235,8 @@ public class VideoActivity extends BaseActivity implements OkHttpUtil.OnDataList
                     ToastUtil.initToast(this, addFindCommentEntity.getMessage());
 
                     if (addFindCommentEntity.getCode() == Constant.Integers.SUC) {
+
+                        tvReviewNum1.setText(Integer.parseInt(tvReviewNum1.getText().toString().toString() + 1 + ""));
                         PageIndex = 1;
                         nextPage = 1;
                         loadReviewData();

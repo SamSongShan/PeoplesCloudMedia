@@ -695,7 +695,13 @@ public class ProductFragment extends BaseFragment implements OkHttpUtil.OnDataLi
         switch (view.getId()) {
             case R.id.tv_addmsg:
             case R.id.rl:
-                startActivityForResult(new Intent(getContext(), ProdectEditActivity.class), Constant.Code.ZMTZZ_prodect);
+                Intent intent = new Intent(getContext(), ProdectEditActivity.class);
+                if (getUserProductInfoEntity!=null){
+                    intent.putExtra("data",getUserProductInfoEntity.getData());
+
+                }
+
+                startActivityForResult(intent, Constant.Code.ZMTZZ_prodect);
                 //onChangeBG(view);
                 break;
 
@@ -827,7 +833,7 @@ public class ProductFragment extends BaseFragment implements OkHttpUtil.OnDataLi
                         datas.clear();
                         zmtzzLinksCopy.clear();
                         zmtzzLinks.clear();
-                        ;
+
 
                         isShowSave = false;
                         showSave.showSave(isShowSave);
