@@ -207,6 +207,7 @@
                     android:text="添加音乐" />
 
                 <ImageView
+                    android:id="@+id/img_colse_music"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_alignParentRight="true"

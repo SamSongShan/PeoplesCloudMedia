@@ -1,5 +1,9 @@
 package org.ffmpeg.android.test;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+
 import org.ffmpeg.android.filters.CropVideoFilter;
 import org.ffmpeg.android.filters.DrawBoxVideoFilter;
 import org.ffmpeg.android.filters.DrawTextVideoFilter;
@@ -7,8 +11,8 @@ import org.ffmpeg.android.filters.FadeVideoFilter;
 import org.ffmpeg.android.filters.TransposeVideoFilter;
 import org.ffmpeg.android.filters.VideoFilter;
 
-import java.io.File;
-import java.util.ArrayList;
+import android.app.Activity;
+import android.content.Context;
 
 public class FilterTest  {
 

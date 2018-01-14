@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -79,7 +80,7 @@ public class RichEditorAdapter extends RecyclerView.Adapter<RichEditorAdapter.My
         holder.iv_item_video.setVisibility(View.GONE);
 
         //设置内容
-        if ("default".equals(eContent.getTexts())) {
+        if ("default".equals(eContent.getTexts())|| TextUtils.isEmpty(eContent.getTexts())) {
             holder.tvDesc.setText(context.getString(R.string.rich_click_add_txt));
         } else {
             holder.tvDesc.setText(Html.fromHtml(eContent.getTexts()));
@@ -90,7 +91,7 @@ public class RichEditorAdapter extends RecyclerView.Adapter<RichEditorAdapter.My
          */
         switch (eContent.getMediaType()) {
             case ItemType.IMG:
-                if ("default".equals(eContent.getFilePath())) {
+                if ("default".equals(eContent.getFilePath())|| TextUtils.isEmpty(eContent.getFilePath())) {
                     holder.ivPic.setImageResource(R.drawable.img);
                 } else {
 
@@ -119,7 +120,7 @@ public class RichEditorAdapter extends RecyclerView.Adapter<RichEditorAdapter.My
                 break;
             case ItemType.VIDEO:
 
-                if ("default".equals(eContent.getVideoImg())) {
+                if ("default".equals(eContent.getVideoImg())|| TextUtils.isEmpty(eContent.getVideoImg())) {
                     holder.ivPic.setImageResource(R.drawable.video_item);
 
 
@@ -283,6 +284,9 @@ public class RichEditorAdapter extends RecyclerView.Adapter<RichEditorAdapter.My
         Intent intent = new Intent(context, TXTEditorActivity.class);
         Bundle bundle = new Bundle();
         bundle.putSerializable("eContent", datas.get(index));
+        bundle.putParcelable("eContent", datas.get(index));
+
+
         intent.putExtras(bundle);
         context.startActivityForResult(intent, REQUEST_CODE_EDIT_TXT);
     }

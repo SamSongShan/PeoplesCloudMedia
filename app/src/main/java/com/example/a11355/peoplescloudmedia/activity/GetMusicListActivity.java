@@ -51,13 +51,14 @@ public class GetMusicListActivity extends BaseActivity implements TextView.OnEdi
     private GetMusicListAdapter getMusicListAdapter;
     private String key;
     private int lastPosition;//上次播放位置
-    private MediaPlayer  player = new MediaPlayer();
+    private MediaPlayer player = new MediaPlayer();
     ;
 
     @Override
     protected int getViewResId() {
         return R.layout.activity_get_music_list;
     }
+
     @OnClick(R.id.tv_cancel)
     public void onViewClicked(View v) {
         PhoneUtil.hideKeyboard(v);
@@ -86,7 +87,7 @@ public class GetMusicListActivity extends BaseActivity implements TextView.OnEdi
             loadingDialog = LoadingDialog.newInstance("搜索中...");
             loadingDialog.show(getFragmentManager());
             key = etSearch.getText().toString();
-            String toJson = gson.toJson(new GetMusicList( key));
+            String toJson = gson.toJson(new GetMusicList(key));
             OkHttpUtil.postJson(Constant.URL.GetMusicList, DesUtil.encrypt(toJson), this);
             return true;
         }
@@ -132,9 +133,9 @@ public class GetMusicListActivity extends BaseActivity implements TextView.OnEdi
     public void onItemClick(View v, int position) {
 
         Intent intent = new Intent();
-        intent.putExtra("path",newsData.get(position).getAudio());
-        intent.putExtra("singer",newsData.get(position).getName());
-        setResult(RESULT_OK,intent);
+        intent.putExtra("path", newsData.get(position).getAudio());
+        intent.putExtra("singer", newsData.get(position).getName());
+        setResult(RESULT_OK, intent);
         onBackPressed();
     /*    Intent intent = new Intent(this, H5ActivityForNewsDetical.class);
         intent.putExtra("url", String.format(Constant.URL.NewsDetailsLink,newsData.get(position).getId()+"", SharedPreferencesUtil.getUserId(this)));
@@ -154,25 +155,27 @@ public class GetMusicListActivity extends BaseActivity implements TextView.OnEdi
     public void onClick(View v) {
 
         newsData.get(lastPosition).setIsplay(0);
-        lastPosition= (int) v.getTag();
-        if (v.isSelected()){
+        lastPosition = (int) v.getTag();
+        if (v.isSelected()) {
             newsData.get(lastPosition).setIsplay(0);
 
-            if (player!=null){
+            if (player != null) {
                 player.stop();
             }
 
         } else {
             newsData.get(lastPosition).setIsplay(1);
 
-            if (player!=null){
+            if (player != null) {
+                player.stop();
+
+                player.reset();
                 play();
             }
 
         }
 
         getMusicListAdapter.notifyDataSetChanged();
-
 
 
     }
@@ -182,9 +185,9 @@ public class GetMusicListActivity extends BaseActivity implements TextView.OnEdi
         //然后指定需要播放文件的路径，初始化MediaPlayer
         try {
             player.setAudioStreamType(AudioManager.STREAM_MUSIC);
-            player.setDataSource("http://cdn.y.baidu.com/7e4f4df3971200f2d1cd5a2364375c7d.mp3");
-             player.prepareAsync();
-            player.setOnPreparedListener(new MediaPlayer.OnPreparedListener(){
+            player.setDataSource(Constant.URL.BaseImg + newsData.get(lastPosition).getAudio());
+            player.prepareAsync();
+            player.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
                 @Override
                 public void onPrepared(MediaPlayer mp) {
                     mp.start();

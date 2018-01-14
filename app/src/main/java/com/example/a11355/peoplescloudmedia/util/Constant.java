@@ -191,6 +191,10 @@ public interface Constant {
         //【71】我的文章列表-图文编辑添加的文章(输入参数string Json)
 
         String GetGraphicEditorList=BaseUrl + "GetGraphicEditorList";
+           //【72】获取图文编辑文章完整信息(输入参数string Json)
+        String GetGraphicEditorEntity=BaseUrl + "GetGraphicEditorEntity";
+
+
 
 
 

@@ -9,9 +9,11 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.Surface;
 import android.view.TextureView;
 import android.view.View;
@@ -20,6 +22,15 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.luck.picture.lib.dialog.LoadingDialog;
+
+import org.ffmpeg.android.Clip;
+import org.ffmpeg.android.FFmpegController;
+import org.ffmpeg.android.ShellUtils;
+
+import java.io.File;
 
 
 /**
@@ -43,6 +54,9 @@ public class CutTimeActivity extends BaseActivity {
     private int endTime;
     private int windowWidth;
     private int windowHeight;
+    private float pro1;
+    private float pro2;
+    private LoadingDialog loadingDialog;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -114,6 +128,89 @@ public class CutTimeActivity extends BaseActivity {
     }
 
     private void cutVideo() {
+        loadingDialog = LoadingDialog.newInstance("剪切中...");
+        loadingDialog.show(getFragmentManager());
+        if (path == null) {
+            Toast.makeText(this, "视频地址无效", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        String dstDirName = "PeoplesCloudMedia";
+        String sdcardPath = Environment.getExternalStorageDirectory().getAbsolutePath();
+        String dstDir = sdcardPath + File.separator ;
+        File dstDirFile = new File(dstDir);
+        if (dstDirFile.exists()) {
+
+        } else {
+            dstDirFile.mkdirs();
+        }
+        String[] split = path.split("\\/");
+        String[] split1 = split[split.length - 1].split("\\.");
+        VideoClip videoClip = new VideoClip();
+
+        videoClip.setOutName(split1[0]+"剪切"+"."+ split1[1]);
+        videoClip.setFilePath(path);
+        videoClip.setWorkingPath(dstDir);
+        videoClip.setStartTime(startTime);
+        videoClip.setEndTime(endTime);
+        videoClip.clip();
+        Log.e("tag", "shellOut() returned: " + path);
+
+        Intent intent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+        Uri uri = Uri.fromFile(dstDirFile);
+        intent.setData(uri);
+        this.sendBroadcast(intent);
+        Toast.makeText(this, "已保存",Toast.LENGTH_SHORT).show();
+        loadingDialog.dismiss();
+        finish();
+        try {
+            FFmpegController fc = new FFmpegController(this, new File(dstDir));
+            Clip in = new Clip();
+
+            int startM = startTime/1000;
+            int endM = (endTime-startTime)/1000;
+
+            String startStr;
+            String endStr;
+
+            if(startM < 10){
+                startStr = "00:00:0"+startM;
+            }else{
+                startStr = "00:00:"+startM;
+            }
+
+            if(endM < 10){
+                endStr = "00:00:0"+endM;
+            }else{
+                endStr = "00:00:"+endM;
+            }
+
+            in.startTime = startStr;
+           // in.path = "/storage/emulated/0/PictureSelector/CameraImage/PictureSelector_20171227_221512.mp4";
+            in.path = path;
+            final Clip out = new Clip();
+            out.duration = (endTime-startTime)/1000;
+            out.audioCodec = "copy";
+            out.videoCodec = "copy";
+
+            String[] split11 = path.split("\\/");
+            String[] split111 = split[split.length - 1].split(".");
+            out.path = dstDir + File.separator + split1[0]+"剪切"+"."+ split1[1];
+
+            fc.clipVideo(in, out, true, new ShellUtils.ShellCallback() {
+                @Override
+                public void shellOut(String shellLine) {
+                    Log.e("tag", "shellOut() returned: " + shellLine);
+                }
+
+                @Override
+                public void processComplete(int exitValue) {
+                    Log.e("tag", "processComplete() returned: " + exitValue);
+                    Toast.makeText(CutTimeActivity.this, "剪切完成:" + out.path, Toast.LENGTH_LONG).show();
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         /*new AsyncTask<Void, Void, String>() {
             @Override
@@ -183,13 +280,13 @@ public class CutTimeActivity extends BaseActivity {
     private void changeTime(){
 
         float left = thumbnailView.getLeftInterval();
-        float pro1 = left/ll_thumbnail.getWidth();
+        pro1 = left/ll_thumbnail.getWidth();
 
-        startTime = (int) (videoDuration*pro1);
+        startTime = (int) (videoDuration* pro1);
 
         float right = thumbnailView.getRightInterval();
-        float pro2 = right/ll_thumbnail.getWidth();
-        endTime = (int) (videoDuration*pro2);
+        pro2 = right/ll_thumbnail.getWidth();
+        endTime = (int) (videoDuration* pro2);
     }
 
     private void changeVideoPlay(){

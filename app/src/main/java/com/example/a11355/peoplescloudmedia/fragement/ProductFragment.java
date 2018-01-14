@@ -150,7 +150,7 @@ public class ProductFragment extends BaseFragment implements OkHttpUtil.OnDataLi
     private String enCode = "";
     private String GraphicEditorId = "default";//:图文编辑实体主键（默认传default）
     private String ImageUrl = "";//:封面（默认传default）
-    private String IsUseMusic = "0";//:是否使用音乐（默认传0,不使用）
+    private String IsUseMusic = "1";//:是否使用音乐（默认传0,不使用）
     private String MusicUrl = "default";//:音乐路径（默认传default）
     private String MusicName = "default";//:音乐名称（默认传default）
     private String Title = "";//:标题
@@ -643,7 +643,7 @@ public class ProductFragment extends BaseFragment implements OkHttpUtil.OnDataLi
         } else if (requestCode == REQUEST_CODE_SET_Music && resultCode == RESULT_OK) {  //音乐
             MusicPath = data.getStringExtra("path");
             MusicName = data.getStringExtra("singer");
-            IsUseMusic = "0";
+            IsUseMusic = "1";
             tvAddMusic.setText(MusicName);
             isShowSave = true;
             isShowSave();
@@ -686,7 +686,7 @@ public class ProductFragment extends BaseFragment implements OkHttpUtil.OnDataLi
     }
 
 
-    @OnClick({R.id.tv_addLink, R.id.rl, R.id.tv_addmsg, R.id.tv_addMusic, R.id.tv_title, R.id.tv_content, R.id.iv_additem_txt, R.id.iv_additem_img, R.id.iv_additem_video, R.id.iv_additem_insert})
+    @OnClick({R.id.img_colse_music, R.id.tv_addLink, R.id.rl, R.id.tv_addmsg, R.id.tv_addMusic, R.id.tv_title, R.id.tv_content, R.id.iv_additem_txt, R.id.iv_additem_img, R.id.iv_additem_video, R.id.iv_additem_insert})
     public void onViewClicked(View view) {
         if (TextUtils.isEmpty(enCode)) {
             ToastUtil.initToast(getContext(), "数据加载中");
@@ -696,8 +696,8 @@ public class ProductFragment extends BaseFragment implements OkHttpUtil.OnDataLi
             case R.id.tv_addmsg:
             case R.id.rl:
                 Intent intent = new Intent(getContext(), ProdectEditActivity.class);
-                if (getUserProductInfoEntity!=null){
-                    intent.putExtra("data",getUserProductInfoEntity.getData());
+                if (getUserProductInfoEntity != null) {
+                    intent.putExtra("data", getUserProductInfoEntity.getData());
 
                 }
 
@@ -735,6 +735,15 @@ public class ProductFragment extends BaseFragment implements OkHttpUtil.OnDataLi
             case R.id.iv_additem_insert:
                 break;
             case R.id.tv_addLink: {
+
+            }
+            break;
+            case R.id.img_colse_music: {   //关闭音乐
+                if ("添加音乐".equals(tvAddMusic.getText().toString())) {
+                    return;
+                }
+                IsUseMusic = "0";
+                tvAddMusic.setText("添加音乐");
 
             }
             break;
@@ -858,21 +867,21 @@ public class ProductFragment extends BaseFragment implements OkHttpUtil.OnDataLi
 
                         }
                         adapter.notifyDataSetChanged();
-                        datasCopy.addAll(datas) ;
+                        datasCopy.addAll(datas);
                         zmtzzLinksCopy.addAll(zmtzzLinks);
-                        if ("0".equals(data.getIsUseMusic())) {
+                        if ("1".equals(data.getIsUseMusic())) {
                             tvAddMusic.setText(data.getMusicName());
 
                         }
 
-                        ProductImg=data.getProductImg();
-                                ProductName=data.getProductName();
-                                ProductPrice=data.getProductPrice();
-                                Description=data.getDescription();
-                                IsUseMusic=data.getIsUseMusic();
-                                MusicPath=data.getMusicPath();
-                                MusicName=data.getMusicName();
-                                Title=data.getTitle();
+                        ProductImg = data.getProductImg();
+                        ProductName = data.getProductName();
+                        ProductPrice = data.getProductPrice();
+                        Description = data.getDescription();
+                        IsUseMusic = data.getIsUseMusic();
+                        MusicPath = data.getMusicPath();
+                        MusicName = data.getMusicName();
+                        Title = data.getTitle();
                     } else {
                         isShowSave = true;
                         showSave.showSave(isShowSave);
@@ -932,8 +941,13 @@ public class ProductFragment extends BaseFragment implements OkHttpUtil.OnDataLi
 
     @OnClick(R.id.rl_show)
     public void onViewClicked() {
-        startActivityForResult(new Intent(getContext(), ProdectEditActivity.class), Constant.Code.ZMTZZ_prodect);
+        Intent intent = new Intent(getContext(), ProdectEditActivity.class);
+        if (getUserProductInfoEntity != null) {
+            intent.putExtra("data", getUserProductInfoEntity.getData());
 
+        }
+
+        startActivityForResult(intent, Constant.Code.ZMTZZ_prodect);
     }
 
     //是否显示确定

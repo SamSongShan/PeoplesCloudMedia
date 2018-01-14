@@ -17,6 +17,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SimpleItemAnimator;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.Animation;
@@ -205,6 +206,8 @@ public class PictureSelectorActivity extends PictureBaseActivity implements View
             initView(savedInstanceState);
         }
         enCode = getIntent().getStringExtra("enCode");
+
+        Log.e("enCode",enCode);
         StatusBarUtils.setStatusBarLightMode(this, Color.WHITE);
 
     }
@@ -568,6 +571,7 @@ public class PictureSelectorActivity extends PictureBaseActivity implements View
 
                 File file = new File(images1.get(0).getPath());
                 OkHttpUtil.postStream(Constant.URL.UploadVideo, enCode, 1, file, this, this, "file");
+                Log.e("enCode",enCode);
 
 
             }
@@ -1156,7 +1160,7 @@ public class PictureSelectorActivity extends PictureBaseActivity implements View
                     }
                     break;
                 case CutVideo: {   //剪切返回
-
+                    readLocalMedia();
                 }
                 break;
             }

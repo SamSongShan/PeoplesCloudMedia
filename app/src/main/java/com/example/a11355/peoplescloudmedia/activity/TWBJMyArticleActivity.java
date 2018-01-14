@@ -58,7 +58,14 @@ public class TWBJMyArticleActivity extends BaseActivity implements OkHttpUtil.On
     @Override
     protected void init() {
 
-        ToolBarUtil.initToolBar(toolbarText, "广告", new View.OnClickListener() {
+        ToolBarUtil.initToolBar(toolbarText, "我的文章", new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
+
+      /*  ToolBarUtil.initToolBar(toolbarText, "我的文章", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onBackPressed();
@@ -68,7 +75,7 @@ public class TWBJMyArticleActivity extends BaseActivity implements OkHttpUtil.On
             public void onClick(View v) {
 
             }
-        });
+        });*/
         rvStore.setLayoutManager(new LinearLayoutManager(this));
         getVideoListAdapter = new GetGraphicEditorAdapter(this, this, this);
         rvStore.setAdapter(getVideoListAdapter);
@@ -174,7 +181,16 @@ public class TWBJMyArticleActivity extends BaseActivity implements OkHttpUtil.On
 
     @Override
     public void onItemClick(View v, int position) {
+       /* Intent intent = new Intent(this, H5ActivityForGraphEdit.class);
+        intent.putExtra("url", Constant.URL.GraphicEditorDetail+videosData.get(position).getGraphicEditorId());
 
+        intent.putExtra("title", videosData.get(position).getTitle()+"");
+        startActivityForResult(intent,Constant.Code.CollectCode);*/
+
+        Intent intent = new Intent(this, HRichEditorViewActivity.class);
+        intent.putExtra("GraphicEditorId", videosData.get(position).getGraphicEditorId());
+
+        startActivityForResult(intent,Constant.Code.CollectCode);
 
 
     }
@@ -185,6 +201,12 @@ public class TWBJMyArticleActivity extends BaseActivity implements OkHttpUtil.On
     }
 
 
-
-
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode==RESULT_OK){
+            PageIndex = 1;
+            nextPage = 1;
+            loadData();
+        }
+    }
 }

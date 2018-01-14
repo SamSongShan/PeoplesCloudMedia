@@ -81,6 +81,10 @@ public class TXTEditorActivity extends BaseActivity {
 
     @Override
     protected void init() {
+
+
+
+
         ToolBarUtil.initToolBar(toolbarText, "编辑文字", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -95,8 +99,8 @@ public class TXTEditorActivity extends BaseActivity {
                     Intent data = new Intent();
                     Bundle bundle = new Bundle();
                     String content = mEditor.getHtml();
-                    eContent.setTexts(content);
                     mEditor.removeFormat();
+                    eContent.setTexts(content);
 
                     bundle.putSerializable("eContent", eContent);
                     data.putExtras(bundle);
@@ -121,7 +125,15 @@ public class TXTEditorActivity extends BaseActivity {
         //mEditor.setBackgroundResource(R.drawable.bg);
         mEditor.setPadding(10, 10, 10, 10);
         //mEditor.setBackground("https://raw.githubusercontent.com/wasabeef/art/master/chip.jpg");
-        mEditor.setPlaceholder("不超过500字");
+
+        EContent parcelableExtra = getIntent().getParcelableExtra("eContent");
+
+        if (parcelableExtra!=null&&!TextUtils.isEmpty(parcelableExtra.getTexts())&&!"default".equals(parcelableExtra.getTexts())) {
+            mEditor.setHtml(parcelableExtra.getTexts());
+        }  else {
+            mEditor.setPlaceholder("不超过500字");
+
+        }
 
         eContent = (EContent) getIntent().getSerializableExtra("eContent");
 

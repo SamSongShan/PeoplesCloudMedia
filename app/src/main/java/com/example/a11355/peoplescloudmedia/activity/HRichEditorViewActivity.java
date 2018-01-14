@@ -27,6 +27,8 @@ import com.example.a11355.peoplescloudmedia.custom.SectorProgressBar;
 import com.example.a11355.peoplescloudmedia.model.EContent;
 import com.example.a11355.peoplescloudmedia.model.GetEntityUser;
 import com.example.a11355.peoplescloudmedia.model.GetEntityUserEntity;
+import com.example.a11355.peoplescloudmedia.model.GetGraphicEditorEntity;
+import com.example.a11355.peoplescloudmedia.model.GetGraphicEditorEntityEntity;
 import com.example.a11355.peoplescloudmedia.model.ItemType;
 import com.example.a11355.peoplescloudmedia.model.UpdateGraphicEditor;
 import com.example.a11355.peoplescloudmedia.util.Constant;
@@ -129,11 +131,12 @@ public class HRichEditorViewActivity extends BaseActivity implements OkHttpUtil.
     private String enCode = "";
     private String GraphicEditorId = "default";//:图文编辑实体主键（默认传default）
     private String ImageUrl = "";//:封面（默认传default）
-    private String IsUseMusic = "0";//:是否使用音乐（默认传0,不使用）
+    private String IsUseMusic = "1";//:是否使用音乐（默认传0,不使用）
     private String MusicUrl = "default";//:音乐路径（默认传default）
     private String MusicName = "default";//:音乐名称（默认传default）
     private String Title = "";//:标题
     private LoadingDialog loadingDialog;
+    private GetGraphicEditorEntityEntity getEntityUserEntity;
 
   /*  */
 
@@ -154,6 +157,8 @@ public class HRichEditorViewActivity extends BaseActivity implements OkHttpUtil.
 
     @Override
     protected void init() {
+
+
         ToolBarUtil.initToolBar(toolbarText, "图文编辑", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -178,13 +183,23 @@ public class HRichEditorViewActivity extends BaseActivity implements OkHttpUtil.
 
             }
         });
+
+
         GetEntityUserEntity.DataBean userInfo = PreferencesUtil.getUserInfo(this);
         if (userInfo == null) {
             String jsonUser = gson.toJson(new GetEntityUser(PreferencesUtil.getToken(this), PreferencesUtil.getUserId(this)));
             OkHttpUtil.postJson(Constant.URL.GetEntityUser, DesUtil.encrypt(jsonUser), this);
         } else {
+
             enCode = userInfo.getEnCode();
             initView();
+            String graphicEditorId = getIntent().getStringExtra("GraphicEditorId");
+            if (!TextUtils.isEmpty(graphicEditorId)) {
+                String jsonUser = gson.toJson(new GetGraphicEditorEntity(graphicEditorId, PreferencesUtil.getToken(this), PreferencesUtil.getUserId(this)));
+                OkHttpUtil.postJson(Constant.URL.GetGraphicEditorEntity, DesUtil.encrypt(jsonUser), this);
+                GraphicEditorId = graphicEditorId;
+
+            }
         }
 
 
@@ -565,7 +580,7 @@ public class HRichEditorViewActivity extends BaseActivity implements OkHttpUtil.
             tvAddMusic.setVisibility(View.GONE);
             MusicUrl = data.getStringExtra("path");
             MusicName = data.getStringExtra("singer");
-            IsUseMusic = "0";
+            IsUseMusic = "1";
 
 
             tvAddedMusic.setText(MusicName);
@@ -691,7 +706,13 @@ public class HRichEditorViewActivity extends BaseActivity implements OkHttpUtil.
                         PreferencesUtil.saveUserInfo(this, DesUtil.encrypt(decrypt, DesUtil.LOCAL_KEY));
                         enCode = getEntityUserEntity.getData().getEnCode();
                         initView();
+                        String graphicEditorId = getIntent().getStringExtra("GraphicEditorId");
+                        if (!TextUtils.isEmpty(graphicEditorId))  {
+                            String jsonUser = gson.toJson(new GetGraphicEditorEntity(graphicEditorId,PreferencesUtil.getToken(this), PreferencesUtil.getUserId(this)));
+                            OkHttpUtil.postJson(Constant.URL.GetGraphicEditorEntity, DesUtil.encrypt(jsonUser), this);
+                            GraphicEditorId = graphicEditorId  ;
 
+                        }
                     } else if (getEntityUserEntity.getCode() == Constant.Integers.TOKEN_OUT_OF) { //token过期
                         ToastUtil.initToast(this, getEntityUserEntity.getMessage());
                         startActivityForResult(new Intent(this, LoginActivity.class), Constant.Code.LoginCode);
@@ -717,8 +738,61 @@ public class HRichEditorViewActivity extends BaseActivity implements OkHttpUtil.
 
                 }
                 break;
+                case Constant.URL.GetGraphicEditorEntity:
+                { //获取图文编辑文章完整信息
+                    LogUtils.e("loge", "GetGraphicEditorEntity: " + decrypt);
+                    getEntityUserEntity = gson.fromJson(decrypt, GetGraphicEditorEntityEntity.class);
+
+                    if (getEntityUserEntity.getCode() == Constant.Integers.SUC) { //成功
+
+                        initdata();
+
+                    } else if (getEntityUserEntity.getCode() == Constant.Integers.TOKEN_OUT_OF) { //token过期
+                        ToastUtil.initToast(this, getEntityUserEntity.getMessage());
+                        startActivityForResult(new Intent(this, LoginActivity.class), Constant.Code.LoginCode);
+
+                    } else {//其他
+                        ToastUtil.initToast(this, getEntityUserEntity.getMessage());
+                    }
+
+                }
+                    break;
             }
         }
+    }
+
+    private void initdata() {
+        tvAddImg.setVisibility(View.GONE);
+        sdv.setVisibility(View.VISIBLE);
+        imgChange.setVisibility(View.VISIBLE);
+        sdv.setImageURI(Constant.URL.BaseImg+getEntityUserEntity.getData().getGraphicEditorEntity().getImageUrl());
+        ImageUrl = getEntityUserEntity.getData().getGraphicEditorEntity().getImageUrl();
+
+        tvTitle.setText(getEntityUserEntity.getData().getGraphicEditorEntity().getTitle());
+        Title =getEntityUserEntity.getData().getGraphicEditorEntity().getTitle();//文章记录赋值
+
+
+
+        tvAddedMusic.setVisibility(View.VISIBLE);
+        tvAddMusic.setVisibility(View.GONE);
+        MusicUrl = getEntityUserEntity.getData().getGraphicEditorEntity().getMusicUrl();
+        MusicName = getEntityUserEntity.getData().getGraphicEditorEntity().getMusicName();
+        IsUseMusic = "1";
+
+
+        for (int i = 0; i < getEntityUserEntity.getData().getMediaBlockEntityList().size(); i++) {
+            EContent eContent = new EContent();
+            eContent.setMediaBlockId(getEntityUserEntity.getData().getMediaBlockEntityList().get(i).getMediaBlockId());
+            eContent.setFilePath(getEntityUserEntity.getData().getMediaBlockEntityList().get(i).getFilePath());
+            eContent.setTexts(getEntityUserEntity.getData().getMediaBlockEntityList().get(i).getTexts());
+            eContent.setVideoImg(getEntityUserEntity.getData().getMediaBlockEntityList().get(i).getVideoImg());
+            eContent.setSortCode(getEntityUserEntity.getData().getMediaBlockEntityList().get(i).getSortCode()+"");
+            eContent.setIsDelete("0");
+            eContent.setMediaType(getEntityUserEntity.getData().getMediaBlockEntityList().get(i).getMediaType()+"");
+            datas.add( eContent);
+        }
+
+        adapter.notifyDataSetChanged();
     }
 
     @Override

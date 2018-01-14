@@ -153,7 +153,7 @@ public class BusinessCardFragment extends BaseFragment implements OkHttpUtil.OnD
         });
     }
 
-    @OnClick({R.id.rl_personalShow, R.id.tv_addmsg, R.id.tv_addcompanymsg, R.id.tv_addMusic, R.id.img_colseCompany})
+    @OnClick({R.id.rl_personalShow, R.id.tv_addmsg, R.id.tv_addcompanymsg, R.id.tv_addMusic, R.id.img_colseCompany,R.id.rv_map})
     public void onViewClicked(View view) {
 
         switch (view.getId()) {
@@ -221,6 +221,19 @@ public class BusinessCardFragment extends BaseFragment implements OkHttpUtil.OnD
                 }
             }
             break;
+
+            case R.id.rv_map:  {
+                Intent intent = new Intent(getContext(), UpdateCardCompanyInfoActivity.class);
+
+                if (getBusinessCardInfoEntity != null && getBusinessCardInfoEntity.getData() != null) {
+                    intent.putExtra("data", getBusinessCardInfoEntity.getData());
+
+                }
+
+                startActivityForResult(intent, Constant.Code.ZMTZZ_Company);
+        }
+
+                break;
         }
     }
 
@@ -252,12 +265,12 @@ public class BusinessCardFragment extends BaseFragment implements OkHttpUtil.OnD
                             tvCompanyNet.setText(getBusinessCardInfoEntity.getData().getCompanyNet());
                             webView.loadUrl("http://m.amap.com/navi/?dest=" + getBusinessCardInfoEntity.getData().getLatitude() + "," + getBusinessCardInfoEntity.getData().getPrecision() + "&destName=" + getBusinessCardInfoEntity.getData().getProvinceName() + getBusinessCardInfoEntity.getData().getCityName() + getBusinessCardInfoEntity.getData().getCountyName() + getBusinessCardInfoEntity.getData().getAddress() + "&key=2a2e47461740f64d5eca896aaa41cc42");//百度地图地址
 
-                        } else if (("0").equals(getBusinessCardInfoEntity.getData().getIsUseCompany())) {
+                        } else if ((getBusinessCardInfoEntity.getData().getIsUseCompany()==0)) {
                             tvAddcompanymsg.setVisibility(View.VISIBLE);
                             llCompanyD.setVisibility(View.GONE);
                         }
                         if (("1").equals(getBusinessCardInfoEntity.getData().getIsUseMusic())) {
-                            tvAddMusic.setText("已添加");
+                            tvAddMusic.setText(getBusinessCardInfoEntity.getData().getMusicName()+"");
                         }
                     }
                     break;
@@ -269,7 +282,7 @@ public class BusinessCardFragment extends BaseFragment implements OkHttpUtil.OnD
                     ToastUtil.initToast(getContext(), img.getMessage());
 
                     if (img.getCode() == Constant.Integers.SUC) {
-                        getBusinessCardInfoEntity.getData().setIsUseCompany("0");
+                        getBusinessCardInfoEntity.getData().setIsUseCompany(0);
                         tvAddcompanymsg.setVisibility(View.VISIBLE);
                         llCompanyD.setVisibility(View.GONE);
 

@@ -1,5 +1,8 @@
 package com.example.a11355.peoplescloudmedia.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.io.Serializable;
 
 /**
@@ -7,7 +10,7 @@ import java.io.Serializable;
  * Created by HDL on 2017/2/17.
  */
 
-public class EContent implements Serializable {
+public class EContent implements Serializable, Parcelable {
     /*
     * 媒体块实体列表(MediaBlockId媒体主键-新增传default,
     * FilePath媒体文件路径,
@@ -100,5 +103,41 @@ public class EContent implements Serializable {
     }
 
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
 
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.MediaBlockId);
+        dest.writeString(this.FilePath);
+        dest.writeString(this.Texts);
+        dest.writeString(this.MediaType);
+        dest.writeString(this.VideoImg);
+        dest.writeString(this.SortCode);
+        dest.writeString(this.isDelete);
+    }
+
+    protected EContent(Parcel in) {
+        this.MediaBlockId = in.readString();
+        this.FilePath = in.readString();
+        this.Texts = in.readString();
+        this.MediaType = in.readString();
+        this.VideoImg = in.readString();
+        this.SortCode = in.readString();
+        this.isDelete = in.readString();
+    }
+
+    public static final Parcelable.Creator<EContent> CREATOR = new Parcelable.Creator<EContent>() {
+        @Override
+        public EContent createFromParcel(Parcel source) {
+            return new EContent(source);
+        }
+
+        @Override
+        public EContent[] newArray(int size) {
+            return new EContent[size];
+        }
+    };
 }

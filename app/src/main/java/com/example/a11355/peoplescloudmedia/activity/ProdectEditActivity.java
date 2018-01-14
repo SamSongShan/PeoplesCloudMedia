@@ -37,8 +37,6 @@ import com.google.gson.GsonBuilder;
 import butterknife.BindView;
 import butterknife.OnClick;
 
-import static com.mob.MobSDK.getContext;
-
 /*产品编辑 页面
 *
 * */
@@ -95,6 +93,8 @@ public class ProdectEditActivity extends BaseActivity implements BaseDialog.OnIt
 
     @Override
     protected void init() {
+
+
         sdv.setFocusable(true);
         sdv.setFocusableInTouchMode(true);
         String jsonUser = gson.toJson(new GetEntityUser(PreferencesUtil.getToken(this), PreferencesUtil.getUserId(this)));
@@ -230,12 +230,12 @@ public class ProdectEditActivity extends BaseActivity implements BaseDialog.OnIt
 
                     } else if (getEntityUserEntity.getCode() == Constant.Integers.TOKEN_OUT_OF) { //token过期
 
-                        ToastUtil.initToast(getContext(), getEntityUserEntity.getMessage());
-                        startActivityForResult(new Intent(getContext(), LoginActivity.class), Constant.Code.LoginCode);
+                        ToastUtil.initToast(this, getEntityUserEntity.getMessage());
+                        startActivityForResult(new Intent(this, LoginActivity.class), Constant.Code.LoginCode);
 
                     } else {//其他
 
-                        ToastUtil.initToast(getContext(), getEntityUserEntity.getMessage());
+                        ToastUtil.initToast(this, getEntityUserEntity.getMessage());
                     }
 
                 }

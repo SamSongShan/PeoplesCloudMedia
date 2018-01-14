@@ -7,13 +7,13 @@ import android.os.Parcelable;
  * Created by ss on 2017/12/29 0029.
  */
 
-public class GetBusinessCardInfoEntity {
+public class GetBusinessCardInfoEntity implements Parcelable {
 
 
     /**
      * Code : 200
      * Message : 获取成功
-     * Data : {"BusinessCardInfo":"f6940273-1c5c-460f-bcec-b96a93ae5686","UserId":"212bd12a-37f2-4eb4-ae84-6dd9e552434b","HeadIcon":"/Resource/WebUserImage/TN006/20171229115743660.jpg","Title":null,"RealName":"土豆","PostName":"经理","Mobile":"13632840502","WeChat":"13636656655","QQ":"444555668666","Signature":"才不会不参加","IsUseCompany":null,"CompanyName":null,"CompanyNet":null,"ProvinceId":null,"CityId":null,"CountyId":null,"Address":null,"Precision":null,"Latitude":null,"CreateDate":"2017-11-25 00:19:44","IsUseMusic":null,"MusicPath":null,"ProvinceName":null,"CityName":null,"CountyName":null}
+     * Data : {"BusinessCardInfo":"f6940273-1c5c-460f-bcec-b96a93ae5686","UserId":"212bd12a-37f2-4eb4-ae84-6dd9e552434b","HeadIcon":"/Resource/WebUserImage/TN006/20180101191510634.jpg","Title":null,"RealName":"土豆","PostName":"经理","Mobile":"13632840501","WeChat":"13636656655","QQ":"444555668666","Signature":"才不会不参加","IsUseCompany":1,"CompanyName":"龙岗区","CompanyNet":"www.baidu.com","ProvinceId":"440000","CityId":"440300","CountyId":"440307","Address":"广东省","Precision":"0.0000","Latitude":"0.0000","CreateDate":"2017-11-25 00:19:44","IsUseMusic":"1","MusicPath":"/Resource/DocumentFile/System/20180112/c353acdc-f0ff-4f60-a5c0-a436bafc9440.mp3","MusicName":null,"ProvinceName":"广东省","CityName":"深圳市","CountyName":"龙岗区"}
      * Number : 20
      */
 
@@ -58,29 +58,30 @@ public class GetBusinessCardInfoEntity {
         /**
          * BusinessCardInfo : f6940273-1c5c-460f-bcec-b96a93ae5686
          * UserId : 212bd12a-37f2-4eb4-ae84-6dd9e552434b
-         * HeadIcon : /Resource/WebUserImage/TN006/20171229115743660.jpg
+         * HeadIcon : /Resource/WebUserImage/TN006/20180101191510634.jpg
          * Title : null
          * RealName : 土豆
          * PostName : 经理
-         * Mobile : 13632840502
+         * Mobile : 13632840501
          * WeChat : 13636656655
          * QQ : 444555668666
          * Signature : 才不会不参加
-         * IsUseCompany : null
-         * CompanyName : null
-         * CompanyNet : null
-         * ProvinceId : null
-         * CityId : null
-         * CountyId : null
-         * Address : null
-         * Precision : null
-         * Latitude : null
+         * IsUseCompany : 1
+         * CompanyName : 龙岗区
+         * CompanyNet : www.baidu.com
+         * ProvinceId : 440000
+         * CityId : 440300
+         * CountyId : 440307
+         * Address : 广东省
+         * Precision : 0.0000
+         * Latitude : 0.0000
          * CreateDate : 2017-11-25 00:19:44
-         * IsUseMusic : null
-         * MusicPath : null
-         * ProvinceName : null
-         * CityName : null
-         * CountyName : null
+         * IsUseMusic : 1
+         * MusicPath : /Resource/DocumentFile/System/20180112/c353acdc-f0ff-4f60-a5c0-a436bafc9440.mp3
+         * MusicName : null
+         * ProvinceName : 广东省
+         * CityName : 深圳市
+         * CountyName : 龙岗区
          */
 
         private String BusinessCardInfo;
@@ -93,7 +94,7 @@ public class GetBusinessCardInfoEntity {
         private String WeChat;
         private String QQ;
         private String Signature;
-        private String IsUseCompany;
+        private int IsUseCompany;
         private String CompanyName;
         private String CompanyNet;
         private String ProvinceId;
@@ -105,6 +106,7 @@ public class GetBusinessCardInfoEntity {
         private String CreateDate;
         private String IsUseMusic;
         private String MusicPath;
+        private String MusicName;
         private String ProvinceName;
         private String CityName;
         private String CountyName;
@@ -189,11 +191,11 @@ public class GetBusinessCardInfoEntity {
             this.Signature = Signature;
         }
 
-        public String getIsUseCompany() {
+        public int getIsUseCompany() {
             return IsUseCompany;
         }
 
-        public void setIsUseCompany(String IsUseCompany) {
+        public void setIsUseCompany(int IsUseCompany) {
             this.IsUseCompany = IsUseCompany;
         }
 
@@ -285,6 +287,14 @@ public class GetBusinessCardInfoEntity {
             this.MusicPath = MusicPath;
         }
 
+        public String getMusicName() {
+            return MusicName;
+        }
+
+        public void setMusicName(String MusicName) {
+            this.MusicName = MusicName;
+        }
+
         public String getProvinceName() {
             return ProvinceName;
         }
@@ -326,7 +336,7 @@ public class GetBusinessCardInfoEntity {
             dest.writeString(this.WeChat);
             dest.writeString(this.QQ);
             dest.writeString(this.Signature);
-            dest.writeString(this.IsUseCompany);
+            dest.writeInt(this.IsUseCompany);
             dest.writeString(this.CompanyName);
             dest.writeString(this.CompanyNet);
             dest.writeString(this.ProvinceId);
@@ -338,6 +348,7 @@ public class GetBusinessCardInfoEntity {
             dest.writeString(this.CreateDate);
             dest.writeString(this.IsUseMusic);
             dest.writeString(this.MusicPath);
+            dest.writeString(this.MusicName);
             dest.writeString(this.ProvinceName);
             dest.writeString(this.CityName);
             dest.writeString(this.CountyName);
@@ -357,7 +368,7 @@ public class GetBusinessCardInfoEntity {
             this.WeChat = in.readString();
             this.QQ = in.readString();
             this.Signature = in.readString();
-            this.IsUseCompany = in.readString();
+            this.IsUseCompany = in.readInt();
             this.CompanyName = in.readString();
             this.CompanyNet = in.readString();
             this.ProvinceId = in.readString();
@@ -369,6 +380,7 @@ public class GetBusinessCardInfoEntity {
             this.CreateDate = in.readString();
             this.IsUseMusic = in.readString();
             this.MusicPath = in.readString();
+            this.MusicName = in.readString();
             this.ProvinceName = in.readString();
             this.CityName = in.readString();
             this.CountyName = in.readString();
@@ -386,4 +398,39 @@ public class GetBusinessCardInfoEntity {
             }
         };
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(this.Code);
+        dest.writeString(this.Message);
+        dest.writeParcelable(this.Data, flags);
+        dest.writeInt(this.Number);
+    }
+
+    public GetBusinessCardInfoEntity() {
+    }
+
+    protected GetBusinessCardInfoEntity(Parcel in) {
+        this.Code = in.readInt();
+        this.Message = in.readString();
+        this.Data = in.readParcelable(DataEntity.class.getClassLoader());
+        this.Number = in.readInt();
+    }
+
+    public static final Parcelable.Creator<GetBusinessCardInfoEntity> CREATOR = new Parcelable.Creator<GetBusinessCardInfoEntity>() {
+        @Override
+        public GetBusinessCardInfoEntity createFromParcel(Parcel source) {
+            return new GetBusinessCardInfoEntity(source);
+        }
+
+        @Override
+        public GetBusinessCardInfoEntity[] newArray(int size) {
+            return new GetBusinessCardInfoEntity[size];
+        }
+    };
 }

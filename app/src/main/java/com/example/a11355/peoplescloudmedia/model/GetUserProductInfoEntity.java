@@ -192,7 +192,7 @@ public class GetUserProductInfoEntity {
             this.AttachLinkList = AttachLinkList;
         }
 
-        public static class MediaBlockListEntity  {
+        public static class MediaBlockListEntity implements Parcelable {
             /**
              * HtmlToTexts : 吃v哈哈
              * VideoImg : default
@@ -306,9 +306,58 @@ public class GetUserProductInfoEntity {
             public void setOtherId(String OtherId) {
                 this.OtherId = OtherId;
             }
+
+            @Override
+            public int describeContents() {
+                return 0;
+            }
+
+            @Override
+            public void writeToParcel(Parcel dest, int flags) {
+                dest.writeString(this.HtmlToTexts);
+                dest.writeString(this.VideoImg);
+                dest.writeString(this.MediaBlockId);
+                dest.writeString(this.FilePath);
+                dest.writeString(this.Texts);
+                dest.writeInt(this.MediaType);
+                dest.writeInt(this.Mark);
+                dest.writeInt(this.SortCode);
+                dest.writeString(this.CreateDate);
+                dest.writeString(this.CreateUserId);
+                dest.writeString(this.OtherId);
+            }
+
+            public MediaBlockListEntity() {
+            }
+
+            protected MediaBlockListEntity(Parcel in) {
+                this.HtmlToTexts = in.readString();
+                this.VideoImg = in.readString();
+                this.MediaBlockId = in.readString();
+                this.FilePath = in.readString();
+                this.Texts = in.readString();
+                this.MediaType = in.readInt();
+                this.Mark = in.readInt();
+                this.SortCode = in.readInt();
+                this.CreateDate = in.readString();
+                this.CreateUserId = in.readString();
+                this.OtherId = in.readString();
+            }
+
+            public static final Creator<MediaBlockListEntity> CREATOR = new Creator<MediaBlockListEntity>() {
+                @Override
+                public MediaBlockListEntity createFromParcel(Parcel source) {
+                    return new MediaBlockListEntity(source);
+                }
+
+                @Override
+                public MediaBlockListEntity[] newArray(int size) {
+                    return new MediaBlockListEntity[size];
+                }
+            };
         }
 
-        public static class AttachLinkListEntity  {
+        public static class AttachLinkListEntity implements Parcelable {
             /**
              * OtherId : 6ad58348-1f74-4dad-93f3-ba8413481d8a
              * AttachLinkId : 5c9d4d7a-882e-4330-9f72-6772b669fcfd
@@ -392,6 +441,49 @@ public class GetUserProductInfoEntity {
             public void setCreateUserId(String CreateUserId) {
                 this.CreateUserId = CreateUserId;
             }
+
+            @Override
+            public int describeContents() {
+                return 0;
+            }
+
+            @Override
+            public void writeToParcel(Parcel dest, int flags) {
+                dest.writeString(this.OtherId);
+                dest.writeString(this.AttachLinkId);
+                dest.writeString(this.LinkName);
+                dest.writeString(this.ToLink);
+                dest.writeInt(this.LinkType);
+                dest.writeInt(this.SortCode);
+                dest.writeString(this.CreateDate);
+                dest.writeString(this.CreateUserId);
+            }
+
+            public AttachLinkListEntity() {
+            }
+
+            protected AttachLinkListEntity(Parcel in) {
+                this.OtherId = in.readString();
+                this.AttachLinkId = in.readString();
+                this.LinkName = in.readString();
+                this.ToLink = in.readString();
+                this.LinkType = in.readInt();
+                this.SortCode = in.readInt();
+                this.CreateDate = in.readString();
+                this.CreateUserId = in.readString();
+            }
+
+            public static final Creator<AttachLinkListEntity> CREATOR = new Creator<AttachLinkListEntity>() {
+                @Override
+                public AttachLinkListEntity createFromParcel(Parcel source) {
+                    return new AttachLinkListEntity(source);
+                }
+
+                @Override
+                public AttachLinkListEntity[] newArray(int size) {
+                    return new AttachLinkListEntity[size];
+                }
+            };
         }
 
         @Override

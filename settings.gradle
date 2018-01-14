@@ -1,1 +1,1 @@
-include ':app', ':gallery', ':picture_library', ':ucrop'
+include ':app', ':gallery', ':picture_library', ':ucrop', ':ffmpeg_java_wrapper_lib'

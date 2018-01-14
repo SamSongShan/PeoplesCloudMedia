@@ -30,7 +30,7 @@ public class GetMusicListAdapter extends AbsRecyclerViewAdapter<GetMusicListEnti
 
         holder.bindSimpleDraweeView(R.id.sdv_Head, d.getPicUrl())
                 .bindTextView(R.id.tv_name, d.getName() + "")
-                .bindTextView(R.id.tv_singer, d.getArtists() + "")
+                .bindTextView(R.id.tv_singer, d.getArtists() + "_"+d.getAlbum())
                 .setViewSelected(R.id.img_play, d.getIsplay() == 1)
                 .setClickListenerAndTag(R.id.img_play, onClickListener,position);
 
