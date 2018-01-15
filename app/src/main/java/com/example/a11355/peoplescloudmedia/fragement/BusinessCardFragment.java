@@ -325,9 +325,12 @@ public class BusinessCardFragment extends BaseFragment implements OkHttpUtil.OnD
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK) {
             if (requestCode == Constant.Code.ZMTZZ_Music) {
-
+                UpdateCardOther updateCardOther1 = new UpdateCardOther(PreferencesUtil.getUserId(getContext()), PreferencesUtil.getToken(getContext()), "MusicName",  data.getStringExtra("singer"));
+                OkHttpUtil.postJson(Constant.URL.UpdateCardOther, DesUtil.encrypt(gson.toJson(updateCardOther1)), this);
                 UpdateCardOther updateCardOther = new UpdateCardOther(PreferencesUtil.getUserId(getContext()), PreferencesUtil.getToken(getContext()), "MusicPath",  data.getStringExtra("path"));
                 OkHttpUtil.postJson(Constant.URL.UpdateCardOther, DesUtil.encrypt(gson.toJson(updateCardOther)), this);
+
+
 
             } else {
                 loadData();

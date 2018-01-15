@@ -9,7 +9,7 @@ import android.text.TextUtils;
 import android.view.View;
 
 import com.example.a11355.peoplescloudmedia.R;
-import com.example.a11355.peoplescloudmedia.activity.H5Activity;
+import com.example.a11355.peoplescloudmedia.activity.H5ActivityForRZTPreview;
 import com.example.a11355.peoplescloudmedia.activity.LoginActivity;
 import com.example.a11355.peoplescloudmedia.adapter.GetRZTArticleListAdapter;
 import com.example.a11355.peoplescloudmedia.base.AbsRecyclerViewAdapter;
@@ -171,17 +171,17 @@ public class RZTArticleFragment extends BaseFragment implements OkHttpUtil.OnDat
 
     @Override
     public void onItemClick(View v, int position) {
-        /*Intent intent = new Intent(getContext(), H5ActivityForRZTPreview.class);
+        Intent intent = new Intent(getContext(), H5ActivityForRZTPreview.class);
         intent.putExtra("data", videosData.get(position));
 
         intent.putExtra("type",-1);
-        startActivity(intent);*/
+        startActivity(intent);
 
 
-        Intent intent = new Intent(getContext(), H5Activity.class);
+       /* Intent intent = new Intent(getContext(), H5Activity.class);
         intent.putExtra("title", videosData.get(position).getTitle());
         intent.putExtra("url", Constant.URL.RZTPreviewArticle + videosData.get(position).getArticleId());
-        startActivity(intent);
+        startActivity(intent);*/
 
     }
 
