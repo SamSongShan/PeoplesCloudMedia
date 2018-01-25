@@ -181,16 +181,17 @@ public class TWBJMyArticleActivity extends BaseActivity implements OkHttpUtil.On
 
     @Override
     public void onItemClick(View v, int position) {
-       /* Intent intent = new Intent(this, H5ActivityForGraphEdit.class);
+        Intent intent = new Intent(this, H5ActivityForGraphEdit.class);
         intent.putExtra("url", Constant.URL.GraphicEditorDetail+videosData.get(position).getGraphicEditorId());
-
+          intent.putExtra("isshowedit",true);
         intent.putExtra("title", videosData.get(position).getTitle()+"");
-        startActivityForResult(intent,Constant.Code.CollectCode);*/
-
-        Intent intent = new Intent(this, HRichEditorViewActivity.class);
+        intent.putExtra("GraphicEditorId", videosData.get(position).getGraphicEditorId());
+        startActivityForResult(intent,Constant.Code.CollectCode);
+       /*Intent intent = new Intent(this, HRichEditorViewActivity.class);
         intent.putExtra("GraphicEditorId", videosData.get(position).getGraphicEditorId());
 
-        startActivityForResult(intent,Constant.Code.CollectCode);
+        startActivityForResult(intent,Constant.Code.CollectCode);*/
+
 
 
     }

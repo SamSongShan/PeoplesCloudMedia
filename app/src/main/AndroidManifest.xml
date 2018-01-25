@@ -58,6 +58,7 @@
     <uses-permission android:name="android.permission.RECEIVE_SMS" />
 
     <application
+        android:hardwareAccelerated="true"
         android:name=".AppContext"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -165,20 +166,25 @@
         <activity android:name=".activity.LinkedActivity" />
         <activity android:name=".activity.TitleEidtorActivity" />
         <activity android:name=".activity.MyPromotionActivity" />
-        <activity android:name=".activity.H5Activity" />
+        <activity android:name=".activity.H5Activity"
+            android:hardwareAccelerated="true"/>
         <activity android:name=".activity.AboutUsActivity" />
         <activity android:name=".activity.MyFocusActivity" />
         <activity android:name=".activity.MyCollectActivity" />
-        <activity android:name=".activity.H5ActivityForNewsDetical" />
+        <activity android:name=".activity.H5ActivityForNewsDetical"
+            android:hardwareAccelerated="true"/>
         <!--
              android:windowSoftInputMode="adjustResize"
              android:windowSoftInputMode="adjustPan"
         -->
         >
-        <activity android:name=".activity.H5ActivityNotitle" />
+        <activity android:name=".activity.H5ActivityNotitle"
+            android:hardwareAccelerated="true"/>
         <activity android:name=".activity.RZTActivity" />
-        <activity android:name=".activity.H5ActivityForRZTPreview" />
-        <activity android:name=".activity.H5ActivityForZMTZZPreview" />
+        <activity android:name=".activity.H5ActivityForRZTPreview"
+            android:hardwareAccelerated="true"/>
+        <activity android:name=".activity.H5ActivityForZMTZZPreview"
+            android:hardwareAccelerated="true"/>
         <activity android:name=".activity.PickUpArticleActivity" />
         <activity
             android:name=".activity.VideoActivity"
@@ -194,10 +200,13 @@
         <activity android:name=".activity.UpdateCardCompanyInfoActivity" />
         <activity android:name=".activity.ProdectEditActivity" />
         <activity android:name=".activity.ZMTZZAddLinkActivity" />
-        <activity android:name=".activity.H5ActivityForCopy" />
+        <activity android:name=".activity.H5ActivityForCopy"
+            android:hardwareAccelerated="true"/>
         <activity android:name=".activity.TWBJMyArticleActivity" />
-        <activity android:name=".activity.H5ActivityForGraphEdit" />
-        <activity android:name=".activity.H5ActivityArticleEdit" />
+        <activity android:name=".activity.H5ActivityForGraphEdit"
+            android:hardwareAccelerated="true"/>
+        <activity android:name=".activity.H5ActivityArticleEdit"
+            android:hardwareAccelerated="true"/>
         <activity android:name=".activity.MineMyArticleActivity"></activity>
     </application>
 

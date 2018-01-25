@@ -32,8 +32,6 @@ import java.util.List;
 
 import butterknife.BindView;
 
-import static com.example.a11355.peoplescloudmedia.custom.DividerGridItem.ATTRS_B;
-
 /**
  * 发现文章模块
  */
@@ -84,7 +82,7 @@ public class FindArticleFragment extends BaseFragment  implements OnAdapterCallb
 
         rvStore.setLayoutManager(new LinearLayoutManager(getContext()));
         getNewsListAdapter = new GetNewsListAdapter(getActivity(), this, this);
-        rvStore.addItemDecoration(new DividerGridItem(getContext(), ATTRS_B));
+        rvStore.addItemDecoration(new DividerGridItem(getContext()));
         rvStore.setAdapter(getNewsListAdapter);
         srlStore.setOnRefreshListener(this);
         getNewsListAdapter.setOnItemClickListener(this);

@@ -11,6 +11,7 @@ import android.widget.ProgressBar;
 
 import com.example.a11355.peoplescloudmedia.R;
 import com.example.a11355.peoplescloudmedia.base.BaseActivity;
+import com.example.a11355.peoplescloudmedia.util.Constant;
 import com.example.a11355.peoplescloudmedia.util.ToolBarUtil;
 
 import butterknife.BindView;
@@ -28,6 +29,7 @@ public class H5ActivityForGraphEdit extends BaseActivity {
     public WebView webView;
     @BindView(R.id.toolbar_text)
     Toolbar toolbarIcon;
+    private String url;
 
     @Override
     protected int getViewResId() {
@@ -38,21 +40,41 @@ public class H5ActivityForGraphEdit extends BaseActivity {
     protected void init() {
         Intent intent = getIntent();
         String title = intent.getStringExtra("title");
-        final String url = intent.getStringExtra("url");
+        url = intent.getStringExtra("url");
+        boolean isshowedit = intent.getBooleanExtra("isshowedit", false);
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             toolbarIcon.setElevation(0);
         }
-        ToolBarUtil.initToolBar(toolbarIcon, title, new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        }, "", new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        if (isshowedit) {
+            ToolBarUtil.initToolBar(toolbarIcon, title, new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onBackPressed();
+                }
+            }, "编辑", new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(H5ActivityForGraphEdit.this, HRichEditorViewActivity.class);
+        intent.putExtra("GraphicEditorId", getIntent().getStringExtra("GraphicEditorId"));
 
-            }
-        });
+        startActivityForResult(intent, Constant.Code.CollectCode);
+                }
+            });
+        }else {
+            ToolBarUtil.initToolBar(toolbarIcon, title, new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onBackPressed();
+                }
+            }, "", new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                }
+            });
+        }
+
         webView.requestFocusFromTouch();
         webView.getSettings().setJavaScriptEnabled(true);
         webView.setWebChromeClient(new WebChromeClient() {
@@ -82,5 +104,11 @@ public class H5ActivityForGraphEdit extends BaseActivity {
         webView.loadUrl(url);
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode==RESULT_OK){
+            webView.loadUrl(url);
 
+        }
+    }
 }

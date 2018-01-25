@@ -25,12 +25,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.luck.picture.lib.dialog.LoadingDialog;
+import com.luck.picture.lib.entity.LocalMedia;
 
 import org.ffmpeg.android.Clip;
 import org.ffmpeg.android.FFmpegController;
 import org.ffmpeg.android.ShellUtils;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 
 /**
@@ -38,8 +41,9 @@ import java.io.File;
  */
 
 public class CutTimeActivity extends BaseActivity {
+    private SurfaceTexture Surface;
 
-    private MediaPlayer mMediaPlayer;
+    private MediaPlayer             mMediaPlayer = new MediaPlayer();
     private String path;
     private TextureView textureView;
     private int videoWidth;
@@ -57,6 +61,7 @@ public class CutTimeActivity extends BaseActivity {
     private float pro1;
     private float pro2;
     private LoadingDialog loadingDialog;
+    private ImageView iv_play;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -80,10 +85,33 @@ public class CutTimeActivity extends BaseActivity {
         rl_video = (RelativeLayout) findViewById(R.id.rl_video);
         ll_thumbnail = (LinearLayout) findViewById(R.id.ll_thumbnail);
         thumbnailView = (ThumbnailView) findViewById(R.id.thumbnailView);
+        iv_play = (ImageView) findViewById(R.id.iv_play);
+        iv_play.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mMediaPlayer!=null&&Surface!=null){
+                    if (iv_play.isSelected()){    //关闭
+                        mMediaPlayer.stop();
+                        iv_play.setSelected(false);
+                    }  else {
+                        mMediaPlayer.reset();
+                        iv_play.setSelected(true);
 
+                        initMediaPlay(Surface);
+
+                    }
+                }
+            }
+        });
         rl_close.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(mMediaPlayer != null) {
+                    mMediaPlayer.stop();
+
+                    mMediaPlayer.release();
+
+                }
                 finish();
             }
         });
@@ -95,8 +123,10 @@ public class CutTimeActivity extends BaseActivity {
         });
 
         textureView.setSurfaceTextureListener(new TextureView.SurfaceTextureListener() {
+
             @Override
             public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
+            Surface = surface;
                 initMediaPlay(surface);
             }
             @Override
@@ -128,6 +158,9 @@ public class CutTimeActivity extends BaseActivity {
     }
 
     private void cutVideo() {
+        SimpleDateFormat formatter = new SimpleDateFormat ("yyyy年MM月dd日");
+        Date curDate = new Date(System.currentTimeMillis());//获取当前时间
+        String str = formatter.format(curDate);
         loadingDialog = LoadingDialog.newInstance("剪切中...");
         loadingDialog.show(getFragmentManager());
         if (path == null) {
@@ -147,7 +180,7 @@ public class CutTimeActivity extends BaseActivity {
         String[] split1 = split[split.length - 1].split("\\.");
         VideoClip videoClip = new VideoClip();
 
-        videoClip.setOutName(split1[0]+"剪切"+"."+ split1[1]);
+        videoClip.setOutName(split1[0]+"剪切"+str+"."+ split1[1]);
         videoClip.setFilePath(path);
         videoClip.setWorkingPath(dstDir);
         videoClip.setStartTime(startTime);
@@ -159,8 +192,37 @@ public class CutTimeActivity extends BaseActivity {
         Uri uri = Uri.fromFile(dstDirFile);
         intent.setData(uri);
         this.sendBroadcast(intent);
+        MediaPlayer mediaPlayer = getVideoMediaPlayer(new File(path));
+        long duration = mediaPlayer == null ? 0 : mediaPlayer.getDuration();
+        int height = mediaPlayer == null ? 0 : mediaPlayer.getVideoHeight();
+        int width = mediaPlayer == null ? 0 : mediaPlayer.getVideoWidth();
+       // 复制代码
+        MediaMetadataRetriever mmr = new MediaMetadataRetriever();
+        mmr.setDataSource(path);
+        Bitmap bitmap = mmr.getFrameAtTime();
+        LocalMedia localMedia = new LocalMedia();
+        localMedia.setPath(path);
+        localMedia.setCompressed(false);
+        localMedia.setDuration(duration);
+        localMedia.setHeight(height);
+        localMedia.setWidth(width);
+        localMedia.setMimeType(2);
+        mmr.release();
+        mediaPlayer.release();
+
+
         Toast.makeText(this, "已保存",Toast.LENGTH_SHORT).show();
         loadingDialog.dismiss();
+        Intent intent1 = new Intent();
+        intent1.putExtra("data",localMedia)  ;
+
+        setResult(RESULT_OK,intent1);
+        if(mMediaPlayer != null) {
+            mMediaPlayer.stop();
+
+            mMediaPlayer.release();
+
+        }
         finish();
         try {
             FFmpegController fc = new FFmpegController(this, new File(dstDir));
@@ -292,6 +354,8 @@ public class CutTimeActivity extends BaseActivity {
     private void changeVideoPlay(){
         if(mMediaPlayer != null) {
             mMediaPlayer.seekTo(startTime);
+
+
         }
     }
 
@@ -366,16 +430,15 @@ public class CutTimeActivity extends BaseActivity {
     private void initMediaPlay(SurfaceTexture surface){
 
         try {
-            mMediaPlayer = new MediaPlayer();
             mMediaPlayer.setDataSource(path);
             mMediaPlayer.setSurface(new Surface(surface));
-            mMediaPlayer.setLooping(true);
+            //mMediaPlayer.setLooping(true);
             mMediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
                 @Override
                 public void onPrepared(MediaPlayer mp) {
                     mMediaPlayer.start();
-
-                    videoDuration = mMediaPlayer.getDuration();
+                    mMediaPlayer.seekTo(startTime);
+                    videoDuration = mMediaPlayer.getDuration()-endTime;
                     videoWidth = mMediaPlayer.getVideoWidth();
                     videoHeight = mMediaPlayer.getVideoHeight();
                     initVideoSize();
@@ -386,5 +449,14 @@ public class CutTimeActivity extends BaseActivity {
         }catch (Exception e){
             e.printStackTrace();
         }
+    }
+
+    private MediaPlayer getVideoMediaPlayer(File file) {
+        try {
+            return MediaPlayer.create(this, Uri.fromFile(file));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

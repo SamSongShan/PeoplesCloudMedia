@@ -27,7 +27,7 @@ public class ZMTZZLinkAdapter extends AbsRecyclerViewAdapter<ZMTZZLink> {
             holder.bindTextView(R.id.tv_title, d.getLinkName())
                     .setClickListenerAndTag(R.id.img_close_item, onClickListener, position);
 
-                if ("添加链接".equals(d.getLinkName())&&"def12354555568852225333".equals(d.getLinkName())){
+                if ("添加链接".equals(d.getLinkName())&&"def12354555568852225333".equals(d.getToLink())){
                     holder.getView(R.id.img_Add_item).setVisibility(View.VISIBLE);
                     holder.getView(R.id.img_close_item).setVisibility(View.GONE);
                 } else {
@@ -36,5 +36,6 @@ public class ZMTZZLinkAdapter extends AbsRecyclerViewAdapter<ZMTZZLink> {
 
                 }
     }
+    
 }
 

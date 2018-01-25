@@ -263,6 +263,7 @@ public class ProductFragment extends BaseFragment implements OkHttpUtil.OnDataLi
             loadingDialog.show(getActivity().getFragmentManager());
             datasCopy = datas;
             zmtzzLinksCopy = zmtzzLinks;
+            zmtzzLinksCopy.remove(zmtzzLinksCopy.size() - 1);
             UpdateUserProductEntity updateGraphicEditor = new UpdateUserProductEntity(PreferencesUtil.getUserId(getContext()), PreferencesUtil.getToken(getContext()), ProductImg, ProductName, ProductPrice, Description, IsUseMusic, MusicPath, MusicName, Title, datasCopy, zmtzzLinksCopy);
             OkHttpUtil.postJson(Constant.URL.UpdateUserProductEntity, DesUtil.encrypt(gson.toJson(updateGraphicEditor)), this);
         }
@@ -857,15 +858,25 @@ public class ProductFragment extends BaseFragment implements OkHttpUtil.OnDataLi
                         tvTitle.setText(data.getTitle());
                         llContent.setVisibility(View.GONE);
                         llAdditemAddarea.setVisibility(View.GONE);
-
-                        for (int i = 0; i < data.getAttachLinkList().size(); i++) {
-                            zmtzzLinks.add(new ZMTZZLink(data.getAttachLinkList().get(i)));
+                        if (data.getAttachLinkList() != null) {
+                            for (int i = 0; i < data.getAttachLinkList().size(); i++) {
+                                zmtzzLinks.add(new ZMTZZLink(data.getAttachLinkList().get(i)));
+                            }
                         }
+                        if (data.getMediaBlockList() != null) {
+                            for (int i = 0; i < data.getMediaBlockList().size(); i++) {
+                                datas.add(new EContent(data.getMediaBlockList().get(i)));
+
+                            }
+                        } else {
+                            llAdditemAddarea.setVisibility(View.VISIBLE);
+                            llContent.setVisibility(View.VISIBLE);
+                        }
+                        ZMTZZLink zmtzzLink = new ZMTZZLink("添加链接", "def12354555568852225333");
+
+                        zmtzzLinks.add(zmtzzLink);
                         zmtzzLinkAdapter.setData(zmtzzLinks);
-                        for (int i = 0; i < data.getMediaBlockList().size(); i++) {
-                            datas.add(new EContent(data.getMediaBlockList().get(i)));
 
-                        }
                         adapter.notifyDataSetChanged();
                         datasCopy.addAll(datas);
                         zmtzzLinksCopy.addAll(zmtzzLinks);
@@ -888,6 +899,9 @@ public class ProductFragment extends BaseFragment implements OkHttpUtil.OnDataLi
                         ZMTZZLink zmtzzLink = new ZMTZZLink("添加链接", "def12354555568852225333");
 
                         zmtzzLinks.add(zmtzzLink);
+                        zmtzzLinkAdapter.setData(zmtzzLinks);
+
+                        adapter.notifyDataSetChanged();
                     }
 
                     break;

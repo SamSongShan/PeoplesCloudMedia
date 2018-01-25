@@ -1,74 +1,88 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#000">
+    android:background="#000"
+    android:orientation="vertical">
 
     <RelativeLayout
         android:id="@+id/rl_title"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:background="#000">
+
         <RelativeLayout
             android:id="@+id/rl_close"
             android:layout_width="50dp"
             android:layout_height="50dp">
+
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:src="@drawable/toolbar_back"/>
+                android:src="@drawable/toolbar_back" />
         </RelativeLayout>
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="#fff"
-            android:textSize="18sp"
             android:layout_centerInParent="true"
-            android:text="视频剪辑"/>
+            android:text="视频剪辑"
+            android:textColor="#fff"
+            android:textSize="18sp" />
+
         <TextView
             android:id="@+id/tv_finish_video"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
             android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dp"
+            android:paddingBottom="5dp"
             android:paddingLeft="13dp"
             android:paddingRight="13dp"
             android:paddingTop="5dp"
-            android:paddingBottom="5dp"
-            android:textSize="14sp"
+            android:text="确定"
             android:textColor="#fff"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="10dp"
-            android:text="确定"/>
+            android:textSize="14sp" />
     </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/rl_video"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_marginBottom="30dp"
         android:layout_marginTop="30dp"
-        android:layout_marginBottom="30dp">
+        android:layout_weight="1">
+
         <TextureView
             android:id="@+id/textureView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_centerInParent="true"/>
+            android:layout_centerInParent="true" />
     </RelativeLayout>
 
+    <ImageView
+        android:layout_margin="30dp"
+        android:src="@drawable/play_stop"
+        android:id="@+id/iv_play"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_gravity="center" />
+
     <RelativeLayout
-        android:layout_marginRight="30dp"
-        android:layout_marginLeft="30dp"
         android:layout_width="match_parent"
-        android:layout_height="50dp">
+        android:layout_height="50dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp">
+
         <LinearLayout
             android:id="@+id/ll_thumbnail"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="horizontal"/>
+            android:orientation="horizontal" />
+
         <com.luck.picture.lib.ThumbnailView
             android:id="@+id/thumbnailView"
             android:layout_width="match_parent"
@@ -76,12 +90,12 @@
     </RelativeLayout>
 
     <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginBottom="30dp"
         android:layout_marginTop="20dp"
         android:gravity="center"
         android:text="注：最多上传120秒"
-        android:textColor="@color/white"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:textColor="@color/white" />
 
 </LinearLayout>

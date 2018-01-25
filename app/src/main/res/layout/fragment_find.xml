@@ -32,7 +32,7 @@
             android:layout_marginTop="20dp"
             android:layout_marginLeft="30dp"
             android:layout_marginRight="30dp"
-            android:background="@drawable/shape_solid_gray_for_search_90"
+            android:background="@drawable/shape_solid_gray_for_search_90_alph"
             android:layout_width="match_parent"
             android:layout_height="30dp" />
 

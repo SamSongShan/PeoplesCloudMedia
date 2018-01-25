@@ -11,6 +11,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.support.v4.content.FileProvider;
 import android.support.v7.widget.GridLayoutManager;
@@ -131,6 +132,7 @@ public class PictureSelectorActivity extends PictureBaseActivity implements View
     private String videoUrl;
     private List<LocalMedia> images1;
     private TextView picture_id_cut;
+    private LocalMedia data2;
 
     //EventBus 3.0 回调
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -207,7 +209,7 @@ public class PictureSelectorActivity extends PictureBaseActivity implements View
         }
         enCode = getIntent().getStringExtra("enCode");
 
-        Log.e("enCode",enCode);
+        Log.e("enCode", enCode);
         StatusBarUtils.setStatusBarLightMode(this, Color.WHITE);
 
     }
@@ -361,7 +363,9 @@ public class PictureSelectorActivity extends PictureBaseActivity implements View
                 if (adapter != null) {
                     if (images == null) {
                         images = new ArrayList<>();
+
                     }
+
                     adapter.bindImagesData(images);
                     tv_empty.setVisibility(images.size() > 0
                             ? View.INVISIBLE : View.VISIBLE);
@@ -571,7 +575,7 @@ public class PictureSelectorActivity extends PictureBaseActivity implements View
 
                 File file = new File(images1.get(0).getPath());
                 OkHttpUtil.postStream(Constant.URL.UploadVideo, enCode, 1, file, this, this, "file");
-                Log.e("enCode",enCode);
+                Log.e("enCode", enCode);
 
 
             }
@@ -582,7 +586,7 @@ public class PictureSelectorActivity extends PictureBaseActivity implements View
             if (images1.size() > 0) {
                 Intent intent = new Intent(this, CutTimeActivity.class);
 
-                intent.putExtra("path",images1.get(0).getPath()) ;
+                intent.putExtra("path", images1.get(0).getPath());
                 startActivityForResult(intent, CutVideo);
             }
         }
@@ -1160,6 +1164,24 @@ public class PictureSelectorActivity extends PictureBaseActivity implements View
                     }
                     break;
                 case CutVideo: {   //剪切返回
+                    LocalMedia data1 = data.getParcelableExtra("data");
+
+                    if (data1 != null) {
+                        data2 = data.getParcelableExtra("data");
+                    }
+
+                    if (images != null) {
+                        images.clear();
+                        if (data2 != null) {
+                            images.add(0, data2);
+                        }
+                        adapter.bindImagesData(images);
+
+                    }
+                    if (images1 != null) {
+                        images1.clear();
+                    }
+
                     readLocalMedia();
                 }
                 break;

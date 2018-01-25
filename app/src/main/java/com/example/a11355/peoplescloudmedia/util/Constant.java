@@ -280,7 +280,7 @@ BusinessCardInfo 传名片ID
         //微信新闻官网
         String Wechat_GW = "http://weixin.sogou.com";
         //今日头条官网
-        String JRTT_GW = "https://m.toutiao.com";
+        String JRTT_GW = "https://m.toutiao.com/search/?keyword=%E7%83%AD%E7%82%B9&from=search_tab";
         //今日头条官网
         String QQ_GW = "https://xw.qq.com";
 
